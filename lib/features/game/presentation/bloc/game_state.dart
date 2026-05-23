@@ -38,9 +38,11 @@ class GameInProgress extends GameState {
     required this.selectionState,
     required this.levelTheme,
     required this.backgroundImage,
+    required this.themeId,
     required this.coinsReward,
     required this.hintsUsed,
     this.foundCellColors = const {},
+    this.feedback,
   });
 
   final List<List<GridCellModel>> grid;
@@ -60,9 +62,11 @@ class GameInProgress extends GameState {
   final SelectionState selectionState;
   final String levelTheme;
   final String backgroundImage;
+  final int themeId;
   final int coinsReward;
   final int hintsUsed;
   final Map<int, int> foundCellColors;
+  final String? feedback;
 
   bool get allWordsFound =>
       foundWords.length == wordsToFind.length;
@@ -88,6 +92,9 @@ class GameInProgress extends GameState {
     bool? isPaused,
     SelectionState? selectionState,
     int? hintsUsed,
+    int? themeId,
+    String? feedback,
+    bool clearFeedback = false,
   }) =>
       GameInProgress(
         grid: grid ?? this.grid,
@@ -108,8 +115,10 @@ class GameInProgress extends GameState {
         selectionState: selectionState ?? this.selectionState,
         levelTheme: levelTheme,
         backgroundImage: backgroundImage,
+        themeId: themeId ?? this.themeId,
         coinsReward: coinsReward,
         hintsUsed: hintsUsed ?? this.hintsUsed,
+        feedback: clearFeedback ? null : (feedback ?? this.feedback),
       );
 
   @override
@@ -129,6 +138,8 @@ class GameInProgress extends GameState {
         hintsUsed,
         foundCellColors,
         backgroundImage,
+        themeId,
+        feedback,
       ];
 }
 
@@ -139,6 +150,7 @@ class GameCompleted extends GameState {
     required this.time,
     required this.hintsUsed,
     required this.levelId,
+    required this.themeId,
   });
 
   final int stars;
@@ -146,9 +158,11 @@ class GameCompleted extends GameState {
   final Duration time;
   final int hintsUsed;
   final int levelId;
+  final int themeId;
 
   @override
-  List<Object?> get props => [stars, coinsEarned, time, hintsUsed, levelId];
+  List<Object?> get props =>
+      [stars, coinsEarned, time, hintsUsed, levelId, themeId];
 }
 
 class GameError extends GameState {
@@ -157,4 +171,13 @@ class GameError extends GameState {
 
   @override
   List<Object?> get props => [message];
+}
+
+class GameNoMoreLevels extends GameState {
+  const GameNoMoreLevels({required this.themeId});
+
+  final int themeId;
+
+  @override
+  List<Object?> get props => [themeId];
 }

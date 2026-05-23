@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:word_game/core/theme/app_theme.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/game/data/models/grid_cell_model.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
@@ -31,23 +33,31 @@ void main() {
       difficulty: DifficultyLevel.easy,
       selectionState: SelectionState.idle,
       levelTheme: 'Test',
+      backgroundImage: 'paris_bg.jpg',
+      themeId: 1,
       coinsReward: 10,
       hintsUsed: 0,
     );
 
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            width: 300,
-            height: 300,
-            child: LetterGrid(
-              state: state,
-              onDragStart: (_, __) {},
-              onDragUpdate: (_, __) {},
-              onDragEnd: () {},
-            ),
-          ),
+        theme: AppTheme.light,
+        home: Builder(
+          builder: (context) {
+            return Scaffold(
+              body: SizedBox(
+                width: 300,
+                height: 300,
+                child: LetterGrid(
+                  state: state,
+                  colors: context.appColors,
+                  onDragStart: (_, __) {},
+                  onDragUpdate: (_, __) {},
+                  onDragEnd: () {},
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

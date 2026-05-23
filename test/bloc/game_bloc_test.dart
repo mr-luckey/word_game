@@ -12,6 +12,8 @@ import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 
 class MockLoadLevel extends Mock implements LoadLevelUseCase {}
 
+class MockGetNextLevel extends Mock implements GetNextLevelUseCase {}
+
 class MockSaveProgress extends Mock implements SaveProgressUseCase {}
 
 class MockSpendCoins extends Mock implements SpendCoinsUseCase {}
@@ -39,6 +41,7 @@ void main() {
   );
 
   late MockLoadLevel loadLevel;
+  late MockGetNextLevel getNextLevel;
   late MockSaveProgress saveProgress;
   late MockWallet wallet;
   late MockAudio audio;
@@ -46,6 +49,7 @@ void main() {
 
   GameBloc buildBloc() => GameBloc(
         loadLevel: loadLevel,
+        getNextLevel: getNextLevel,
         saveProgress: saveProgress,
         spendCoins: MockSpendCoins(),
         addCoins: MockAddCoins(),
@@ -56,6 +60,7 @@ void main() {
 
   setUp(() {
     loadLevel = MockLoadLevel();
+    getNextLevel = MockGetNextLevel();
     saveProgress = MockSaveProgress();
     wallet = MockWallet();
     audio = MockAudio();

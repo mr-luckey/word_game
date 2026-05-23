@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
 
 class DestinationCard extends StatelessWidget {
@@ -24,6 +24,7 @@ class DestinationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final progress = total > 0 ? completed / total : 0.0;
     final image = imageAsset ?? AssetPaths.themeImage('paris_bg.jpg');
 
@@ -45,10 +46,8 @@ class DestinationCard extends StatelessWidget {
                   Image.asset(
                     image,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      decoration: const BoxDecoration(
-                        gradient: AppColors.primaryGradient,
-                      ),
+                    errorBuilder: (_, __, ___) => DecoratedBox(
+                      decoration: BoxDecoration(gradient: colors.primaryGradient),
                     ),
                   ),
                   DecoratedBox(
@@ -58,31 +57,34 @@ class DestinationCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.55),
+                          colors.scrim,
                         ],
                       ),
                     ),
                   ),
                   Positioned(
                     left: AppSizes.paddingMd,
+                    right: AppSizes.paddingMd,
                     bottom: AppSizes.paddingMd,
                     child: Row(
                       children: [
                         Icon(
                           Icons.flight_takeoff_rounded,
-                          color: AppColors.gold,
-                          size: 28,
+                          color: colors.gold,
+                          size: 24,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             title,
-                            style: AppTextStyles.levelName.copyWith(
-                              color: Colors.white,
-                              fontSize: 20,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.levelName(context).copyWith(
+                              color: colors.onScenic,
+                              fontSize: 18,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withValues(alpha: 0.5),
+                                  color: colors.scrim,
                                   blurRadius: 8,
                                 ),
                               ],
@@ -106,13 +108,14 @@ class DestinationCard extends StatelessWidget {
                   children: [
                     Text(
                       'Levels $completed / $total',
-                      style: AppTextStyles.wordList.copyWith(
+                      style: AppTextStyles.wordList(context).copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
                       '${(progress * 100).round()}%',
-                      style: AppTextStyles.coinsScore.copyWith(fontSize: 16),
+                      style: AppTextStyles.coinsScore(context)
+                          .copyWith(fontSize: 16),
                     ),
                   ],
                 ),
@@ -122,8 +125,8 @@ class DestinationCard extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 10,
-                    backgroundColor: AppColors.cellAlt,
-                    valueColor: const AlwaysStoppedAnimation(AppColors.gold),
+                    backgroundColor: colors.cellAlt,
+                    valueColor: AlwaysStoppedAnimation(colors.gold),
                   ),
                 ),
               ],
@@ -131,9 +134,10 @@ class DestinationCard extends StatelessWidget {
           ),
         ],
       ),
-    )
-        .animate()
-        .fadeIn(duration: 500.ms)
-        .slideY(begin: 0.15, end: 0, curve: Curves.easeOutCubic);
+    ).animate().fadeIn(duration: 500.ms).slideY(
+          begin: 0.15,
+          end: 0,
+          curve: Curves.easeOutCubic,
+        );
   }
 }

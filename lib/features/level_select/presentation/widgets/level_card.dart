@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 
 class LevelCard extends StatelessWidget {
   const LevelCard({
@@ -20,15 +20,16 @@ class LevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final gradient = locked
-        ? const LinearGradient(
-            colors: [Color(0xFFB0BEC5), Color(0xFF90A4AE)],
+        ? LinearGradient(
+            colors: [colors.levelLockedStart, colors.levelLockedEnd],
           )
         : stars > 0
-            ? const LinearGradient(
-                colors: [Color(0xFF66BB6A), Color(0xFF43A047)],
+            ? LinearGradient(
+                colors: [colors.levelCompleteStart, colors.levelCompleteEnd],
               )
-            : AppColors.playButtonGradient;
+            : colors.playButtonGradient;
 
     return Material(
       color: Colors.transparent,
@@ -43,7 +44,7 @@ class LevelCard extends StatelessWidget {
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.gold.withValues(alpha: 0.35),
+                      color: colors.gold.withValues(alpha: 0.35),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -55,11 +56,11 @@ class LevelCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (locked)
-                  const Icon(Icons.lock_rounded, color: Colors.white, size: 28)
+                  Icon(Icons.lock_rounded, color: colors.onPrimary, size: 28)
                 else
                   Text(
                     '$levelNumber',
-                    style: AppTextStyles.button.copyWith(
+                    style: AppTextStyles.button(context).copyWith(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                     ),
@@ -71,7 +72,9 @@ class LevelCard extends StatelessWidget {
                     return Icon(
                       i < stars ? Icons.star_rounded : Icons.star_outline_rounded,
                       size: 14,
-                      color: locked ? Colors.white54 : AppColors.gold,
+                      color: locked
+                          ? colors.onPrimary.withValues(alpha: 0.5)
+                          : colors.gold,
                     );
                   }),
                 ),
@@ -80,10 +83,7 @@ class LevelCard extends StatelessWidget {
           ),
         ),
       ),
-    )
-        .animate()
-        .fadeIn(duration: 300.ms)
-        .scale(
+    ).animate().fadeIn(duration: 300.ms).scale(
           begin: const Offset(0.9, 0.9),
           end: const Offset(1, 1),
           curve: Curves.easeOutBack,

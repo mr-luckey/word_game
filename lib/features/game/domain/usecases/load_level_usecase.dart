@@ -9,6 +9,15 @@ class LoadLevelUseCase {
   Future<LevelEntity?> call(int levelId) => _repository.getLevelById(levelId);
 }
 
+class GetNextLevelUseCase {
+  GetNextLevelUseCase(this._repository);
+
+  final LevelRepository _repository;
+
+  Future<LevelEntity?> call(int currentLevelId) =>
+      _repository.getNextLevel(currentLevelId);
+}
+
 class SaveProgressUseCase {
   SaveProgressUseCase(this._repository);
 

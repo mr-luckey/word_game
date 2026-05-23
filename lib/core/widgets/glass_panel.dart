@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 
-/// Frosted glass card used over scenic backgrounds.
 class GlassPanel extends StatelessWidget {
   const GlassPanel({
     super.key,
@@ -22,6 +22,7 @@ class GlassPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final radius = borderRadius ?? BorderRadius.circular(AppSizes.radiusLg);
     final panel = ClipRRect(
       borderRadius: radius,
@@ -30,14 +31,11 @@ class GlassPanel extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: radius,
-            color: Colors.white.withValues(alpha: 0.88),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.95),
-              width: 1.5,
-            ),
+            color: colors.glassSurface,
+            border: Border.all(color: colors.glassBorder, width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
+                color: colors.shadow,
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

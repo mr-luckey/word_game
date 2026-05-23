@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 
 class CoinDisplay extends StatelessWidget {
   const CoinDisplay({
@@ -15,6 +15,7 @@ class CoinDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.paddingSm + 2,
@@ -24,19 +25,19 @@ class CoinDisplay extends StatelessWidget {
         gradient: LinearGradient(
           colors: light
               ? [
-                  Colors.white.withValues(alpha: 0.25),
-                  Colors.white.withValues(alpha: 0.15),
+                  colors.onScenic.withValues(alpha: 0.25),
+                  colors.onScenic.withValues(alpha: 0.15),
                 ]
               : [
-                  AppColors.gold.withValues(alpha: 0.2),
-                  AppColors.gold.withValues(alpha: 0.08),
+                  colors.gold.withValues(alpha: 0.2),
+                  colors.gold.withValues(alpha: 0.08),
                 ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: light
-              ? Colors.white.withValues(alpha: 0.5)
-              : AppColors.gold.withValues(alpha: 0.6),
+              ? colors.onScenic.withValues(alpha: 0.5)
+              : colors.gold.withValues(alpha: 0.6),
         ),
       ),
       child: Row(
@@ -44,14 +45,14 @@ class CoinDisplay extends StatelessWidget {
         children: [
           Icon(
             Icons.monetization_on_rounded,
-            color: light ? AppColors.gold : AppColors.goldDark,
+            color: light ? colors.gold : colors.goldDark,
             size: AppSizes.coinIconSize,
           ),
           const SizedBox(width: AppSizes.paddingXs),
           Text(
             '$coins',
-            style: AppTextStyles.coinsScore.copyWith(
-              color: light ? Colors.white : AppColors.goldDark,
+            style: AppTextStyles.coinsScore(context).copyWith(
+              color: light ? colors.onScenic : colors.goldDark,
               fontSize: 18,
             ),
           ),

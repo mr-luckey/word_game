@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/app_theme_extension.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 
 class LetterGrid extends StatelessWidget {
   const LetterGrid({
     super.key,
     required this.state,
+    required this.colors,
     required this.onDragStart,
     required this.onDragUpdate,
     required this.onDragEnd,
   });
 
   final GameInProgress state;
+  final AppThemeColors colors;
   final void Function(int row, int col) onDragStart;
   final void Function(int row, int col) onDragUpdate;
   final VoidCallback onDragEnd;
@@ -23,9 +25,8 @@ class LetterGrid extends StatelessWidget {
     final n = state.grid.length;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final boardSize = constraints.maxWidth;
         final gap = AppSizes.gridGap;
-        final cellSize = (boardSize - gap * (n + 1)) / n;
+        final cellSize = (constraints.maxWidth - gap * (n + 1)) / n;
         final totalSize = cellSize * n + gap * (n + 1);
 
         return Center(
@@ -33,11 +34,11 @@ class LetterGrid extends StatelessWidget {
             width: totalSize,
             height: totalSize,
             decoration: BoxDecoration(
-              color: AppColors.boardWhite,
+              color: colors.boardWhite,
               borderRadius: BorderRadius.circular(AppSizes.radiusLg),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
+                  color: colors.shadow,
                   blurRadius: 24,
                   offset: const Offset(0, 8),
                 ),
@@ -57,8 +58,10 @@ class LetterGrid extends StatelessWidget {
               child: CustomPaint(
                 painter: GridPainter(
                   state: state,
+                  colors: colors,
                   cellSize: cellSize,
                   gap: gap,
+                  letterStyle: AppTextStyles.gridLetter(context, n.toDouble()),
                 ),
                 size: Size.square(cellSize * n + gap * (n - 1)),
               ),
@@ -89,13 +92,17 @@ class LetterGrid extends StatelessWidget {
 class GridPainter extends CustomPainter {
   GridPainter({
     required this.state,
+    required this.colors,
     required this.cellSize,
     required this.gap,
+    required this.letterStyle,
   });
 
   final GameInProgress state;
+  final AppThemeColors colors;
   final double cellSize;
   final double gap;
+  final TextStyle letterStyle;
 
   Offset _cellCenter(int row, int col) {
     final stride = cellSize + gap;
@@ -111,7 +118,6 @@ class GridPainter extends CustomPainter {
     final stride = cellSize + gap;
     final radius = Radius.circular(AppSizes.radiusSm);
 
-    // Selection path line (behind cells)
     if (state.selectedCells.length >= 2 &&
         state.selectionState != SelectionState.wrong) {
       final path = Path();
@@ -125,7 +131,7 @@ class GridPainter extends CustomPainter {
       canvas.drawPath(
         path,
         Paint()
-          ..color = AppColors.selectionLine.withValues(alpha: 0.85)
+          ..color = colors.selectionLine.withValues(alpha: 0.85)
           ..strokeWidth = cellSize * 0.42
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
@@ -141,30 +147,28 @@ class GridPainter extends CustomPainter {
           radius,
         );
 
-        Color bg = (r + c) % 2 == 0 ? AppColors.cellDefault : AppColors.cellAlt;
+        Color bg = (r + c) % 2 == 0 ? colors.cellDefault : colors.cellAlt;
         if (state.foundCellColors.containsKey(idx)) {
-          bg = AppColors.foundColorForIndex(state.foundCellColors[idx]!);
+          bg = colors.foundColorForIndex(state.foundCellColors[idx]!);
         } else if (state.revealedCells.contains(idx)) {
-          bg = AppColors.cellRevealed;
+          bg = colors.cellRevealed;
         } else if (state.hintCells.contains(idx)) {
-          bg = AppColors.cellHint;
+          bg = colors.cellHint;
         } else if (state.selectedCells.any((cell) => cell.row == r && cell.col == c)) {
           bg = state.selectionState == SelectionState.wrong
-              ? AppColors.cellWrong
-              : AppColors.cellSelected;
+              ? colors.cellWrong
+              : colors.cellSelected;
         }
 
-        canvas.drawRRect(
-          rect,
-          Paint()..color = bg,
-        );
+        canvas.drawRRect(rect, Paint()..color = bg);
 
-        final isSelected = state.selectedCells.any((cell) => cell.row == r && cell.col == c);
+        final isSelected =
+            state.selectedCells.any((cell) => cell.row == r && cell.col == c);
         if (isSelected && state.selectionState != SelectionState.wrong) {
           canvas.drawRRect(
             rect,
             Paint()
-              ..color = AppColors.gold.withValues(alpha: 0.35)
+              ..color = colors.gold.withValues(alpha: 0.35)
               ..style = PaintingStyle.stroke
               ..strokeWidth = 2.5,
           );
@@ -174,10 +178,10 @@ class GridPainter extends CustomPainter {
         final tp = TextPainter(
           text: TextSpan(
             text: letter,
-            style: AppTextStyles.gridLetter(n.toDouble()).copyWith(
+            style: letterStyle.copyWith(
               color: state.foundCellColors.containsKey(idx)
-                  ? Colors.white
-                  : AppColors.darkText,
+                  ? colors.onPrimary
+                  : colors.onSurface,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -196,5 +200,5 @@ class GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant GridPainter old) =>
-      old.state != state || old.cellSize != cellSize;
+      old.state != state || old.cellSize != cellSize || old.colors != colors;
 }

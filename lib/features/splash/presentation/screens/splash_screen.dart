@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/injection.dart';
 
@@ -14,6 +14,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return BlocProvider(
       create: (_) => getIt<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashState>(
@@ -26,28 +27,18 @@ class SplashScreen extends StatelessWidget {
               Image.asset(
                 AssetPaths.splashBg,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.darkNavy,
-                        AppColors.primaryBlue,
-                        AppColors.oceanBlue,
-                      ],
-                    ),
-                  ),
+                errorBuilder: (_, __, ___) => DecoratedBox(
+                  decoration: BoxDecoration(gradient: colors.primaryGradient),
                 ),
               ),
-              Container(
+              DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withValues(alpha: 0.3),
-                      Colors.black.withValues(alpha: 0.55),
+                      colors.scrim.withValues(alpha: 0.3),
+                      colors.scrim.withValues(alpha: 0.55),
                     ],
                   ),
                 ),
@@ -65,27 +56,24 @@ class SplashScreen extends StatelessWidget {
                         errorBuilder: (_, __, ___) => Icon(
                           Icons.travel_explore_rounded,
                           size: 120,
-                          color: Colors.white.withValues(alpha: 0.95),
+                          color: colors.onScenic.withValues(alpha: 0.95),
                         ),
                       ),
-                    )
-                        .animate()
-                        .fadeIn(duration: 800.ms)
-                        .scale(
+                    ).animate().fadeIn(duration: 800.ms).scale(
                           begin: const Offset(0.7, 0.7),
                           end: const Offset(1, 1),
                           curve: Curves.elasticOut,
                         ),
                     const SizedBox(height: 16),
-                    Text('WORD SEARCH', style: AppTextStyles.gameTitle)
+                    Text('WORD SEARCH', style: AppTextStyles.gameTitle(context))
                         .animate(delay: 300.ms)
                         .fadeIn()
                         .slideY(begin: 0.3, end: 0),
                     Text(
                       'JOURNEY',
-                      style: AppTextStyles.gameTitle.copyWith(
+                      style: AppTextStyles.gameTitle(context).copyWith(
                         fontSize: 30,
-                        color: const Color(0xFFFFD54F),
+                        color: colors.goldLight,
                         letterSpacing: 8,
                       ),
                     )
@@ -93,12 +81,12 @@ class SplashScreen extends StatelessWidget {
                         .fadeIn()
                         .shimmer(
                           duration: 2.seconds,
-                          color: Colors.white.withValues(alpha: 0.25),
+                          color: colors.onScenic.withValues(alpha: 0.25),
                         ),
                     const SizedBox(height: 8),
                     Text(
                       'Travel the world with words',
-                      style: AppTextStyles.subtitle,
+                      style: AppTextStyles.subtitle(context),
                     ).animate(delay: 600.ms).fadeIn(),
                     const SizedBox(height: 48),
                     SizedBox(
@@ -107,10 +95,8 @@ class SplashScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: LinearProgressIndicator(
                           minHeight: 6,
-                          backgroundColor: Colors.white24,
-                          valueColor: const AlwaysStoppedAnimation(
-                            AppColors.gold,
-                          ),
+                          backgroundColor: colors.onScenicMuted,
+                          valueColor: AlwaysStoppedAnimation(colors.gold),
                         ),
                       ),
                     ).animate(delay: 700.ms).fadeIn(),

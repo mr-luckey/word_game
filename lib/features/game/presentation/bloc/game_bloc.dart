@@ -7,6 +7,7 @@ import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
+import 'package:word_game/core/utils/game_cell_utils.dart';
 import 'package:word_game/core/utils/grid_generator.dart';
 import 'package:word_game/core/utils/grid_rotator.dart';
 import 'package:word_game/core/utils/word_placer.dart';
@@ -20,6 +21,7 @@ import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc({
     required LoadLevelUseCase loadLevel,
+    required GetNextLevelUseCase getNextLevel,
     required SaveProgressUseCase saveProgress,
     required SpendCoinsUseCase spendCoins,
     required AddCoinsUseCase addCoins,
@@ -27,6 +29,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required AudioService audio,
     required AnalyticsService analytics,
   })  : _loadLevel = loadLevel,
+        _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
         _spendCoins = spendCoins,
         _addCoins = addCoins,
@@ -35,6 +38,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _analytics = analytics,
         super(const GameInitial()) {
     on<LoadLevel>(_onLoadLevel);
+    on<LoadNextLevel>(_onLoadNextLevel);
     on<CellDragStarted>(_onDragStart);
     on<CellDragUpdated>(_onDragUpdate);
     on<CellDragEnded>(_onDragEnd);
@@ -45,9 +49,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GamePaused>(_onPause);
     on<GameResumed>(_onResume);
     on<GameTick>(_onTick);
+    on<ClearGameFeedback>(_onClearFeedback);
   }
 
   final LoadLevelUseCase _loadLevel;
+  final GetNextLevelUseCase _getNextLevel;
   final SaveProgressUseCase _saveProgress;
   final SpendCoinsUseCase _spendCoins;
   final AddCoinsUseCase _addCoins;
@@ -107,11 +113,37 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         selectionState: SelectionState.idle,
         levelTheme: level.themeName,
         backgroundImage: level.backgroundImage,
+        themeId: level.themeId,
         coinsReward: level.coinsReward,
         hintsUsed: 0,
       ),
     );
     _startTimer();
+  }
+
+  Future<void> _onLoadNextLevel(
+    LoadNextLevel event,
+    Emitter<GameState> emit,
+  ) async {
+    final currentId = switch (state) {
+      GameCompleted s => s.levelId,
+      GameInProgress s => s.levelId,
+      _ => null,
+    };
+    if (currentId == null) return;
+
+    final next = await _getNextLevel(currentId);
+    if (next == null) {
+      emit(GameNoMoreLevels(
+        themeId: switch (state) {
+          GameCompleted s => s.themeId,
+          GameInProgress s => s.themeId,
+          _ => 1,
+        },
+      ));
+      return;
+    }
+    add(LoadLevel(next.id));
   }
 
   void _startTimer() {
@@ -133,6 +165,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(s.copyWith(elapsed: next));
   }
 
+  void _onClearFeedback(ClearGameFeedback event, Emitter<GameState> emit) {
+    final s = state;
+    if (s is! GameInProgress) return;
+    emit(s.copyWith(clearFeedback: true));
+  }
+
   void _onDragStart(CellDragStarted event, Emitter<GameState> emit) {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
@@ -142,6 +180,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       s.copyWith(
         selectedCells: [cell],
         selectionState: SelectionState.selecting,
+        clearFeedback: true,
       ),
     );
   }
@@ -219,98 +258,170 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   Future<void> _onHint(HintRequested event, Emitter<GameState> emit) async {
     final s = state;
-    if (s is! GameInProgress) return;
-    var working = s;
+    if (s is! GameInProgress || s.isPaused) return;
+
+    final unfound = s.wordsToFind
+        .where((w) => !s.foundWords.any((f) => f.text == w.text))
+        .toList();
+    if (unfound.isEmpty) {
+      emit(s.copyWith(feedback: 'All words already found!'));
+      return;
+    }
+
+    var working = s.copyWith(clearFeedback: true, selectedCells: []);
     if (s.hintsLeft <= 0) {
       final ok = await _spendCoins(GameConfig.hintCost);
-      if (!ok) return;
+      if (!ok) {
+        emit(s.copyWith(feedback: 'Not enough coins for a hint.'));
+        return;
+      }
       final coins = await _wallet.getCoins();
-      working = s.copyWith(coins: coins, hintsUsed: s.hintsUsed + 1);
+      working = working.copyWith(coins: coins, hintsUsed: s.hintsUsed + 1);
     } else {
-      working = s.copyWith(
+      working = working.copyWith(
         hintsLeft: s.hintsLeft - 1,
         hintsUsed: s.hintsUsed + 1,
       );
     }
-    emit(working);
-    final unfound = working.wordsToFind
-        .where((w) => !working.foundWords.any((f) => f.text == w.text))
-        .toList();
-    if (unfound.isEmpty) return;
-    final target = unfound.first.text;
-    final placement = _placements.firstWhere((p) => p.word == target);
+
     final n = working.grid.length;
-    final first = placement.cells.first;
-    final idx = first.row * n + first.col;
+    final foundTexts = working.foundWords.map((w) => w.text).toSet();
+
+    WordPlacement? targetPlacement;
+    for (final word in unfound) {
+      final placement = _placements.firstWhere((p) => p.word == word.text);
+      final startIdx = GameCellUtils.toIndex(
+        placement.cells.first.row,
+        placement.cells.first.col,
+        n,
+      );
+      if (!working.hintCells.contains(startIdx)) {
+        targetPlacement = placement;
+        break;
+      }
+    }
+    targetPlacement ??= _placements.firstWhere(
+      (p) => p.word == unfound.first.text && !foundTexts.contains(p.word),
+    );
+
+    final start = targetPlacement.cells.first;
+    final idx = GameCellUtils.toIndex(start.row, start.col, n);
+
     emit(
       working.copyWith(
         hintCells: {...working.hintCells, idx},
+        feedback: 'Hint: first letter of "${targetPlacement.word}"',
       ),
     );
   }
 
   Future<void> _onReveal(RevealRequested event, Emitter<GameState> emit) async {
     final s = state;
-    if (s is! GameInProgress) return;
-    final ok = await _spendCoins(GameConfig.revealCost);
-    if (!ok) return;
-    final coins = await _wallet.getCoins();
+    if (s is! GameInProgress || s.isPaused) return;
+
     final unfound = s.wordsToFind
         .where((w) => !s.foundWords.any((f) => f.text == w.text))
         .toList();
-    if (unfound.isEmpty) return;
-    final placement =
-        _placements.firstWhere((p) => p.word == unfound.first.text);
+    if (unfound.isEmpty) {
+      emit(s.copyWith(feedback: 'All words already found!'));
+      return;
+    }
+
+    final ok = await _spendCoins(GameConfig.revealCost);
+    if (!ok) {
+      emit(s.copyWith(feedback: 'Not enough coins to reveal a word.'));
+      return;
+    }
+    final coins = await _wallet.getCoins();
+
+    final withoutReveal = unfound.where((w) {
+      final p = _placements.firstWhere((pl) => pl.word == w.text);
+      final n = s.grid.length;
+      return !p.cells.every(
+        (c) => s.revealedCells.contains(GameCellUtils.toIndex(c.row, c.col, n)),
+      );
+    }).toList();
+
+    final targetWord = withoutReveal.isNotEmpty ? withoutReveal.first : unfound.first;
+    final placement = _placements.firstWhere((p) => p.word == targetWord.text);
     final n = s.grid.length;
-    final indices = placement.cells.map((c) => c.row * n + c.col).toSet();
+    final indices = placement.cells
+        .map((c) => GameCellUtils.toIndex(c.row, c.col, n))
+        .toSet();
+
     emit(
       s.copyWith(
         coins: coins,
         revealedCells: {...s.revealedCells, ...indices},
         hintsUsed: s.hintsUsed + 1,
+        selectedCells: [],
+        clearFeedback: true,
+        feedback: 'Revealed "${placement.word}" on the board',
       ),
     );
   }
 
   void _onRotate(BoardRotated event, Emitter<GameState> emit) {
     final s = state;
-    if (s is! GameInProgress) return;
+    if (s is! GameInProgress || s.isPaused) return;
+    final n = s.grid.length;
     final letters = s.grid.map((row) => row.map((c) => c.letter).toList()).toList();
     final rotated = GridRotator.rotate90CW(letters);
-    _placements = GridRotator.rotatePlacements(_placements, s.grid.length);
+    _placements = GridRotator.rotatePlacements(_placements, n);
+
     emit(
       s.copyWith(
         grid: _buildGridModels(rotated),
         selectedCells: [],
+        selectionState: SelectionState.idle,
+        foundCells: GameCellUtils.rotateIndexSet(s.foundCells, n),
+        hintCells: GameCellUtils.remapHintCells(s.hintCells, n),
+        revealedCells: GameCellUtils.remapRevealedCells(s.revealedCells, n),
+        foundCellColors: GameCellUtils.rotateColorMap(s.foundCellColors, n),
+        clearFeedback: true,
+        feedback: 'Board rotated',
       ),
     );
   }
 
   Future<void> _onShuffle(ShuffleRequested event, Emitter<GameState> emit) async {
     final s = state;
-    if (s is! GameInProgress) return;
+    if (s is! GameInProgress || s.isPaused) return;
+
     final ok = await _spendCoins(GameConfig.shuffleCost);
-    if (!ok) return;
+    if (!ok) {
+      emit(s.copyWith(feedback: 'Not enough coins to shuffle.'));
+      return;
+    }
     final coins = await _wallet.getCoins();
     final random = Random();
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    final placed = <String>{};
-    for (final p in _placements) {
-      for (final c in p.cells) {
-        placed.add('${c.row},${c.col}');
-      }
-    }
+    final locked = GameCellUtils.lockedCoordKeys(s, _placements);
+
     final newGrid = s.grid.map((row) => row.map((c) => c).toList()).toList();
+    var shuffledCount = 0;
     for (var r = 0; r < newGrid.length; r++) {
       for (var c = 0; c < newGrid[r].length; c++) {
-        if (!placed.contains('$r,$c')) {
-          newGrid[r][c] = newGrid[r][c].copyWith(
-            letter: letters[random.nextInt(26)],
-          );
-        }
+        if (locked.contains(GameCellUtils.coordKey(r, c))) continue;
+        newGrid[r][c] = newGrid[r][c].copyWith(
+          letter: letters[random.nextInt(26)],
+        );
+        shuffledCount++;
       }
     }
-    emit(s.copyWith(grid: newGrid, coins: coins));
+
+    emit(
+      s.copyWith(
+        grid: newGrid,
+        coins: coins,
+        selectedCells: [],
+        selectionState: SelectionState.idle,
+        clearFeedback: true,
+        feedback: shuffledCount > 0
+            ? 'Filler letters shuffled — found words unchanged'
+            : 'Nothing to shuffle',
+      ),
+    );
   }
 
   void _onPause(GamePaused event, Emitter<GameState> emit) {
@@ -349,6 +460,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         time: s.elapsed,
         hintsUsed: s.hintsUsed,
         levelId: s.levelId,
+        themeId: s.themeId,
       ),
     );
   }

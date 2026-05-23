@@ -38,20 +38,32 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
   final ProgressRepository _progress;
   final int themeId;
 
+  /// Reload stars / unlock state (e.g. after returning from a level).
+  Future<void> refresh() => load();
+
   Future<void> load() async {
+    if (isClosed) return;
+
     final themes = await _levels.loadThemes();
+    if (isClosed) return;
+
     final theme = themes.firstWhere(
       (t) => t.id == themeId,
       orElse: () => themes.first,
     );
     final stars = await _progress.getAllStars();
+    if (isClosed) return;
+
     final ordered = theme.levels.map((l) => l.id).toList()..sort();
     final unlocked = <int>{};
     for (final id in ordered) {
+      if (isClosed) return;
       if (await _progress.isLevelUnlocked(id, ordered)) {
         unlocked.add(id);
       }
     }
+    if (isClosed) return;
+
     emit(
       LevelSelectState(
         loading: false,

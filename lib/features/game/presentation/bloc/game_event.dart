@@ -15,6 +15,10 @@ class LoadLevel extends GameEvent {
   List<Object?> get props => [levelId];
 }
 
+class LoadNextLevel extends GameEvent {
+  const LoadNextLevel();
+}
+
 class CellDragStarted extends GameEvent {
   const CellDragStarted({required this.row, required this.col});
   final int row;
@@ -63,4 +67,8 @@ class GameResumed extends GameEvent {
 
 class GameTick extends GameEvent {
   const GameTick();
+}
+
+class ClearGameFeedback extends GameEvent {
+  const ClearGameFeedback();
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 
 class ToolCircleButton extends StatelessWidget {
   const ToolCircleButton({
@@ -20,6 +20,7 @@ class ToolCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -34,26 +35,24 @@ class ToolCircleButton extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: highlight
-                    ? AppColors.playButtonGradient
-                    : const LinearGradient(
-                        colors: [Colors.white, Color(0xFFF5F5F5)],
+                    ? colors.playButtonGradient
+                    : LinearGradient(
+                        colors: [colors.surface, colors.cellAlt],
                       ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
+                    color: colors.shadow,
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),
                 ],
                 border: Border.all(
-                  color: highlight
-                      ? AppColors.gold
-                      : AppColors.cellBorder,
+                  color: highlight ? colors.gold : colors.cellBorder,
                 ),
               ),
               child: Icon(
                 icon,
-                color: highlight ? Colors.white : AppColors.primaryBlue,
+                color: highlight ? colors.onPrimary : colors.primary,
                 size: 26,
               ),
             ),
@@ -62,17 +61,17 @@ class ToolCircleButton extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyles.wordList.copyWith(
+          style: AppTextStyles.wordList(context).copyWith(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: colors.onScenic,
           ),
         ),
         Text(
           subtitle,
-          style: AppTextStyles.wordList.copyWith(
+          style: AppTextStyles.wordList(context).copyWith(
             fontSize: 9,
-            color: Colors.white70,
+            color: colors.onScenicMuted,
           ),
         ),
       ],

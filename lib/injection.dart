@@ -32,6 +32,7 @@ Future<void> configureDependencies() async {
   );
 
   getIt.registerLazySingleton(() => LoadLevelUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetNextLevelUseCase(getIt()));
   getIt.registerLazySingleton(() => SaveProgressUseCase(getIt()));
   getIt.registerLazySingleton(() => SpendCoinsUseCase(getIt()));
   getIt.registerLazySingleton(() => AddCoinsUseCase(getIt()));
@@ -46,6 +47,7 @@ Future<void> configureDependencies() async {
   getIt.registerFactory(
     () => GameBloc(
       loadLevel: getIt(),
+      getNextLevel: getIt(),
       saveProgress: getIt(),
       spendCoins: getIt(),
       addCoins: getIt(),

@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 
 class JourneyBottomNav extends StatelessWidget {
   const JourneyBottomNav({
@@ -24,15 +24,16 @@ class JourneyBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.92),
+            color: colors.navSurface,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: colors.shadow,
                 blurRadius: 16,
                 offset: const Offset(0, -4),
               ),
@@ -58,15 +59,12 @@ class JourneyBottomNav extends StatelessWidget {
                             duration: 200.ms,
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              gradient: selected
-                                  ? AppColors.playButtonGradient
-                                  : null,
+                              gradient: selected ? colors.playButtonGradient : null,
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: selected
                                   ? [
                                       BoxShadow(
-                                        color: AppColors.gold
-                                            .withValues(alpha: 0.4),
+                                        color: colors.gold.withValues(alpha: 0.4),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),
@@ -75,20 +73,18 @@ class JourneyBottomNav extends StatelessWidget {
                             ),
                             child: Icon(
                               icon,
-                              color: selected ? Colors.white : AppColors.lockedGray,
+                              color: selected ? colors.onPrimary : colors.locked,
                               size: 26,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             label,
-                            style: AppTextStyles.wordList.copyWith(
+                            style: AppTextStyles.wordList(context).copyWith(
                               fontSize: 11,
                               fontWeight:
                                   selected ? FontWeight.w600 : FontWeight.w400,
-                              color: selected
-                                  ? AppColors.goldDark
-                                  : AppColors.lockedGray,
+                              color: selected ? colors.goldDark : colors.locked,
                             ),
                           ),
                         ],

@@ -3,9 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
@@ -19,7 +19,7 @@ class DestinationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DestinationsCubit(getIt())..load(),
+      create: (_) => DestinationsCubit(getIt(), getIt())..load(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: ScenicBackground(
@@ -34,14 +34,12 @@ class DestinationsScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                        onPressed: () => context.pop(),
-                      ),
+                      const SizedBox(width: 48),
                       Expanded(
                         child: Text(
                           'Explore Destinations',
-                          style: AppTextStyles.appBarTitle.copyWith(fontSize: 20),
+                          style: AppTextStyles.appBarTitle(context)
+                              .copyWith(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -55,9 +53,10 @@ class DestinationsScreen extends StatelessWidget {
                 Expanded(
                   child: BlocBuilder<DestinationsCubit, DestinationsState>(
                     builder: (context, state) {
+                      final colors = context.appColors;
                       if (state.loading) {
-                        return const Center(
-                          child: CircularProgressIndicator(color: AppColors.gold),
+                        return Center(
+                          child: CircularProgressIndicator(color: colors.gold),
                         );
                       }
                       return ListView.builder(
@@ -72,7 +71,7 @@ class DestinationsScreen extends StatelessWidget {
                             child: GlassPanel(
                               padding: EdgeInsets.zero,
                               onTap: () =>
-                                  context.push('/levels?themeId=${theme.id}'),
+                                  context.go('/levels?themeId=${theme.id}'),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
@@ -91,9 +90,9 @@ class DestinationsScreen extends StatelessWidget {
                                             ),
                                             fit: BoxFit.cover,
                                             errorBuilder: (_, __, ___) =>
-                                                Container(
-                                              decoration: const BoxDecoration(
-                                                gradient: AppColors.primaryGradient,
+                                                DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                gradient: colors.primaryGradient,
                                               ),
                                             ),
                                           ),
@@ -104,9 +103,7 @@ class DestinationsScreen extends StatelessWidget {
                                                 end: Alignment.bottomCenter,
                                                 colors: [
                                                   Colors.transparent,
-                                                  Colors.black.withValues(
-                                                    alpha: 0.6,
-                                                  ),
+                                                  colors.scrim,
                                                 ],
                                               ),
                                             ),
@@ -116,9 +113,10 @@ class DestinationsScreen extends StatelessWidget {
                                             bottom: AppSizes.paddingMd,
                                             child: Text(
                                               theme.name,
-                                              style: AppTextStyles.levelName
-                                                  .copyWith(
-                                                color: Colors.white,
+                                              style: AppTextStyles.levelName(
+                                                context,
+                                              ).copyWith(
+                                                color: colors.onScenic,
                                                 fontSize: 22,
                                               ),
                                             ),
@@ -133,20 +131,20 @@ class DestinationsScreen extends StatelessWidget {
                                     ),
                                     child: Row(
                                       children: [
-                                        const Icon(
+                                        Icon(
                                           Icons.map_rounded,
-                                          color: AppColors.primaryBlue,
+                                          color: colors.primary,
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
                                           '${theme.levels.length} levels',
-                                          style: AppTextStyles.wordList,
+                                          style: AppTextStyles.wordList(context),
                                         ),
                                         const Spacer(),
-                                        const Icon(
+                                        Icon(
                                           Icons.arrow_forward_ios_rounded,
                                           size: 16,
-                                          color: AppColors.lockedGray,
+                                          color: colors.locked,
                                         ),
                                       ],
                                     ),
