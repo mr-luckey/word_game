@@ -70,6 +70,7 @@ class LevelRepositoryImpl implements LevelRepository {
         id: level.id,
         themeId: theme.id,
         themeName: theme.name,
+        backgroundImage: theme.backgroundImage,
         difficultyIndex: level.difficultyIndex,
         gridSize: level.gridSize,
         timeLimit: level.timeLimit,

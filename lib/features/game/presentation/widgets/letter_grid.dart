@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_colors.dart';
+import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 
@@ -22,53 +23,127 @@ class LetterGrid extends StatelessWidget {
     final n = state.grid.length;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final cellSize = constraints.maxWidth / n;
-        return GestureDetector(
-          onPanStart: (d) {
-            final cell = _cellFromOffset(d.localPosition, cellSize, n);
-            if (cell != null) onDragStart(cell.$1, cell.$2);
-          },
-          onPanUpdate: (d) {
-            final cell = _cellFromOffset(d.localPosition, cellSize, n);
-            if (cell != null) onDragUpdate(cell.$1, cell.$2);
-          },
-          onPanEnd: (_) => onDragEnd(),
-          child: CustomPaint(
-            painter: GridPainter(
-              state: state,
-              cellSize: cellSize,
+        final boardSize = constraints.maxWidth;
+        final gap = AppSizes.gridGap;
+        final cellSize = (boardSize - gap * (n + 1)) / n;
+        final totalSize = cellSize * n + gap * (n + 1);
+
+        return Center(
+          child: Container(
+            width: totalSize,
+            height: totalSize,
+            decoration: BoxDecoration(
+              color: AppColors.boardWhite,
+              borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-            size: Size.square(constraints.maxWidth),
+            padding: EdgeInsets.all(gap),
+            child: GestureDetector(
+              onPanStart: (d) {
+                final cell = _cellFromOffset(d.localPosition, cellSize, gap, n);
+                if (cell != null) onDragStart(cell.$1, cell.$2);
+              },
+              onPanUpdate: (d) {
+                final cell = _cellFromOffset(d.localPosition, cellSize, gap, n);
+                if (cell != null) onDragUpdate(cell.$1, cell.$2);
+              },
+              onPanEnd: (_) => onDragEnd(),
+              child: CustomPaint(
+                painter: GridPainter(
+                  state: state,
+                  cellSize: cellSize,
+                  gap: gap,
+                ),
+                size: Size.square(cellSize * n + gap * (n - 1)),
+              ),
+            ),
           ),
         );
       },
     );
   }
 
-  (int, int)? _cellFromOffset(Offset local, double cellSize, int n) {
-    final col = (local.dx / cellSize).floor();
-    final row = (local.dy / cellSize).floor();
+  (int, int)? _cellFromOffset(
+    Offset local,
+    double cellSize,
+    double gap,
+    int n,
+  ) {
+    final stride = cellSize + gap;
+    final col = (local.dx / stride).floor();
+    final row = (local.dy / stride).floor();
     if (row < 0 || row >= n || col < 0 || col >= n) return null;
+    final cx = local.dx - col * stride;
+    final cy = local.dy - row * stride;
+    if (cx > cellSize || cy > cellSize) return null;
     return (row, col);
   }
 }
 
 class GridPainter extends CustomPainter {
-  GridPainter({required this.state, required this.cellSize});
+  GridPainter({
+    required this.state,
+    required this.cellSize,
+    required this.gap,
+  });
 
   final GameInProgress state;
   final double cellSize;
+  final double gap;
+
+  Offset _cellCenter(int row, int col) {
+    final stride = cellSize + gap;
+    return Offset(
+      col * stride + cellSize / 2,
+      row * stride + cellSize / 2,
+    );
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     final n = state.grid.length;
+    final stride = cellSize + gap;
+    final radius = Radius.circular(AppSizes.radiusSm);
+
+    // Selection path line (behind cells)
+    if (state.selectedCells.length >= 2 &&
+        state.selectionState != SelectionState.wrong) {
+      final path = Path();
+      final first = state.selectedCells.first;
+      path.moveTo(_cellCenter(first.row, first.col).dx,
+          _cellCenter(first.row, first.col).dy);
+      for (var i = 1; i < state.selectedCells.length; i++) {
+        final c = state.selectedCells[i];
+        path.lineTo(_cellCenter(c.row, c.col).dx, _cellCenter(c.row, c.col).dy);
+      }
+      canvas.drawPath(
+        path,
+        Paint()
+          ..color = AppColors.selectionLine.withValues(alpha: 0.85)
+          ..strokeWidth = cellSize * 0.42
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
+    }
+
     for (var r = 0; r < n; r++) {
       for (var c = 0; c < n; c++) {
         final idx = r * n + c;
-        final rect = Rect.fromLTWH(c * cellSize, r * cellSize, cellSize, cellSize);
+        final rect = RRect.fromRectAndRadius(
+          Rect.fromLTWH(c * stride, r * stride, cellSize, cellSize),
+          radius,
+        );
+
         Color bg = (r + c) % 2 == 0 ? AppColors.cellDefault : AppColors.cellAlt;
-        if (state.foundCells.contains(idx)) {
-          bg = AppColors.cellFound;
+        if (state.foundCellColors.containsKey(idx)) {
+          bg = AppColors.foundColorForIndex(state.foundCellColors[idx]!);
         } else if (state.revealedCells.contains(idx)) {
           bg = AppColors.cellRevealed;
         } else if (state.hintCells.contains(idx)) {
@@ -78,19 +153,33 @@ class GridPainter extends CustomPainter {
               ? AppColors.cellWrong
               : AppColors.cellSelected;
         }
-        canvas.drawRect(rect, Paint()..color = bg);
-        canvas.drawRect(
+
+        canvas.drawRRect(
           rect,
-          Paint()
-            ..color = AppColors.cellBorder
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1,
+          Paint()..color = bg,
         );
+
+        final isSelected = state.selectedCells.any((cell) => cell.row == r && cell.col == c);
+        if (isSelected && state.selectionState != SelectionState.wrong) {
+          canvas.drawRRect(
+            rect,
+            Paint()
+              ..color = AppColors.gold.withValues(alpha: 0.35)
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 2.5,
+          );
+        }
+
         final letter = state.grid[r][c].letter;
         final tp = TextPainter(
           text: TextSpan(
             text: letter,
-            style: AppTextStyles.gridLetter(n.toDouble()),
+            style: AppTextStyles.gridLetter(n.toDouble()).copyWith(
+              color: state.foundCellColors.containsKey(idx)
+                  ? Colors.white
+                  : AppColors.darkText,
+              fontWeight: FontWeight.w800,
+            ),
           ),
           textDirection: TextDirection.ltr,
         )..layout();

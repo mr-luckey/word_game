@@ -68,6 +68,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         id: 9999,
         themeId: 0,
         themeName: 'Daily Challenge',
+        backgroundImage: 'paris_bg.jpg',
         difficultyIndex: 1,
         gridSize: GameConfig.gridMedium,
         timeLimit: 300,
@@ -105,6 +106,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         difficulty: level.difficulty,
         selectionState: SelectionState.idle,
         levelTheme: level.themeName,
+        backgroundImage: level.backgroundImage,
         coinsReward: level.coinsReward,
         hintsUsed: 0,
       ),
@@ -174,6 +176,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (placement != null && !alreadyFound) {
       await _audio.playWordFound();
       final n = s.grid.length;
+      final colorIndex = s.foundWords.length;
+      final newFoundCellColors = Map<int, int>.from(s.foundCellColors);
+      for (final c in placement.cells) {
+        newFoundCellColors[c.row * n + c.col] = colorIndex;
+      }
       final newFoundCells = {
         ...s.foundCells,
         ...placement.cells.map((c) => c.row * n + c.col),
@@ -185,6 +192,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       var newState = s.copyWith(
         foundWords: newFoundWords,
         foundCells: newFoundCells,
+        foundCellColors: newFoundCellColors,
         selectedCells: [],
         selectionState: SelectionState.correct,
       );

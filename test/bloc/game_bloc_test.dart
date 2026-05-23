@@ -29,6 +29,7 @@ void main() {
     id: 101,
     themeId: 1,
     themeName: 'Paris',
+    backgroundImage: 'paris_bg.jpg',
     difficultyIndex: 0,
     gridSize: 8,
     timeLimit: 180,

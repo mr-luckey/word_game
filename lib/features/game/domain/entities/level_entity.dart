@@ -7,6 +7,7 @@ class LevelEntity extends Equatable {
     required this.id,
     required this.themeId,
     required this.themeName,
+    required this.backgroundImage,
     required this.difficultyIndex,
     required this.gridSize,
     required this.timeLimit,
@@ -18,6 +19,7 @@ class LevelEntity extends Equatable {
   final int id;
   final int themeId;
   final String themeName;
+  final String backgroundImage;
   final int difficultyIndex;
   final int gridSize;
   final int timeLimit;

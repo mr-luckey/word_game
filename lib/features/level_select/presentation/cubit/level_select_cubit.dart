@@ -7,6 +7,7 @@ class LevelSelectState extends Equatable {
   const LevelSelectState({
     this.loading = true,
     this.themeName = '',
+    this.backgroundImage = '',
     this.levels = const [],
     this.stars = const {},
     this.unlocked = const {},
@@ -15,6 +16,7 @@ class LevelSelectState extends Equatable {
 
   final bool loading;
   final String themeName;
+  final String backgroundImage;
   final List<LevelJson> levels;
   final Map<int, int> stars;
   final Set<int> unlocked;
@@ -25,7 +27,7 @@ class LevelSelectState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [loading, themeName, levels, stars, unlocked, difficultyIndex];
+      [loading, themeName, backgroundImage, levels, stars, unlocked, difficultyIndex];
 }
 
 class LevelSelectCubit extends Cubit<LevelSelectState> {
@@ -54,6 +56,7 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
       LevelSelectState(
         loading: false,
         themeName: theme.name,
+        backgroundImage: theme.backgroundImage,
         levels: theme.levels,
         stars: stars,
         unlocked: unlocked,
@@ -65,6 +68,7 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
     emit(LevelSelectState(
       loading: state.loading,
       themeName: state.themeName,
+      backgroundImage: state.backgroundImage,
       levels: state.levels,
       stars: state.stars,
       unlocked: state.unlocked,

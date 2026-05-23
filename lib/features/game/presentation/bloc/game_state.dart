@@ -37,8 +37,10 @@ class GameInProgress extends GameState {
     required this.difficulty,
     required this.selectionState,
     required this.levelTheme,
+    required this.backgroundImage,
     required this.coinsReward,
     required this.hintsUsed,
+    this.foundCellColors = const {},
   });
 
   final List<List<GridCellModel>> grid;
@@ -57,8 +59,10 @@ class GameInProgress extends GameState {
   final DifficultyLevel difficulty;
   final SelectionState selectionState;
   final String levelTheme;
+  final String backgroundImage;
   final int coinsReward;
   final int hintsUsed;
+  final Map<int, int> foundCellColors;
 
   bool get allWordsFound =>
       foundWords.length == wordsToFind.length;
@@ -77,6 +81,7 @@ class GameInProgress extends GameState {
     Set<int>? foundCells,
     Set<int>? hintCells,
     Set<int>? revealedCells,
+    Map<int, int>? foundCellColors,
     int? coins,
     int? hintsLeft,
     Duration? elapsed,
@@ -92,6 +97,7 @@ class GameInProgress extends GameState {
         foundCells: foundCells ?? this.foundCells,
         hintCells: hintCells ?? this.hintCells,
         revealedCells: revealedCells ?? this.revealedCells,
+        foundCellColors: foundCellColors ?? this.foundCellColors,
         coins: coins ?? this.coins,
         hintsLeft: hintsLeft ?? this.hintsLeft,
         timeLimit: timeLimit,
@@ -101,6 +107,7 @@ class GameInProgress extends GameState {
         difficulty: difficulty,
         selectionState: selectionState ?? this.selectionState,
         levelTheme: levelTheme,
+        backgroundImage: backgroundImage,
         coinsReward: coinsReward,
         hintsUsed: hintsUsed ?? this.hintsUsed,
       );
@@ -120,6 +127,8 @@ class GameInProgress extends GameState {
         isPaused,
         selectionState,
         hintsUsed,
+        foundCellColors,
+        backgroundImage,
       ];
 }
 

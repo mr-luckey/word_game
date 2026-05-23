@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -39,47 +40,81 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(color: Colors.black.withValues(alpha: 0.45)),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.3),
+                      Colors.black.withValues(alpha: 0.55),
+                    ],
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 160,
-                      height: 160,
+                      width: 180,
+                      height: 180,
                       child: Lottie.asset(
                         AssetPaths.wordLogoLottie,
                         fit: BoxFit.contain,
                         errorBuilder: (_, __, ___) => Icon(
-                          Icons.travel_explore,
+                          Icons.travel_explore_rounded,
                           size: 120,
                           color: Colors.white.withValues(alpha: 0.95),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text('WORD SEARCH JOURNEY', style: AppTextStyles.gameTitle),
+                    )
+                        .animate()
+                        .fadeIn(duration: 800.ms)
+                        .scale(
+                          begin: const Offset(0.7, 0.7),
+                          end: const Offset(1, 1),
+                          curve: Curves.elasticOut,
+                        ),
+                    const SizedBox(height: 16),
+                    Text('WORD SEARCH', style: AppTextStyles.gameTitle)
+                        .animate(delay: 300.ms)
+                        .fadeIn()
+                        .slideY(begin: 0.3, end: 0),
+                    Text(
+                      'JOURNEY',
+                      style: AppTextStyles.gameTitle.copyWith(
+                        fontSize: 30,
+                        color: const Color(0xFFFFD54F),
+                        letterSpacing: 8,
+                      ),
+                    )
+                        .animate(delay: 450.ms)
+                        .fadeIn()
+                        .shimmer(
+                          duration: 2.seconds,
+                          color: Colors.white.withValues(alpha: 0.25),
+                        ),
                     const SizedBox(height: 8),
-                    Text('Travel the world with words', style: AppTextStyles.subtitle),
+                    Text(
+                      'Travel the world with words',
+                      style: AppTextStyles.subtitle,
+                    ).animate(delay: 600.ms).fadeIn(),
                     const SizedBox(height: 48),
                     SizedBox(
-                      width: 200,
-                      child: LinearProgressIndicator(
-                        backgroundColor: Colors.white24,
-                        valueColor: const AlwaysStoppedAnimation(AppColors.oceanBlue),
+                      width: 220,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          minHeight: 6,
+                          backgroundColor: Colors.white24,
+                          valueColor: const AlwaysStoppedAnimation(
+                            AppColors.gold,
+                          ),
+                        ),
                       ),
-                    ),
+                    ).animate(delay: 700.ms).fadeIn(),
                   ],
-                ),
-              ),
-              const Positioned(
-                bottom: 32,
-                left: 0,
-                right: 0,
-                child: Text(
-                  'Word Search Journey Clone',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white54, fontSize: 12),
                 ),
               ),
             ],

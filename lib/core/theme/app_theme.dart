@@ -13,7 +13,7 @@ class AppTheme {
           primary: AppColors.primaryBlue,
           secondary: AppColors.oceanBlue,
         ),
-        scaffoldBackgroundColor: AppColors.lightBlueBg,
+        scaffoldBackgroundColor: AppColors.cream,
         textTheme: GoogleFonts.poppinsTextTheme(),
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.primaryBlue,
