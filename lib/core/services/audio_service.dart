@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 
 class AudioService {
   AudioService(this._prefs);
@@ -14,15 +15,15 @@ class AudioService {
   bool get soundEnabled => _prefs.getBool(_soundKey) ?? true;
   bool get musicEnabled => _prefs.getBool(_musicKey) ?? true;
 
-  Future<void> playWordFound() => _play('audio/word_found.mp3');
-  Future<void> playLevelComplete() => _play('audio/level_complete.mp3');
-  Future<void> playWrong() => _play('audio/wrong.mp3');
+  Future<void> playWordFound() => _play(AssetPaths.wordFoundSfx);
+  Future<void> playLevelComplete() => _play(AssetPaths.levelCompleteSfx);
+  Future<void> playWrong() => _play(AssetPaths.wrongSfx);
 
   Future<void> startBackgroundMusic() async {
     if (!musicEnabled) return;
     await _bgPlayer.setReleaseMode(ReleaseMode.loop);
     await _bgPlayer.play(
-      AssetSource('audio/bg_music.mp3'),
+      AssetSource(AssetPaths.bgMusic),
       volume: 0.4,
     );
   }

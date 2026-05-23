@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
@@ -20,16 +22,20 @@ class SplashScreen extends StatelessWidget {
           body: Stack(
             fit: StackFit.expand,
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.darkNavy,
-                      AppColors.primaryBlue,
-                      AppColors.oceanBlue,
-                    ],
+              Image.asset(
+                AssetPaths.splashBg,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColors.darkNavy,
+                        AppColors.primaryBlue,
+                        AppColors.oceanBlue,
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -38,10 +44,18 @@ class SplashScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.travel_explore,
-                      size: 120,
-                      color: Colors.white.withValues(alpha: 0.95),
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Lottie.asset(
+                        AssetPaths.wordLogoLottie,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => Icon(
+                          Icons.travel_explore,
+                          size: 120,
+                          color: Colors.white.withValues(alpha: 0.95),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Text('WORD SEARCH JOURNEY', style: AppTextStyles.gameTitle),

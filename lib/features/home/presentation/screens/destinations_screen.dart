@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_colors.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
@@ -51,24 +52,38 @@ class DestinationsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Container(
+                        SizedBox(
                           height: 120,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.primaryBlue,
-                                AppColors.oceanBlue.withValues(
-                                  alpha: 0.6 + index * 0.05,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.asset(
+                                AssetPaths.themeImage(theme.backgroundImage),
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        AppColors.primaryBlue,
+                                        AppColors.oceanBlue.withValues(
+                                          alpha: 0.6 + index * 0.05,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.location_city,
-                              size: 48,
-                              color: Colors.white.withValues(alpha: 0.9),
-                            ),
+                              ),
+                              Container(
+                                color: Colors.black.withValues(alpha: 0.35),
+                              ),
+                              Center(
+                                child: Icon(
+                                  Icons.location_city,
+                                  size: 48,
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Padding(
