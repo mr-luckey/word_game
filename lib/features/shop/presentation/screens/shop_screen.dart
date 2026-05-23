@@ -6,7 +6,6 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
-import 'package:word_game/core/widgets/gradient_button.dart';
 import 'package:word_game/core/widgets/scenic_page.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
@@ -103,71 +102,154 @@ class _ShopList extends StatelessWidget {
         const SizedBox(height: AppSizes.paddingMd),
         if (useStore)
           ...products.map(
-            (p) => _ProductTile(product: p),
+            (p) {
+              final coins = ShopProducts.coinRewards[p.id];
+              return _ShopPackTile(
+                title: p.title,
+                subtitle: coins != null && coins > 0
+                    ? '$coins coins'
+                    : p.description,
+                price: p.price,
+                onBuy: () => context.read<ShopCubit>().buy(p),
+              );
+            },
           )
         else
           ...fallbackPacks.map(
-            (p) => _FallbackTile(pack: p),
+            (p) => _ShopPackTile(
+              title: p.title,
+              subtitle: p.coins > 0
+                  ? (p.bestValue
+                      ? '${p.coins} coins · BEST VALUE'
+                      : '${p.coins} coins')
+                  : null,
+              price: p.price,
+              onBuy: () => context.read<ShopCubit>().buyFallback(p),
+            ),
           ),
         const SizedBox(height: AppSizes.paddingLg),
         Text('EXTRAS', style: AppTextStyles.levelName(context)),
         const SizedBox(height: AppSizes.paddingSm),
-        ...extras.map((p) => _FallbackTile(pack: p)),
+        ...extras.map(
+          (p) => _ShopPackTile(
+            title: p.title,
+            subtitle: p.coins > 0 ? '${p.coins} coins' : null,
+            price: p.price,
+            onBuy: () => context.read<ShopCubit>().buyFallback(p),
+          ),
+        ),
       ],
     );
   }
 }
 
-class _ProductTile extends StatelessWidget {
-  const _ProductTile({required this.product});
+class _ShopPackTile extends StatelessWidget {
+  const _ShopPackTile({
+    required this.title,
+    this.subtitle,
+    required this.price,
+    required this.onBuy,
+  });
 
-  final ProductDetails product;
+  final String title;
+  final String? subtitle;
+  final String price;
+  final VoidCallback onBuy;
 
   @override
   Widget build(BuildContext context) {
-    final coins = ShopProducts.coinRewards[product.id];
+    final colors = context.appColors;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
       child: GlassPanel(
-        child: ListTile(
-          title: Text(product.title),
-          subtitle: Text(
-            coins != null && coins > 0
-                ? '$coins coins'
-                : product.description,
-          ),
-          trailing: GradientButton(
-            label: product.price,
-            expanded: false,
-            onPressed: () => context.read<ShopCubit>().buy(product),
-          ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.paddingMd,
+          vertical: AppSizes.paddingSm + 2,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.levelName(context).copyWith(fontSize: 16),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle!,
+                      style: AppTextStyles.wordList(context).copyWith(
+                        fontSize: 13,
+                        color: colors.locked,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            _ShopPriceButton(price: price, onPressed: onBuy),
+          ],
         ),
       ),
     );
   }
 }
 
-class _FallbackTile extends StatelessWidget {
-  const _FallbackTile({required this.pack});
+/// Compact buy button — no outer shadow so GlassPanel clip does not cut it.
+class _ShopPriceButton extends StatelessWidget {
+  const _ShopPriceButton({
+    required this.price,
+    required this.onPressed,
+  });
 
-  final ShopPackFallback pack;
+  final String price;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
-      child: GlassPanel(
-        child: ListTile(
-          title: Text(pack.title),
-          subtitle: pack.coins > 0
-              ? Text(
-                  pack.bestValue ? '${pack.coins} coins · BEST VALUE' : '${pack.coins} coins',
-                )
-              : null,
-          trailing: GradientButton(
-            label: pack.price,
-            expanded: false,
-            onPressed: () => context.read<ShopCubit>().buyFallback(pack),
+    final colors = context.appColors;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: colors.primaryGradient,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colors.goldLight.withValues(alpha: 0.5),
+              width: 1,
+            ),
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 72),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Text(
+                price,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.visible,
+                softWrap: false,
+                style: AppTextStyles.button(context).copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0,
+                ),
+              ),
+            ),
           ),
         ),
       ),
