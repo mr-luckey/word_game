@@ -1,20 +1,28 @@
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:word_game/app.dart';
+import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/audio_service.dart';
+import 'package:word_game/injection.dart';
 
-void main() {
-  runApp(const MainApp());
-}
-
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Firebase disabled for now — enable when flutterfire configure is done.
+  // try {
+  //   await Firebase.initializeApp();
+  // } catch (_) {}
+  await configureDependencies();
+  await getIt<AdService>().initialize();
+  await getIt<AudioService>().startBackgroundMusic();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+  runApp(const WordSearchApp());
 }

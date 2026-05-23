@@ -1,19 +1,57 @@
 name: word_game
-description: "A new Flutter project."
+description: Word Search Journey Flutter Clone
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.5
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.5
+  bloc: ^8.1.4
+  get_it: ^7.7.0
+  injectable: ^2.4.0
+  go_router: ^14.2.7
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.3
+  path: ^1.9.0
+  shared_preferences: ^2.3.1
+  google_mobile_ads: ^5.1.0
+  in_app_purchase: ^3.2.0
+  lottie: ^3.1.2
+  animated_text_kit: ^4.2.2
+  shimmer: ^3.0.0
+  confetti: ^0.7.0
+  flutter_animate: ^4.5.0
+  cached_network_image: ^3.3.1
+  audioplayers: ^6.0.0
+  # firebase_core: ^3.5.0
+  # firebase_analytics: ^11.3.0
+  # firebase_crashlytics: ^4.1.0
+  intl: ^0.19.0
+  dartz: ^0.10.1
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.4.11
+  drift_dev: ^2.18.0
+  injectable_generator: ^2.6.1
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/data/
+    - assets/images/
+    - assets/images/splash/
+    - assets/images/themes/
+    - assets/animations/
+    - assets/audio/
