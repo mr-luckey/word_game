@@ -87,7 +87,19 @@ class ProfileScreen extends StatelessWidget {
                                         : colors.locked,
                                   ),
                                   title: Text(a.title),
-                                  subtitle: Text(a.description),
+                                  subtitle: Text(
+                                    a.unlocked
+                                        ? a.description
+                                        : '${a.description} · +${a.coinReward} coins',
+                                  ),
+                                  trailing: a.unlocked
+                                      ? null
+                                      : Text(
+                                          '+${a.coinReward}',
+                                          style: AppTextStyles.coinsScore(
+                                            context,
+                                          ).copyWith(fontSize: 14),
+                                        ),
                                 ),
                               ),
                             ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,28 +74,58 @@ class AdService {
     await _interstitial?.show();
   }
 
-  Future<bool> showRewardedAd({
-    required void Function(int coins) onReward,
-    required VoidCallback onFail,
+  /// Doubles level coins: caller should add [levelCoins] again on success.
+  Future<bool> showDoubleCoinsAd({
+    required int levelCoins,
+    required void Function() onGranted,
   }) async {
     final ad = _rewarded;
     if (ad == null) {
-      onFail();
       loadRewarded();
+      if (kDebugMode && !kIsWeb) {
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        onGranted();
+        return true;
+      }
       return false;
     }
-    var rewarded = false;
-    await ad.show(
-      onUserEarnedReward: (_, __) {
-        rewarded = true;
-        onReward(GameConfig.rewardedBonusCoins);
+
+    var granted = false;
+    final completer = Completer<bool>();
+
+    ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _rewarded = null;
+        loadRewarded();
+        if (!completer.isCompleted) completer.complete(granted);
+      },
+      onAdFailedToShowFullScreenContent: (ad, _) {
+        ad.dispose();
+        _rewarded = null;
+        loadRewarded();
+        if (!completer.isCompleted) completer.complete(false);
       },
     );
-    ad.dispose();
-    _rewarded = null;
-    loadRewarded();
-    if (!rewarded) onFail();
-    return rewarded;
+
+    await ad.show(
+      onUserEarnedReward: (_, __) {
+        granted = true;
+        onGranted();
+      },
+    );
+
+    return completer.future;
+  }
+
+  Future<bool> showRewardedAd({
+    required void Function(int coins) onReward,
+    required void Function() onFail,
+  }) async {
+    return showDoubleCoinsAd(
+      levelCoins: GameConfig.rewardedBonusCoins,
+      onGranted: () => onReward(GameConfig.rewardedBonusCoins),
+    );
   }
 
   BannerAd? createBannerAd({required void Function(BannerAd) onLoaded}) {

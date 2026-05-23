@@ -27,11 +27,18 @@ class ScenicBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        _BackgroundImage(
-          asset: imageAsset ?? AssetPaths.splashBg,
-          blurSigma: blurSigma,
-          fallbackGradient: c.primaryGradient,
-        ),
+        if (c.useScenicImages)
+          _BackgroundImage(
+            asset: imageAsset ?? AssetPaths.splashBg,
+            blurSigma: blurSigma,
+            fallbackGradient: c.primaryGradient,
+          )
+        else
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: c.solidBackground ?? c.primaryGradient,
+            ),
+          ),
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(

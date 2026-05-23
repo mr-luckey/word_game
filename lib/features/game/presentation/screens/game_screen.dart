@@ -90,6 +90,9 @@ class _GameView extends StatelessWidget {
               (p is! GameInProgress || p.feedback != c.feedback),
           listener: (context, state) {
             if (state is! GameInProgress || state.feedback == null) return;
+            if (state.feedback!.startsWith('🏆')) {
+              context.read<CoinCubit>().refresh();
+            }
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.feedback!),
@@ -260,7 +263,7 @@ class _TopBar extends StatelessWidget {
           const SizedBox(width: 4),
           _CircleIconButton(
             icon: Icons.settings_rounded,
-            onPressed: () => context.push('/settings'),
+            onPressed: () => _openSettings(context),
           ),
         ],
       ),
@@ -271,6 +274,15 @@ class _TopBar extends StatelessWidget {
     final m = (seconds ~/ 60).toString().padLeft(2, '0');
     final s = (seconds % 60).toString().padLeft(2, '0');
     return '$m:$s';
+  }
+
+  Future<void> _openSettings(BuildContext context) async {
+    final bloc = context.read<GameBloc>();
+    bloc.add(const GamePaused());
+    await context.push('/settings');
+    if (context.mounted) {
+      bloc.add(const GameResumed());
+    }
   }
 }
 

@@ -46,6 +46,7 @@ class LevelCompleteOverlay extends StatefulWidget {
 class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
   late final ConfettiController _confettiController;
   int _displayCoins = 0;
+  int _animFromCoins = 0;
   bool _coinsDoubled = false;
   bool _adLoading = false;
 
@@ -53,6 +54,7 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
   void initState() {
     super.initState();
     _displayCoins = widget.coinsEarned;
+    _animFromCoins = widget.coinsEarned;
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 3),
     )..play();
@@ -71,19 +73,21 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
   }
 
   Future<void> _watchAdForDouble() async {
-    if (_coinsDoubled || _adLoading) return;
+    if (_coinsDoubled || _adLoading || widget.coinsEarned <= 0) return;
     setState(() => _adLoading = true);
 
-    final rewarded = await getIt<AdService>().showRewardedAd(
-      onReward: (_) {},
-      onFail: () {},
+    var granted = false;
+    final ok = await getIt<AdService>().showDoubleCoinsAd(
+      levelCoins: widget.coinsEarned,
+      onGranted: () => granted = true,
     );
 
     if (!mounted) return;
 
-    if (rewarded) {
+    if (ok && granted) {
       await context.read<CoinCubit>().add(widget.coinsEarned);
       setState(() {
+        _animFromCoins = _displayCoins;
         _displayCoins = widget.coinsEarned * 2;
         _coinsDoubled = true;
         _adLoading = false;
@@ -91,9 +95,11 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
       _confettiController.play();
     } else {
       setState(() => _adLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ad not available. Try again later.')),
-      );
+      if (!ok || !granted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ad not available. Try again later.')),
+        );
+      }
     }
   }
 
@@ -192,6 +198,7 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
                     const SizedBox(height: AppSizes.paddingSm),
                     _CoinRewardDisplay(
                       displayCoins: _displayCoins,
+                      animFromCoins: _animFromCoins,
                       doubled: _coinsDoubled,
                     ),
                     const SizedBox(height: AppSizes.paddingMd),
@@ -255,10 +262,12 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
 class _CoinRewardDisplay extends StatelessWidget {
   const _CoinRewardDisplay({
     required this.displayCoins,
+    required this.animFromCoins,
     required this.doubled,
   });
 
   final int displayCoins;
+  final int animFromCoins;
   final bool doubled;
 
   @override
@@ -306,15 +315,13 @@ class _CoinRewardDisplay extends StatelessWidget {
                 curve: Curves.elasticOut,
               ),
           const SizedBox(width: 8),
-          AnimatedSwitcher(
-            duration: 500.ms,
-            transitionBuilder: (child, anim) => ScaleTransition(
-              scale: anim,
-              child: child,
-            ),
-            child: Text(
-              '+ $displayCoins coins',
-              key: ValueKey(displayCoins),
+          TweenAnimationBuilder<int>(
+            key: ValueKey('$animFromCoins-$displayCoins'),
+            tween: IntTween(begin: animFromCoins, end: displayCoins),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, _) => Text(
+              '+ $value coins',
               style: AppTextStyles.coinsScore(context).copyWith(
                 fontSize: doubled ? 22 : 18,
                 color: doubled ? colors.onPrimary : colors.goldDark,

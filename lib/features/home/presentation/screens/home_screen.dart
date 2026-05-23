@@ -204,7 +204,7 @@ class _HomeHeader extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(Icons.settings_rounded, color: colors.onScenic),
-            onPressed: () => context.go('/settings'),
+            onPressed: () => context.push('/settings'),
           ),
           const Spacer(),
           BlocBuilder<CoinCubit, CoinState>(

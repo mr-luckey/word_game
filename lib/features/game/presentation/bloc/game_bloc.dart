@@ -3,8 +3,10 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:word_game/core/constants/game_config.dart';
+import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
+import 'package:word_game/features/profile/domain/entities/achievement.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/core/utils/game_cell_utils.dart';
@@ -28,6 +30,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required WalletRepository wallet,
     required AudioService audio,
     required AnalyticsService analytics,
+    required AchievementService achievements,
   })  : _loadLevel = loadLevel,
         _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
@@ -36,6 +39,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _wallet = wallet,
         _audio = audio,
         _analytics = analytics,
+        _achievements = achievements,
         super(const GameInitial()) {
     on<LoadLevel>(_onLoadLevel);
     on<LoadNextLevel>(_onLoadNextLevel);
@@ -60,8 +64,19 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final WalletRepository _wallet;
   final AudioService _audio;
   final AnalyticsService _analytics;
+  final AchievementService _achievements;
 
   Timer? _timer;
+
+  Future<String?> _achievementFeedback(
+    Future<List<AchievementUnlock>> future,
+  ) async {
+    final unlocks = await future;
+    if (unlocks.isEmpty) return null;
+    final first = unlocks.first;
+    final more = unlocks.length > 1 ? ' (+${unlocks.length - 1} more)' : '';
+    return '🏆 ${first.achievement.title}! +${first.coinsAwarded} coins$more';
+  }
   List<WordPlacement> _placements = [];
   GridCellCoord? _dragStart;
 
@@ -238,6 +253,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (newState.allWordsFound) {
         await _completeGame(newState, emit);
       } else {
+        final achievementMsg = await _achievementFeedback(_achievements.onWordFound());
+        if (achievementMsg != null) {
+          final coins = await _wallet.getCoins();
+          newState = newState.copyWith(coins: coins, feedback: achievementMsg);
+        }
         emit(newState);
       }
     } else {
@@ -361,7 +381,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     );
   }
 
-  void _onRotate(BoardRotated event, Emitter<GameState> emit) {
+  Future<void> _onRotate(BoardRotated event, Emitter<GameState> emit) async {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
     final n = s.grid.length;
@@ -382,6 +402,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         feedback: 'Board rotated',
       ),
     );
+
+    final achievementMsg = await _achievementFeedback(_achievements.onBoardRotated());
+    final current = state;
+    if (achievementMsg != null && current is GameInProgress) {
+      final coins = await _wallet.getCoins();
+      emit(current.copyWith(coins: coins, feedback: achievementMsg));
+    }
   }
 
   Future<void> _onShuffle(ShuffleRequested event, Emitter<GameState> emit) async {
@@ -446,6 +473,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         : 0.5;
     final stars = GameConfig.starsForTimeRatio(ratio);
     await _addCoins(s.coinsReward);
+    await _achievementFeedback(
+      _achievements.onLevelComplete(
+        stars: stars,
+        timeSeconds: s.elapsed.inSeconds,
+        hintsUsed: s.hintsUsed,
+        levelId: s.levelId,
+      ),
+    );
     await _saveProgress(
       levelId: s.levelId,
       stars: stars,

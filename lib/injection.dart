@@ -1,9 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
-import 'package:word_game/core/services/daily_challenge_service.dart';
+import 'package:word_game/core/theme/app_theme_cubit.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/data/repositories/level_repository_impl.dart';
 import 'package:word_game/data/repositories/progress_repository_impl.dart';
@@ -40,7 +41,8 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
   getIt.registerLazySingleton(() => AdService(prefs));
-  getIt.registerLazySingleton(() => DailyChallengeService(prefs));
+  getIt.registerLazySingleton(() => AchievementService(db, getIt()));
+  getIt.registerLazySingleton(() => AppThemeCubit(prefs));
 
   getIt.registerFactory(() => CoinCubit(getIt()));
   getIt.registerFactory(SplashCubit.new);
@@ -54,6 +56,7 @@ Future<void> configureDependencies() async {
       wallet: getIt(),
       audio: getIt(),
       analytics: getIt(),
+      achievements: getIt(),
     ),
   );
   getIt.registerFactory(() => ShopCubit(getIt(), getIt()));

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
 import 'package:word_game/core/widgets/gradient_button.dart';
-import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/scenic_page.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -18,91 +19,52 @@ class ShopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ShopCubit>(),
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        body: ScenicBackground(
-          imageAsset: AssetPaths.splashBg,
-          darken: 0.38,
-          child: SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.paddingSm,
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 48),
-                      Expanded(
-                        child: Text(
-                          'SHOP',
-                          style: AppTextStyles.appBarTitle(context)
-                              .copyWith(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      BlocBuilder<CoinCubit, CoinState>(
-                        builder: (context, state) => Padding(
-                          padding: const EdgeInsets.only(
-                            right: AppSizes.paddingSm,
-                          ),
-                          child: Text(
-                            '${state.coins}',
-                            style: AppTextStyles.coinsScore(context),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: BlocBuilder<ShopCubit, ShopState>(
-                    builder: (context, state) {
-                      if (state is ShopLoading) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: context.appColors.gold,
-                          ),
-                        );
-                      }
-                      if (state is ShopLoaded) {
-                        return ListView(
-                          padding: const EdgeInsets.all(AppSizes.paddingMd),
-                          children: [
-                            Text(
-                              'COIN PACKS',
-                              style: AppTextStyles.levelName(context),
-                            ),
-                            const SizedBox(height: AppSizes.paddingMd),
-                            ...state.products.map(
-                              (p) => Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: AppSizes.paddingSm,
-                                ),
-                                child: GlassPanel(
-                                  child: ListTile(
-                                    title: Text(p.title),
-                                    subtitle: Text(p.description),
-                                    trailing: GradientButton(
-                                      label: p.price,
-                                      expanded: false,
-                                      onPressed: () =>
-                                          context.read<ShopCubit>().buy(p),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const _StaticShopExtras(),
-                          ],
-                        );
-                      }
-                      return const _StaticShop();
-                    },
-                  ),
-                ),
-              ],
-            ),
+      child: BlocListener<ShopCubit, ShopState>(
+        listenWhen: (p, c) =>
+            c is ShopPurchaseSuccess || c is ShopPurchaseError,
+        listener: (context, state) {
+          if (state is ShopPurchaseSuccess) {
+            context.read<CoinCubit>().refresh();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          } else if (state is ShopPurchaseError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: ScenicPage(
+          title: 'SHOP',
+          showBack: false,
+          child: BlocBuilder<ShopCubit, ShopState>(
+            builder: (context, state) {
+              if (state is ShopLoading) {
+                return Center(
+                  child: CircularProgressIndicator(color: context.appColors.gold),
+                );
+              }
+              if (state is ShopLoaded && state.products.isNotEmpty) {
+                return _ShopList(
+                  products: state.products,
+                  extras: ShopProducts.fallbackExtras,
+                  useStore: true,
+                );
+              }
+              if (state is ShopUnavailable ||
+                  (state is ShopLoaded && state.products.isEmpty)) {
+                final packs = state is ShopLoaded
+                    ? state.fallbackPacks
+                    : ShopProducts.fallbackPacks;
+                return _ShopList(
+                  products: const [],
+                  fallbackPacks: packs,
+                  extras: ShopProducts.fallbackExtras,
+                  useStore: false,
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ),
       ),
@@ -110,72 +72,85 @@ class ShopScreen extends StatelessWidget {
   }
 }
 
-class _StaticShop extends StatelessWidget {
-  const _StaticShop();
+class _ShopList extends StatelessWidget {
+  const _ShopList({
+    required this.products,
+    this.fallbackPacks = const [],
+    required this.extras,
+    required this.useStore,
+  });
+
+  final List<ProductDetails> products;
+  final List<ShopPackFallback> fallbackPacks;
+  final List<ShopPackFallback> extras;
+  final bool useStore;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(AppSizes.paddingMd),
       children: [
+        if (!useStore)
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
+            child: Text(
+              'Store preview — replace product IDs in shop_products.dart',
+              style: AppTextStyles.wordList(context).copyWith(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ),
         Text('COIN PACKS', style: AppTextStyles.levelName(context)),
-        const SizedBox(height: 16),
-        const _CoinPackTile(amount: 500, price: '\$0.99'),
-        const _CoinPackTile(amount: 1500, price: '\$2.49', best: true),
-        const _CoinPackTile(amount: 5000, price: '\$7.99'),
-        const SizedBox(height: 24),
-        const _StaticShopExtras(),
+        const SizedBox(height: AppSizes.paddingMd),
+        if (useStore)
+          ...products.map(
+            (p) => _ProductTile(product: p),
+          )
+        else
+          ...fallbackPacks.map(
+            (p) => _FallbackTile(pack: p),
+          ),
+        const SizedBox(height: AppSizes.paddingLg),
+        Text('EXTRAS', style: AppTextStyles.levelName(context)),
+        const SizedBox(height: AppSizes.paddingSm),
+        ...extras.map((p) => _FallbackTile(pack: p)),
       ],
     );
   }
 }
 
-class _StaticShopExtras extends StatelessWidget {
-  const _StaticShopExtras();
+class _ProductTile extends StatelessWidget {
+  const _ProductTile({required this.product});
+
+  final ProductDetails product;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        GlassPanel(
-          child: ListTile(
-            title: Text('REMOVE ADS', style: AppTextStyles.levelName(context)),
-            subtitle: const Text('Play without interruptions forever'),
-            trailing: Text('\$1.99', style: AppTextStyles.coinsScore(context)),
+    final coins = ShopProducts.coinRewards[product.id];
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
+      child: GlassPanel(
+        child: ListTile(
+          title: Text(product.title),
+          subtitle: Text(
+            coins != null && coins > 0
+                ? '$coins coins'
+                : product.description,
+          ),
+          trailing: GradientButton(
+            label: product.price,
+            expanded: false,
+            onPressed: () => context.read<ShopCubit>().buy(product),
           ),
         ),
-        const SizedBox(height: AppSizes.paddingSm),
-        GlassPanel(
-          child: ListTile(
-            title: Text('VIP PASS', style: AppTextStyles.levelName(context)),
-            subtitle: const Text('No Ads + 50 daily coins + 5 hints'),
-            trailing: Text('\$0.99/mo', style: AppTextStyles.coinsScore(context)),
-          ),
-        ),
-        const SizedBox(height: AppSizes.paddingSm),
-        GlassPanel(
-          child: ListTile(
-            title: Text('STARTER PACK', style: AppTextStyles.levelName(context)),
-            subtitle: const Text('200 coins + 10 hints — new users only'),
-            trailing: Text('\$0.49', style: AppTextStyles.coinsScore(context)),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
 
-class _CoinPackTile extends StatelessWidget {
-  const _CoinPackTile({
-    required this.amount,
-    required this.price,
-    this.best = false,
-  });
+class _FallbackTile extends StatelessWidget {
+  const _FallbackTile({required this.pack});
 
-  final int amount;
-  final String price;
-  final bool best;
+  final ShopPackFallback pack;
 
   @override
   Widget build(BuildContext context) {
@@ -183,9 +158,17 @@ class _CoinPackTile extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
       child: GlassPanel(
         child: ListTile(
-          title: Text('$amount coins'),
-          subtitle: best ? const Text('BEST VALUE') : null,
-          trailing: Text(price, style: AppTextStyles.coinsScore(context)),
+          title: Text(pack.title),
+          subtitle: pack.coins > 0
+              ? Text(
+                  pack.bestValue ? '${pack.coins} coins · BEST VALUE' : '${pack.coins} coins',
+                )
+              : null,
+          trailing: GradientButton(
+            label: pack.price,
+            expanded: false,
+            onPressed: () => context.read<ShopCubit>().buyFallback(pack),
+          ),
         ),
       ),
     );

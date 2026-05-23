@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
@@ -26,6 +27,8 @@ class MockAudio extends Mock implements AudioService {}
 
 class MockAnalytics extends Mock implements AnalyticsService {}
 
+class MockAchievements extends Mock implements AchievementService {}
+
 void main() {
   const sampleLevel = LevelEntity(
     id: 101,
@@ -46,6 +49,7 @@ void main() {
   late MockWallet wallet;
   late MockAudio audio;
   late MockAnalytics analytics;
+  late MockAchievements achievements;
 
   GameBloc buildBloc() => GameBloc(
         loadLevel: loadLevel,
@@ -56,6 +60,7 @@ void main() {
         wallet: wallet,
         audio: audio,
         analytics: analytics,
+        achievements: achievements,
       );
 
   setUp(() {
@@ -65,6 +70,17 @@ void main() {
     wallet = MockWallet();
     audio = MockAudio();
     analytics = MockAnalytics();
+    achievements = MockAchievements();
+    when(() => achievements.onWordFound()).thenAnswer((_) async => []);
+    when(
+      () => achievements.onLevelComplete(
+        stars: any(named: 'stars'),
+        timeSeconds: any(named: 'timeSeconds'),
+        hintsUsed: any(named: 'hintsUsed'),
+        levelId: any(named: 'levelId'),
+      ),
+    ).thenAnswer((_) async => []);
+    when(() => achievements.onBoardRotated()).thenAnswer((_) async => []);
     when(() => loadLevel(101)).thenAnswer((_) async => sampleLevel);
     when(() => wallet.getCoins()).thenAnswer((_) async => 250);
     when(

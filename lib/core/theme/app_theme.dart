@@ -1,88 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
-import 'package:word_game/core/theme/app_theme_extension.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static const AppThemeColors _c = AppThemeColors.light;
+  static ThemeData build({
+    required AppThemePreset preset,
+    required bool darkMode,
+  }) {
+    final c = preset.colors(dark: darkMode);
+    final brightness = darkMode ? Brightness.dark : Brightness.light;
 
-  static ThemeData get light {
     final colorScheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: _c.primary,
-      onPrimary: _c.onPrimary,
-      secondary: _c.secondary,
-      onSecondary: _c.onPrimary,
-      tertiary: _c.tertiary,
-      onTertiary: _c.onPrimary,
-      error: _c.timerDanger,
-      onError: _c.onPrimary,
-      surface: _c.surface,
-      onSurface: _c.onSurface,
+      brightness: brightness,
+      primary: c.primary,
+      onPrimary: c.onPrimary,
+      secondary: c.secondary,
+      onSecondary: c.onPrimary,
+      tertiary: c.tertiary,
+      onTertiary: c.onPrimary,
+      error: c.timerDanger,
+      onError: c.onPrimary,
+      surface: c.surface,
+      onSurface: c.onSurface,
     );
 
     final textTheme = GoogleFonts.poppinsTextTheme().apply(
-      bodyColor: _c.onSurface,
-      displayColor: _c.onSurface,
+      bodyColor: c.onSurface,
+      displayColor: c.onSurface,
     );
 
     return ThemeData(
       useMaterial3: true,
+      brightness: brightness,
       colorScheme: colorScheme,
-      extensions: const [AppThemeColors.light],
-      scaffoldBackgroundColor: _c.cream,
+      extensions: [c],
+      scaffoldBackgroundColor: c.cream,
       textTheme: textTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: _c.primary,
-        foregroundColor: _c.onPrimary,
+        backgroundColor: c.primary,
+        foregroundColor: c.onPrimary,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: textTheme.titleLarge?.copyWith(
-          color: _c.onPrimary,
-          fontWeight: FontWeight.w600,
-        ),
       ),
       cardTheme: CardThemeData(
         elevation: 2,
-        color: _c.surface,
+        color: c.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusMd),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: _c.primary,
-          foregroundColor: _c.onPrimary,
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.paddingLg,
-            vertical: AppSizes.paddingMd,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-          ),
+          backgroundColor: c.primary,
+          foregroundColor: c.onPrimary,
         ),
       ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: _c.primary,
-        ),
-      ),
-      progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: _c.gold,
-        linearTrackColor: _c.onScenicMuted,
-      ),
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: _c.tertiary,
-        contentTextStyle: textTheme.bodyMedium?.copyWith(color: _c.onScenic),
-      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: c.gold),
+      snackBarTheme: SnackBarThemeData(backgroundColor: c.tertiary),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: _c.navSurface,
-        selectedItemColor: _c.goldDark,
-        unselectedItemColor: _c.locked,
-        type: BottomNavigationBarType.fixed,
+        backgroundColor: c.navSurface,
+        selectedItemColor: c.goldDark,
+        unselectedItemColor: c.locked,
       ),
     );
   }
+
+  /// Legacy accessor — prefer [AppThemeCubit].
+  static ThemeData get light => build(
+        preset: AppThemePreset.journey,
+        darkMode: false,
+      );
 }

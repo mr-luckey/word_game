@@ -48,6 +48,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     required this.playButtonGradient,
     required this.overlayGradient,
     required this.glassGradient,
+    this.useScenicImages = true,
+    this.solidBackground,
   });
 
   final Color primary;
@@ -94,6 +96,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
   final Gradient playButtonGradient;
   final Gradient overlayGradient;
   final Gradient glassGradient;
+  final bool useScenicImages;
+  final Gradient? solidBackground;
 
   Color foundColorForIndex(int index) =>
       foundWordPalette[index % foundWordPalette.length];
@@ -172,6 +176,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       end: Alignment.bottomRight,
       colors: [Color(0xE6FFFFFF), Color(0xCCFFFFFF)],
     ),
+    useScenicImages: true,
+    solidBackground: null,
   );
 
   @override
@@ -220,6 +226,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     Gradient? playButtonGradient,
     Gradient? overlayGradient,
     Gradient? glassGradient,
+    bool? useScenicImages,
+    Gradient? solidBackground,
   }) {
     return AppThemeColors(
       primary: primary ?? this.primary,
@@ -265,8 +273,10 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       primaryGradient: primaryGradient ?? this.primaryGradient,
       playButtonGradient: playButtonGradient ?? this.playButtonGradient,
       overlayGradient: overlayGradient ?? this.overlayGradient,
-      glassGradient: glassGradient ?? this.glassGradient,
-    );
+        glassGradient: glassGradient ?? this.glassGradient,
+        useScenicImages: useScenicImages ?? this.useScenicImages,
+        solidBackground: solidBackground ?? this.solidBackground,
+      );
   }
 
   @override
