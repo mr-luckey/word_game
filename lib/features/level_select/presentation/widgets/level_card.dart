@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:word_game/core/theme/app_sizes.dart';
-import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
 class LevelCard extends StatelessWidget {
@@ -23,52 +22,119 @@ class LevelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final spec = context.themePreset.homeSpec;
     final completed = !locked && stars > 0;
+
+    // Active tile gets accent gradient, completed gets gold, locked gets dark
+    BoxDecoration decoration;
+    if (locked) {
+      decoration = BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [colors.levelLockedStart, colors.levelLockedEnd],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: colors.glassBorder.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      );
+    } else if (isActive) {
+      decoration = BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            spec.playButtonGlow.withValues(alpha: 0.9),
+            spec.playButtonGlow,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: colors.onScenic.withValues(alpha: 0.5),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: spec.playButtonGlow.withValues(alpha: 0.5),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      );
+    } else if (completed) {
+      decoration = BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [colors.levelCompleteStart, colors.levelCompleteEnd],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: colors.gold.withValues(alpha: 0.5),
+          width: 1,
+        ),
+      );
+    } else {
+      decoration = BoxDecoration(
+        color: colors.surface.withValues(alpha: 0.88),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: colors.glassBorder.withValues(alpha: 0.4),
+          width: 1,
+        ),
+      );
+    }
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Ink(
-          decoration: JourneyDecorations.levelTileDecoration(
-            context,
-            locked: locked,
-            isActive: isActive,
-            completed: completed,
-          ),
+          decoration: decoration,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: AppSizes.paddingSm,
-              horizontal: 4,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (locked)
-                  Icon(Icons.lock_rounded, color: colors.gold, size: 26)
+                  Icon(
+                    Icons.lock_rounded,
+                    color: colors.locked.withValues(alpha: 0.6),
+                    size: 24,
+                  )
                 else
                   Text(
                     '$levelNumber',
-                    style: AppTextStyles.button(context).copyWith(
+                    style: GoogleFonts.cinzel(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: isActive ? colors.onSurface : colors.onScenic,
+                      color: isActive
+                          ? const Color(0xFF001021)
+                          : colors.onScenic,
                     ),
                   ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 5),
+                // Stars row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(3, (i) {
                     final filled = !locked && i < stars;
                     return Icon(
-                      filled ? Icons.star_rounded : Icons.star_outline_rounded,
-                      size: 12,
+                      filled
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      size: 10,
                       color: locked
-                          ? colors.locked
+                          ? colors.locked.withValues(alpha: 0.35)
                           : filled
-                              ? colors.gold
-                              : colors.gold.withValues(alpha: 0.55),
+                              ? (isActive
+                                  ? const Color(0xFF001021)
+                                  : colors.gold)
+                              : colors.gold.withValues(
+                                  alpha: isActive ? 0.5 : 0.35),
                     );
                   }),
                 ),
@@ -78,7 +144,7 @@ class LevelCard extends StatelessWidget {
         ),
       ),
     ).animate().fadeIn(duration: 280.ms).scale(
-          begin: const Offset(0.92, 0.92),
+          begin: const Offset(0.9, 0.9),
           end: const Offset(1, 1),
           curve: Curves.easeOutBack,
         );
