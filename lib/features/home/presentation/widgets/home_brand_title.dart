@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
-/// Centered WORD SEARCH / JOURNEY + plane + tagline — mockup layout.
+/// "WELCOME BACK! / Ready for your next journey?" — matches design mockup.
 class HomeBrandTitle extends StatelessWidget {
   const HomeBrandTitle({super.key});
 
@@ -13,93 +13,39 @@ class HomeBrandTitle extends StatelessWidget {
     final colors = context.appColors;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 6),
+      padding: const EdgeInsets.fromLTRB(20, 6, 20, 8),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.center,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    'WORD SEARCH',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.cinzel(
-                      fontSize:
-                          MediaQuery.sizeOf(context).width < 360 ? 22 : 25,
-                      fontWeight: FontWeight.w700,
-                      color: spec.searchWordColor,
-                      letterSpacing: 3,
-                      height: 1.1,
-                      shadows: JourneyThemeKit.textGlow(context),
-                    ),
-                  ),
-                  Text(
-                    'JOURNEY',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.cinzel(
-                      fontSize:
-                          MediaQuery.sizeOf(context).width < 360 ? 29 : 34,
-                      fontWeight: FontWeight.w800,
-                      color: spec.journeyWordColor,
-                      letterSpacing: 5,
-                      height: 1.05,
-                      shadows: JourneyThemeKit.textGlow(context, strength: 1.2),
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                right: 0,
-                top: 24,
-                child: CompassBadge(size: 24),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 1,
-                  color: colors.glassBorder.withValues(alpha: 0.45),
+          Text(
+            'WELCOME BACK!',
+            style: GoogleFonts.montserrat(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: spec.taglineColor,
+              letterSpacing: 1.4,
+            ),
+          ).animate().fadeIn(duration: 400.ms),
+          const SizedBox(height: 2),
+          Text(
+            'Ready for your\nnext journey?',
+            style: GoogleFonts.cinzel(
+              fontSize: MediaQuery.sizeOf(context).width < 360 ? 22 : 26,
+              fontWeight: FontWeight.w800,
+              color: colors.onScenic,
+              height: 1.12,
+              shadows: [
+                Shadow(
+                  color: colors.scrim.withValues(alpha: 0.6),
+                  blurRadius: 8,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('— ',
-                        style:
-                            TextStyle(color: spec.taglineColor, fontSize: 10)),
-                    Icon(Icons.public_rounded,
-                        size: 13, color: spec.taglineColor),
-                    const SizedBox(width: 5),
-                    Text(
-                      '${context.themePreset.label.toUpperCase()} THEME',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: spec.taglineColor,
-                        letterSpacing: 1.9,
-                      ),
-                    ),
-                    Text(' —',
-                        style:
-                            TextStyle(color: spec.taglineColor, fontSize: 10)),
-                  ],
+                Shadow(
+                  color: spec.playButtonGlow.withValues(alpha: 0.25),
+                  blurRadius: 14,
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  height: 1,
-                  color: colors.glassBorder.withValues(alpha: 0.45),
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ).animate(delay: 80.ms).fadeIn(duration: 450.ms),
         ],
       ),
     );
