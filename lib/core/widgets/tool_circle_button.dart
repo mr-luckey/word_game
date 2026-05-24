@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
+/// Hint / Reveal / Shuffle buttons — matches design mockup exactly.
 class ToolCircleButton extends StatelessWidget {
   const ToolCircleButton({
     super.key,
@@ -19,49 +20,72 @@ class ToolCircleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            customBorder: const CircleBorder(),
-            child: Ink(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colors.surface.withValues(alpha: 0.9),
-                border: Border.all(
-                  color: colors.glassBorder.withValues(alpha: 0.5),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colors.shadow,
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
+    final spec = context.themePreset.homeSpec;
+
+    return GestureDetector(
+      onTap: onPressed,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  colors.surface.withValues(alpha: 0.95),
+                  colors.surface.withValues(alpha: 0.75),
                 ],
               ),
-              child: Icon(icon, color: colors.gold, size: 26),
+              border: Border.all(
+                color: spec.playButtonGlow.withValues(alpha: 0.45),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: spec.playButtonGlow.withValues(alpha: 0.2),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+                BoxShadow(
+                  color: colors.scrim.withValues(alpha: 0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: spec.playButtonGlow, size: 26),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: GoogleFonts.montserrat(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: colors.onScenic,
             ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: AppTextStyles.wordList(context).copyWith(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: colors.onScenic,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.monetization_on_rounded,
+                  color: colors.gold, size: 11),
+              const SizedBox(width: 2),
+              Text(
+                subtitle,
+                style: GoogleFonts.montserrat(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: colors.gold,
+                ),
+              ),
+            ],
           ),
-        ),
-        Text(
-          '$subtitle coins',
-          style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 10),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
