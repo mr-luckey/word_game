@@ -9,10 +9,10 @@ class HomeAchievementsCard extends StatelessWidget {
 
   final VoidCallback? onTap;
 
-  static const _badges = [
-    (Icons.explore_rounded, 'Word\nNovice', '0 / 1'),
-    (Icons.public_rounded, 'Word\nHunter', '0 / 50'),
-    (Icons.star_rounded, 'Word\nMaster', '0 / 200'),
+  static const _achievements = [
+    (Icons.explore_rounded, 'Word Novice', '0 / 1'),
+    (Icons.public_rounded, 'Word Hunter', '0 / 50'),
+    (Icons.workspace_premium_rounded, 'Word Master', '0 / 200'),
   ];
 
   @override
@@ -22,29 +22,29 @@ class HomeAchievementsCard extends StatelessWidget {
 
     return HomeGlassCard(
       onTap: onTap,
-      height: 164,
-      padding: const EdgeInsets.all(9),
+      height: 152,
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Title row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'ACHIEVEMENTS',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
+                      'Achievements',
+                      style: GoogleFonts.cinzel(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
                         color: spec.achievementAccent,
-                        letterSpacing: 0.8,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     Text(
-                      'Keep playing, keep unlocking!',
+                      '0 / 30 Unlocked',
                       style: GoogleFonts.montserrat(
                         fontSize: 8,
                         color: colors.onScenicMuted,
@@ -53,52 +53,45 @@ class HomeAchievementsCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.emoji_events_rounded,
-                  color: spec.achievementAccent, size: 30),
+              Icon(
+                Icons.emoji_events_rounded,
+                color: spec.achievementAccent,
+                size: 28,
+              ),
             ],
           ),
           const Spacer(),
+          // Achievement badges row
           Row(
-            children: List.generate(_badges.length, (i) {
-              final (icon, label, progress) = _badges[i];
-              return Expanded(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: colors.gold.withValues(alpha: 0.1),
-                        border: Border.all(
-                          color: colors.glassBorder.withValues(alpha: 0.65),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Icon(icon, color: colors.gold, size: 18),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 6.7,
-                        height: 1.12,
-                        color: colors.onScenicMuted,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: _achievements.map((a) {
+              final (icon, label, progress) = a;
+              return Column(
+                children: [
+                  Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: colors.gold.withValues(alpha: 0.08),
+                      border: Border.all(
+                        color: colors.glassBorder.withValues(alpha: 0.5),
+                        width: 1.5,
                       ),
                     ),
-                    Text(
-                      progress,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: colors.gold,
-                      ),
+                    child: Icon(icon, color: colors.gold, size: 17),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    label.split(' ').last,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 7,
+                      color: colors.onScenicMuted,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
-            }),
+            }).toList(),
           ),
         ],
       ),
