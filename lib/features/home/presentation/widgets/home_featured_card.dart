@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/home/presentation/widgets/home_glass_card.dart';
 
-/// Featured destination — Paris full-bleed / Safari·Tokyo split glass (mockup).
+/// Featured destination — Full-bleed or split-glass layout.
 class HomeFeaturedCard extends StatelessWidget {
   const HomeFeaturedCard({
     super.key,
@@ -91,7 +91,7 @@ class _DestinationTitle extends StatelessWidget {
         Text(
           line1,
           style: GoogleFonts.cinzel(
-            fontSize: 26,
+            fontSize: 24,
             fontWeight: FontWeight.w800,
             color: spec.featuredLine1Color,
             height: 1.05,
@@ -102,7 +102,7 @@ class _DestinationTitle extends StatelessWidget {
           Text(
             line2,
             style: GoogleFonts.cinzel(
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: FontWeight.w700,
               color: spec.featuredLine2Color,
               height: 1.05,
@@ -114,20 +114,8 @@ class _DestinationTitle extends StatelessWidget {
   }
 }
 
-class _StarSeparator extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Icon(Icons.star_rounded, size: 12, color: context.appColors.gold);
-  }
-}
-
-class _ProgressFooter extends StatelessWidget {
-  const _ProgressFooter({
-    required this.completed,
-    required this.total,
-    required this.pct,
-  });
-
+class _ProgressBar extends StatelessWidget {
+  const _ProgressBar({required this.completed, required this.total, required this.pct});
   final int completed;
   final int total;
   final int pct;
@@ -135,84 +123,44 @@ class _ProgressFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+    final spec = context.themePreset.homeSpec;
+    final progress = total > 0 ? completed / total : 0.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
           children: [
             Text(
-              'Levels Completed',
+              '$completed / $total levels completed',
               style: GoogleFonts.montserrat(
                 fontSize: 9,
+                fontWeight: FontWeight.w600,
                 color: colors.onScenicMuted,
-                fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 2),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: '$completed',
-                    style: GoogleFonts.cinzel(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: colors.gold,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' / $total',
-                    style: GoogleFonts.cinzel(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: colors.onScenic,
-                    ),
-                  ),
-                ],
+            const Spacer(),
+            Text(
+              '$pct%',
+              style: GoogleFonts.montserrat(
+                fontSize: 9,
+                fontWeight: FontWeight.w700,
+                color: colors.gold,
               ),
             ),
           ],
         ),
-        const Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-          decoration: BoxDecoration(
-            color: colors.scrim.withValues(alpha: 0.65),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: colors.glassBorder, width: 1),
-          ),
-          child: Text(
-            '$pct%',
-            style: GoogleFonts.montserrat(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: colors.gold,
-            ),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: progress,
+            minHeight: 5,
+            backgroundColor: colors.onScenicMuted.withValues(alpha: 0.2),
+            valueColor: AlwaysStoppedAnimation(spec.playButtonGlow),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _StampBadge extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.appColors;
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: colors.onScenic.withValues(alpha: 0.12),
-        border: Border.all(color: colors.onScenic.withValues(alpha: 0.35)),
-      ),
-      child: Icon(
-        Icons.verified_rounded,
-        color: colors.onScenic.withValues(alpha: 0.55),
-        size: 26,
-      ),
     );
   }
 }
@@ -247,7 +195,7 @@ class _FullBleedCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
         child: Ink(
-          height: 200,
+          height: 210,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -256,9 +204,9 @@ class _FullBleedCard extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: spec.playButtonGlow.withValues(alpha: 0.25),
-                blurRadius: 14,
-                offset: const Offset(0, 5),
+                color: spec.playButtonGlow.withValues(alpha: 0.28),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
@@ -268,40 +216,51 @@ class _FullBleedCard extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 Image.asset(imageAsset, fit: BoxFit.cover),
+                // Left-to-right dark gradient
                 DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                       colors: [
-                        colors.scrim.withValues(alpha: 0.88),
-                        colors.scrim.withValues(alpha: 0.45),
-                        colors.scrim.withValues(alpha: 0.2),
+                        colors.scrim.withValues(alpha: 0.92),
+                        colors.scrim.withValues(alpha: 0.5),
+                        colors.scrim.withValues(alpha: 0.15),
                       ],
                       stops: const [0.0, 0.55, 1.0],
                     ),
                   ),
                 ),
+                // Bottom gradient for progress
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          colors.scrim.withValues(alpha: 0.7),
+                        ],
+                      ),
+                    ),
+                    child: const SizedBox(height: 70, width: double.infinity),
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _FeaturedLabel(),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
                       _DestinationTitle(line1: line1, line2: line2),
                       const Spacer(),
-                      _StarSeparator(),
-                      const SizedBox(height: 8),
-                      _ProgressFooter(
-                        completed: completed,
-                        total: total,
-                        pct: pct,
-                      ),
+                      _ProgressBar(completed: completed, total: total, pct: pct),
                     ],
                   ),
                 ),
-                Positioned(top: 10, right: 10, child: _StampBadge()),
               ],
             ),
           ),
@@ -335,7 +294,7 @@ class _SplitGlassCard extends StatelessWidget {
     return HomeGlassCard(
       onTap: onTap,
       radius: 18,
-      height: 188,
+      height: 200,
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [
@@ -347,31 +306,19 @@ class _SplitGlassCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _FeaturedLabel(),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   _DestinationTitle(line1: line1, line2: line2),
                   const Spacer(),
-                  _StarSeparator(),
-                  const SizedBox(height: 8),
-                  _ProgressFooter(
-                    completed: completed,
-                    total: total,
-                    pct: pct,
-                  ),
+                  _ProgressBar(completed: completed, total: total, pct: pct),
                 ],
               ),
             ),
           ),
           Expanded(
             flex: 11,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(imageAsset, fit: BoxFit.cover),
-                ),
-                Positioned(top: 4, right: 4, child: _StampBadge()),
-              ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(imageAsset, fit: BoxFit.cover),
             ),
           ),
         ],
