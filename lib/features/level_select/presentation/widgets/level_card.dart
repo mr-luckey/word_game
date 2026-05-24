@@ -10,71 +10,65 @@ class LevelCard extends StatelessWidget {
     required this.levelNumber,
     required this.stars,
     required this.locked,
+    this.isActive = false,
     this.onTap,
   });
 
   final int levelNumber;
   final int stars;
   final bool locked;
+  final bool isActive;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final gradient = locked
-        ? LinearGradient(
-            colors: [colors.levelLockedStart, colors.levelLockedEnd],
-          )
-        : stars > 0
-            ? LinearGradient(
-                colors: [colors.levelCompleteStart, colors.levelCompleteEnd],
-              )
-            : colors.playButtonGradient;
+    final completed = !locked && stars > 0;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+        borderRadius: BorderRadius.circular(12),
         child: Ink(
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-            boxShadow: locked
-                ? null
-                : [
-                    BoxShadow(
-                      color: colors.gold.withValues(alpha: 0.35),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+          decoration: JourneyDecorations.levelTileDecoration(
+            context,
+            locked: locked,
+            isActive: isActive,
+            completed: completed,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(AppSizes.paddingSm),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppSizes.paddingSm,
+              horizontal: 4,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (locked)
-                  Icon(Icons.lock_rounded, color: colors.onPrimary, size: 28)
+                  Icon(Icons.lock_rounded, color: colors.gold, size: 26)
                 else
                   Text(
                     '$levelNumber',
                     style: AppTextStyles.button(context).copyWith(
-                      fontSize: 24,
+                      fontSize: 22,
                       fontWeight: FontWeight.w800,
+                      color: isActive ? colors.onSurface : colors.onScenic,
                     ),
                   ),
                 const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(3, (i) {
+                    final filled = !locked && i < stars;
                     return Icon(
-                      i < stars ? Icons.star_rounded : Icons.star_outline_rounded,
-                      size: 14,
+                      filled ? Icons.star_rounded : Icons.star_outline_rounded,
+                      size: 12,
                       color: locked
-                          ? colors.onPrimary.withValues(alpha: 0.5)
-                          : colors.gold,
+                          ? colors.locked
+                          : filled
+                              ? colors.gold
+                              : colors.gold.withValues(alpha: 0.55),
                     );
                   }),
                 ),
@@ -83,8 +77,8 @@ class LevelCard extends StatelessWidget {
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 300.ms).scale(
-          begin: const Offset(0.9, 0.9),
+    ).animate().fadeIn(duration: 280.ms).scale(
+          begin: const Offset(0.92, 0.92),
           end: const Offset(1, 1),
           curve: Curves.easeOutBack,
         );

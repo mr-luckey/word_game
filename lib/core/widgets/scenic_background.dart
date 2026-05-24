@@ -13,6 +13,7 @@ class ScenicBackground extends StatelessWidget {
     this.blurSigma = 0,
     this.darken = 0.35,
     this.colors,
+    this.showBackgroundImage = true,
   });
 
   final String? imageAsset;
@@ -20,6 +21,8 @@ class ScenicBackground extends StatelessWidget {
   final double blurSigma;
   final double darken;
   final AppThemeColors? colors;
+  /// When false, only the theme gradient is shown (no photo wallpaper).
+  final bool showBackgroundImage;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +30,9 @@ class ScenicBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (c.useScenicImages)
+        if (showBackgroundImage && c.useScenicImages)
           _BackgroundImage(
-            asset: imageAsset ?? AssetPaths.splashBg,
+            asset: imageAsset ?? AssetPaths.themeSplash(context.themePreset),
             blurSigma: blurSigma,
             fallbackGradient: c.primaryGradient,
           )
@@ -39,19 +42,20 @@ class ScenicBackground extends StatelessWidget {
               gradient: c.solidBackground ?? c.primaryGradient,
             ),
           ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                c.scrim.withValues(alpha: darken * 0.5),
-                c.scrim.withValues(alpha: darken * 0.25),
-                c.scrim.withValues(alpha: darken),
-              ],
+        if (showBackgroundImage)
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  c.scrim.withValues(alpha: darken * 0.5),
+                  c.scrim.withValues(alpha: darken * 0.25),
+                  c.scrim.withValues(alpha: darken),
+                ],
+              ),
             ),
           ),
-        ),
         if (child != null) child!,
       ],
     );

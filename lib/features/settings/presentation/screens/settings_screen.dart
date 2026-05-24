@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
-import 'package:word_game/core/theme/app_theme_cubit.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
@@ -22,108 +23,123 @@ class SettingsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(AppSizes.paddingMd),
           children: [
-            BlocBuilder<AppThemeCubit, AppThemeState>(
+            BlocBuilder<AppThemeBloc, AppThemeState>(
               builder: (context, themeState) {
                 final colors = context.appColors;
+                final isAuto =
+                    themeState.mode == ThemeSelectionMode.autoDestination;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    GlassPanel(
-                      padding: EdgeInsets.zero,
-                      child: SwitchListTile(
-                        title: const Text('Dark mode'),
-                        subtitle: const Text('Easier on the eyes at night'),
-                        value: themeState.darkMode,
-                        onChanged: (_) =>
-                            context.read<AppThemeCubit>().toggleDarkMode(),
-                      ),
-                    ),
-                    const SizedBox(height: AppSizes.paddingMd),
                     Text(
-                      'Color theme',
-                      style: AppTextStyles.levelName(context),
+                      'Theme mode',
+                      style: AppTextStyles.sectionHeading(context),
                     ),
                     const SizedBox(height: AppSizes.paddingSm),
-                    ...AppThemePreset.values.map((preset) {
-                      final selected = themeState.preset == preset;
-                      final preview = preset.colors(dark: themeState.darkMode);
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppSizes.paddingSm,
-                        ),
-                        child: GlassPanel(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSizes.paddingMd,
-                            vertical: AppSizes.paddingSm,
+                    GlassPanel(
+                      padding: EdgeInsets.zero,
+                      child: Column(
+                        children: [
+                          RadioListTile<ThemeSelectionMode>(
+                            title: const Text('Auto (match destination)'),
+                            subtitle: const Text(
+                              'Theme follows the destination you play',
+                            ),
+                            value: ThemeSelectionMode.autoDestination,
+                            groupValue: themeState.mode,
+                            activeColor: colors.gold,
+                            onChanged: (_) =>
+                                context.read<AppThemeBloc>().setAutoMode(),
                           ),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () => context
-                                .read<AppThemeCubit>()
-                                .setPreset(preset),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 44,
-                                  height: 44,
-                                  decoration: BoxDecoration(
+                          const Divider(height: 1),
+                          RadioListTile<ThemeSelectionMode>(
+                            title: const Text('Fixed theme'),
+                            subtitle: const Text(
+                              'Keep one look across the whole app',
+                            ),
+                            value: ThemeSelectionMode.fixed,
+                            groupValue: themeState.mode,
+                            activeColor: colors.gold,
+                            onChanged: (_) {
+                              context
+                                  .read<AppThemeBloc>()
+                                  .setPreset(themeState.fixedPreset);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (!isAuto) ...[
+                      const SizedBox(height: AppSizes.paddingMd),
+                      Text(
+                        'Choose theme',
+                        style: AppTextStyles.sectionHeading(context),
+                      ),
+                      const SizedBox(height: AppSizes.paddingSm),
+                      ...AppThemePreset.values.map((preset) {
+                        final selected =
+                            themeState.fixedPreset == preset;
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: AppSizes.paddingSm,
+                          ),
+                          child: GlassPanel(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSizes.paddingMd,
+                              vertical: AppSizes.paddingSm,
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () => context
+                                  .read<AppThemeBloc>()
+                                  .setPreset(preset),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    gradient: preset.usesScenicImages
-                                        ? preview.primaryGradient
-                                        : preview.solidBackground ??
-                                            preview.primaryGradient,
-                                    border: Border.all(
-                                      color: colors.glassBorder,
+                                    child: Image.asset(
+                                      AssetPaths.themeSplash(preset),
+                                      width: 44,
+                                      height: 44,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) =>
+                                          Container(
+                                        width: 44,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          gradient: preset
+                                              .colors(dark: true)
+                                              .primaryGradient,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  child: preset.usesScenicImages
-                                      ? Icon(
-                                          Icons.landscape_rounded,
-                                          color: colors.onPrimary,
-                                          size: 22,
-                                        )
-                                      : null,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        preset.label,
-                                        style: AppTextStyles.wordList(context)
-                                            .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      preset.label,
+                                      style: AppTextStyles.wordList(context)
+                                          .copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: colors.onScenic,
                                       ),
-                                      Text(
-                                        preset.usesScenicImages
-                                            ? 'Photo backgrounds'
-                                            : 'Solid color backgrounds',
-                                        style: AppTextStyles.wordList(context)
-                                            .copyWith(
-                                          fontSize: 12,
-                                          color: colors.locked,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  selected
-                                      ? Icons.check_circle_rounded
-                                      : Icons.circle_outlined,
-                                  color: selected
-                                      ? colors.gold
-                                      : colors.locked,
-                                ),
-                              ],
+                                  Icon(
+                                    selected
+                                        ? Icons.check_circle_rounded
+                                        : Icons.circle_outlined,
+                                    color: selected
+                                        ? colors.gold
+                                        : colors.locked,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      }),
+                    ],
                   ],
                 );
               },
@@ -152,14 +168,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 );
               },
-            ),
-            const SizedBox(height: AppSizes.paddingMd),
-            GlassPanel(
-              child: const ListTile(
-                title: Text('Privacy Policy'),
-                subtitle: Text('https://example.com/privacy'),
-                trailing: Icon(Icons.open_in_new_rounded),
-              ),
             ),
           ],
         ),

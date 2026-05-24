@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/core/widgets/coin_display.dart';
-import 'package:word_game/core/widgets/glass_panel.dart';
+import 'package:word_game/core/widgets/journey_screen_header.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
-import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 
 class DestinationsScreen extends StatelessWidget {
@@ -18,38 +18,49 @@ class DestinationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final preset = context.themePreset;
     return BlocProvider(
       create: (_) => DestinationsCubit(getIt(), getIt())..load(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         body: ScenicBackground(
-          imageAsset: AssetPaths.splashBg,
-          darken: 0.35,
+          imageAsset: AssetPaths.themeGrid(preset),
+          darken: 0.55,
+          blurSigma: 1.5,
           child: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const JourneyScreenHeader(showSettings: false),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.paddingSm,
+                    horizontal: AppSizes.paddingMd,
                   ),
-                  child: Row(
+                  child: Column(
                     children: [
-                      const SizedBox(width: 48),
-                      Expanded(
-                        child: Text(
-                          'Explore Destinations',
-                          style: AppTextStyles.appBarTitle(context)
-                              .copyWith(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        ),
+                      Text(
+                        'EXPLORE',
+                        style: AppTextStyles.sectionHeading(context),
+                        textAlign: TextAlign.center,
                       ),
-                      BlocBuilder<CoinCubit, CoinState>(
-                        builder: (context, state) =>
-                            CoinDisplay(coins: state.coins, light: true),
+                      Text(
+                        'Destinations',
+                        style: AppTextStyles.levelName(context).copyWith(
+                          fontSize: 20,
+                          color: context.appColors.onScenic,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Discover iconic cities and new word adventures.',
+                        style: AppTextStyles.bodyMuted(context),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: AppSizes.paddingSm),
                 Expanded(
                   child: BlocBuilder<DestinationsCubit, DestinationsState>(
                     builder: (context, state) {
@@ -59,103 +70,47 @@ class DestinationsScreen extends StatelessWidget {
                           child: CircularProgressIndicator(color: colors.gold),
                         );
                       }
+
+                      final playableIds =
+                          state.themes.map((t) => t.id).toSet();
+                      final destinations =
+                          DestinationCatalog.forPreset(preset);
+
                       return ListView.builder(
                         padding: const EdgeInsets.all(AppSizes.paddingMd),
-                        itemCount: state.themes.length,
+                        itemCount: destinations.length,
                         itemBuilder: (context, index) {
-                          final theme = state.themes[index];
+                          final dest = destinations[index];
+                          final unlocked = playableIds.contains(dest.id);
+                          final levelCount = state.themes
+                              .where((t) => t.id == dest.id)
+                              .map((t) => t.levels.length)
+                              .firstOrNull;
+
                           return Padding(
                             padding: const EdgeInsets.only(
                               bottom: AppSizes.paddingMd,
                             ),
-                            child: GlassPanel(
-                              padding: EdgeInsets.zero,
-                              onTap: () =>
-                                  context.go('/levels?themeId=${theme.id}'),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(AppSizes.radiusLg),
-                                    ),
-                                    child: SizedBox(
-                                      height: 130,
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          Image.asset(
-                                            AssetPaths.themeImage(
-                                              theme.backgroundImage,
-                                            ),
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (_, __, ___) =>
-                                                DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                gradient: colors.primaryGradient,
-                                              ),
-                                            ),
-                                          ),
-                                          DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  Colors.transparent,
-                                                  colors.scrim,
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            left: AppSizes.paddingMd,
-                                            bottom: AppSizes.paddingMd,
-                                            child: Text(
-                                              theme.name,
-                                              style: AppTextStyles.levelName(
-                                                context,
-                                              ).copyWith(
-                                                color: colors.onScenic,
-                                                fontSize: 22,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(
-                                      AppSizes.paddingMd,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.map_rounded,
-                                          color: colors.primary,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          '${theme.levels.length} levels',
-                                          style: AppTextStyles.wordList(context),
-                                        ),
-                                        const Spacer(),
-                                        Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          size: 16,
-                                          color: colors.locked,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                              .animate(delay: (index * 80).ms)
-                              .fadeIn(duration: 400.ms)
-                              .slideX(begin: 0.1, end: 0);
+                            child: _ExploreDestinationCard(
+                              name: dest.name,
+                              country: dest.country,
+                              imageAsset: dest.imageAsset,
+                              levelLabel: unlocked
+                                  ? '0/${levelCount ?? 20} levels'
+                                  : 'Locked',
+                              locked: !unlocked,
+                              onTap: unlocked
+                                  ? () {
+                                      getIt<AppThemeBloc>()
+                                          .setDestinationContext(dest.id);
+                                      context.go('/levels?themeId=${dest.id}');
+                                    }
+                                  : null,
+                            )
+                                .animate(delay: (index * 80).ms)
+                                .fadeIn(duration: 400.ms)
+                                .slideY(begin: 0.06, end: 0),
+                          );
                         },
                       );
                     },
@@ -167,5 +122,125 @@ class DestinationsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _ExploreDestinationCard extends StatelessWidget {
+  const _ExploreDestinationCard({
+    required this.name,
+    required this.country,
+    required this.imageAsset,
+    required this.levelLabel,
+    required this.locked,
+    this.onTap,
+  });
+
+  final String name;
+  final String country;
+  final String imageAsset;
+  final String levelLabel;
+  final bool locked;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final preset = context.themePreset;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(preset.cardRadius),
+        child: Ink(
+          height: 120,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(preset.cardRadius),
+            border: Border.all(
+              color: colors.glassBorder.withValues(alpha: locked ? 0.25 : 0.55),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(preset.cardRadius),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  imageAsset,
+                  fit: BoxFit.cover,
+                  color: locked ? Colors.black54 : null,
+                  colorBlendMode: locked ? BlendMode.darken : null,
+                  errorBuilder: (_, __, ___) => DecoratedBox(
+                    decoration: BoxDecoration(gradient: colors.primaryGradient),
+                  ),
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        colors.scrim.withValues(alpha: 0.75),
+                        colors.scrim.withValues(alpha: 0.2),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              name.toUpperCase(),
+                              style: AppTextStyles.levelName(context).copyWith(
+                                fontSize: 16,
+                                color: locked ? colors.locked : colors.onScenic,
+                              ),
+                            ),
+                            Text(
+                              country,
+                              style: AppTextStyles.bodyMuted(context).copyWith(
+                                color: colors.onScenicMuted,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              levelLabel,
+                              style: AppTextStyles.wordList(context).copyWith(
+                                fontSize: 12,
+                                color: colors.gold,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (locked)
+                        Icon(Icons.lock_rounded, color: colors.gold, size: 28)
+                      else
+                        Icon(Icons.chevron_right_rounded,
+                            color: colors.gold, size: 28),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+extension _FirstOrNull<T> on Iterable<T> {
+  T? get firstOrNull {
+    final it = iterator;
+    if (it.moveNext()) return it.current;
+    return null;
   }
 }

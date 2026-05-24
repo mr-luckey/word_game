@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:word_game/core/theme/app_theme_cubit.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/widgets/main_shell.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
@@ -24,9 +24,9 @@ class WordSearchApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<CoinCubit>()),
-        BlocProvider.value(value: getIt<AppThemeCubit>()),
+        BlocProvider.value(value: getIt<AppThemeBloc>()),
       ],
-      child: BlocBuilder<AppThemeCubit, AppThemeState>(
+      child: BlocBuilder<AppThemeBloc, AppThemeState>(
         builder: (context, themeState) => MaterialApp.router(
           title: 'Word Search Journey',
           debugShowCheckedModeBanner: false,

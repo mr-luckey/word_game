@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
@@ -15,6 +14,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final preset = context.themePreset;
     return BlocProvider(
       create: (_) => getIt<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashState>(
@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               Image.asset(
-                AssetPaths.splashBg,
+                AssetPaths.themeSplash(preset),
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => DecoratedBox(
                   decoration: BoxDecoration(gradient: colors.primaryGradient),
@@ -37,69 +37,95 @@ class SplashScreen extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      colors.scrim.withValues(alpha: 0.3),
-                      colors.scrim.withValues(alpha: 0.55),
+                      colors.scrim.withValues(alpha: 0.25),
+                      colors.scrim.withValues(alpha: 0.7),
                     ],
                   ),
                 ),
               ),
-              Center(
+              SafeArea(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 180,
-                      height: 180,
-                      child: Lottie.asset(
-                        AssetPaths.wordLogoLottie,
-                        fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => Icon(
-                          Icons.travel_explore_rounded,
-                          size: 120,
-                          color: colors.onScenic.withValues(alpha: 0.95),
-                        ),
-                      ),
-                    ).animate().fadeIn(duration: 800.ms).scale(
-                          begin: const Offset(0.7, 0.7),
+                    const Spacer(flex: 2),
+                    Icon(
+                      Icons.explore_rounded,
+                      size: 80,
+                      color: colors.gold,
+                    )
+                        .animate()
+                        .fadeIn(duration: 700.ms)
+                        .scale(
+                          begin: const Offset(0.75, 0.75),
                           end: const Offset(1, 1),
                           curve: Curves.elasticOut,
                         ),
-                    const SizedBox(height: 16),
-                    Text('WORD SEARCH', style: AppTextStyles.gameTitle(context))
-                        .animate(delay: 300.ms)
-                        .fadeIn()
-                        .slideY(begin: 0.3, end: 0),
+                    const SizedBox(height: 18),
+                    Text(
+                      'WORD SEARCH',
+                      style: AppTextStyles.gameTitle(context).copyWith(
+                        fontSize: 26,
+                        letterSpacing: 4,
+                        color: colors.gold,
+                      ),
+                    ).animate(delay: 250.ms).fadeIn(),
                     Text(
                       'JOURNEY',
                       style: AppTextStyles.gameTitle(context).copyWith(
-                        fontSize: 30,
-                        color: colors.goldLight,
-                        letterSpacing: 8,
+                        fontSize: 28,
+                        letterSpacing: 10,
+                        color: colors.onScenic,
                       ),
-                    )
-                        .animate(delay: 450.ms)
-                        .fadeIn()
-                        .shimmer(
-                          duration: 2.seconds,
-                          color: colors.onScenic.withValues(alpha: 0.25),
-                        ),
-                    const SizedBox(height: 8),
+                    ).animate(delay: 350.ms).fadeIn(),
+                    const SizedBox(height: 6),
                     Text(
-                      'Travel the world with words',
-                      style: AppTextStyles.subtitle(context),
-                    ).animate(delay: 600.ms).fadeIn(),
-                    const SizedBox(height: 48),
-                    SizedBox(
-                      width: 220,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                          minHeight: 6,
-                          backgroundColor: colors.onScenicMuted,
-                          valueColor: AlwaysStoppedAnimation(colors.gold),
-                        ),
+                      preset.subtitle,
+                      style: AppTextStyles.gameSubtitle(context).copyWith(
+                        letterSpacing: 3,
+                        fontSize: 11,
                       ),
-                    ).animate(delay: 700.ms).fadeIn(),
+                    ).animate(delay: 450.ms).fadeIn(),
+                    const Spacer(flex: 3),
+                    BlocBuilder<SplashCubit, SplashState>(
+                      builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            children: [
+                              Text(
+                                preset.splashTagline,
+                                style: AppTextStyles.subtitle(context).copyWith(
+                                  fontSize: 13,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(2),
+                                child: LinearProgressIndicator(
+                                  value: state.progress,
+                                  minHeight: 3,
+                                  backgroundColor:
+                                      colors.onScenicMuted.withValues(alpha: 0.35),
+                                  valueColor:
+                                      AlwaysStoppedAnimation(colors.gold),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                '${state.progressPercent}%',
+                                style: AppTextStyles.coinsScore(context)
+                                    .copyWith(
+                                  color: colors.onScenic,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 36),
                   ],
                 ),
               ),

@@ -52,7 +52,7 @@ class CoinDisplay extends StatelessWidget {
           Text(
             '$coins',
             style: AppTextStyles.coinsScore(context).copyWith(
-              color: light ? colors.onScenic : colors.goldDark,
+              color: light ? colors.accentCoin : colors.goldDark,
               fontSize: 18,
             ),
           ),

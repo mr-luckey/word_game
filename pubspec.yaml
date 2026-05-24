@@ -51,7 +51,15 @@ flutter:
   assets:
     - assets/data/
     - assets/images/
+    - assets/images/source/
+    - assets/images/themes/classic_travel/
+    - assets/images/themes/forest_quest/
+    - assets/images/themes/neon_city/
+    - assets/images/themes/sunset_safari/
+    - assets/images/themes/winter_alps/
+    - assets/images/themes/dark_luxury/
+    - assets/images/themes/ocean_escape/
+    - assets/images/home/
     - assets/images/splash/
-    - assets/images/themes/
     - assets/animations/
     - assets/audio/

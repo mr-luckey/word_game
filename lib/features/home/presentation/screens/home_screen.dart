@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/theme/app_sizes.dart';
-import 'package:word_game/core/theme/app_text_styles.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/core/widgets/coin_display.dart';
-import 'package:word_game/core/widgets/gradient_button.dart';
-import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
-import 'package:word_game/features/home/presentation/widgets/destination_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_achievements_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_background.dart';
+import 'package:word_game/features/home/presentation/widgets/home_brand_title.dart';
+import 'package:word_game/features/home/presentation/widgets/home_daily_bonus_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_featured_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_play_button.dart';
+import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 
@@ -36,145 +38,106 @@ class _HomeView extends StatefulWidget {
 class _HomeViewState extends State<_HomeView> {
   bool _isFirstActivate = true;
 
+  void _goLevels(BuildContext context, int themeId) {
+    getIt<AppThemeBloc>().setDestinationContext(themeId);
+    context.go('/levels?themeId=$themeId');
+  }
+
   @override
   void activate() {
     super.activate();
-    // Skip first activate — BlocProvider already calls load() on create.
     if (_isFirstActivate) {
       _isFirstActivate = false;
       return;
     }
     if (!mounted) return;
     final cubit = context.read<DestinationsCubit>();
-    if (!cubit.isClosed) {
-      cubit.refresh();
-    }
+    if (!cubit.isClosed) cubit.refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final preset = context.themePreset;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: ScenicBackground(
-        imageAsset: AssetPaths.themeImage('paris_bg.jpg'),
-        darken: 0.4,
+      body: HomeBackground(
         child: SafeArea(
           child: Column(
             children: [
-              const _HomeHeader(),
+              const HomeTopBar(),
+              const HomeBrandTitle(),
               Expanded(
                 child: BlocBuilder<DestinationsCubit, DestinationsState>(
                   builder: (context, state) {
                     if (state.loading) {
-                      return Center(
-                        child: CircularProgressIndicator(color: colors.gold),
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     }
 
                     final theme =
                         state.themes.isNotEmpty ? state.themes.first : null;
-                    final cardCompleted = state.featuredCompleted;
-                    final cardTotal = state.featuredTotal;
-                    final overallCompleted = state.totalCompleted;
-                    final overallTotal = state.totalLevels;
+                    final featured = DestinationCatalog.forPreset(preset)
+                        .where((d) => d.unlockOrder == 1)
+                        .first;
+                    final meta =
+                        (theme != null ? DestinationCatalog.byId(theme.id) : null) ??
+                            featured;
+                    final imagePath = theme != null
+                        ? AssetPaths.themeImage(theme.backgroundImage)
+                        : meta.imageAsset;
+                    final completed = state.featuredCompleted;
+                    final total =
+                        state.featuredTotal > 0 ? state.featuredTotal : 20;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.paddingMd,
-                      ),
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                       child: Column(
                         children: [
-                          const Spacer(),
-                          Text(
-                            'WORD SEARCH',
-                            style: AppTextStyles.gameTitle(context).copyWith(
-                              fontSize: 32,
-                              shadows: [
-                                Shadow(
-                                  color: colors.scrim,
-                                  blurRadius: 12,
+                          HomeFeaturedCard(
+                            title: theme?.name ?? meta.name,
+                            completed: completed,
+                            total: total,
+                            imageAsset: imagePath,
+                            onTap: () =>
+                                _goLevels(context, theme?.id ?? meta.id),
+                          ),
+                          const SizedBox(height: 14),
+                          HomePlayButton(
+                            onPressed: () =>
+                                _goLevels(context, theme?.id ?? meta.id),
+                          ),
+                          const SizedBox(height: 14),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: HomeDailyBonusCard(
+                                    onTap: () async {
+                                      final updated = await context
+                                          .push<bool>('/game?levelId=9999');
+                                      if (updated == true && context.mounted) {
+                                        context
+                                            .read<DestinationsCubit>()
+                                            .refresh();
+                                        context.read<CoinCubit>().refresh();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: HomeAchievementsCard(
+                                    onTap: () => context.go('/profile'),
+                                  ),
                                 ),
                               ],
                             ),
-                          ).animate().fadeIn(duration: 600.ms).slideY(
-                                begin: -0.2,
-                                end: 0,
-                              ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'JOURNEY',
-                            style: AppTextStyles.gameTitle(context).copyWith(
-                              fontSize: 28,
-                              color: colors.goldLight,
-                              letterSpacing: 6,
-                            ),
-                          )
-                              .animate(delay: 150.ms)
-                              .fadeIn()
-                              .shimmer(
-                                duration: 2.seconds,
-                                color: colors.onScenic.withValues(alpha: 0.3),
-                              ),
-                          const SizedBox(height: AppSizes.paddingLg),
-                          DestinationCard(
-                            title: theme?.name.toUpperCase() ?? 'PARIS ADVENTURE',
-                            completed: cardCompleted,
-                            total: cardTotal > 0 ? cardTotal : 1,
-                            imageAsset: theme != null
-                                ? AssetPaths.themeImage(theme.backgroundImage)
-                                : null,
-                            onTap: () => context.go(
-                              '/levels?themeId=${theme?.id ?? 1}',
-                            ),
                           ),
-                          const SizedBox(height: AppSizes.paddingLg),
-                          GradientButton(
-                            label: 'PLAY NOW',
-                            icon: Icons.play_arrow_rounded,
-                            useGold: true,
-                            onPressed: () => context.go(
-                              '/levels?themeId=${theme?.id ?? 1}',
-                            ),
-                          )
-                              .animate(onPlay: (c) => c.repeat(reverse: true))
-                              .scale(
-                                begin: const Offset(1, 1),
-                                end: const Offset(1.04, 1.04),
-                                duration: 900.ms,
-                                curve: Curves.easeInOut,
-                              ),
-                          const SizedBox(height: AppSizes.paddingMd),
-                          Text(
-                            '$overallCompleted / $overallTotal levels completed',
-                            style: AppTextStyles.subtitle(context).copyWith(
-                              color: colors.onScenic.withValues(alpha: 0.9),
-                            ),
-                          ),
-                          const SizedBox(height: AppSizes.paddingSm),
-                          TextButton.icon(
-                            onPressed: () async {
-                              final updated = await context.push<bool>(
-                                '/game?levelId=9999',
-                              );
-                              if (updated == true && context.mounted) {
-                                context.read<DestinationsCubit>().refresh();
-                                context.read<CoinCubit>().refresh();
-                              }
-                            },
-                            icon: Icon(
-                              Icons.card_giftcard_rounded,
-                              color: colors.goldLight,
-                            ),
-                            label: Text(
-                              'Daily Bonus Challenge',
-                              style: AppTextStyles.subtitle(context).copyWith(
-                                color: colors.goldLight.withValues(alpha: 0.9),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          const Spacer(flex: 2),
+                          const SizedBox(height: 8),
                         ],
                       ),
                     );
@@ -184,34 +147,6 @@ class _HomeViewState extends State<_HomeView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _HomeHeader extends StatelessWidget {
-  const _HomeHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.appColors;
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.paddingSm,
-        vertical: AppSizes.paddingXs,
-      ),
-      child: Row(
-        children: [
-          IconButton(
-            icon: Icon(Icons.settings_rounded, color: colors.onScenic),
-            onPressed: () => context.push('/settings'),
-          ),
-          const Spacer(),
-          BlocBuilder<CoinCubit, CoinState>(
-            builder: (context, state) =>
-                CoinDisplay(coins: state.coins, light: true),
-          ),
-        ],
       ),
     );
   }

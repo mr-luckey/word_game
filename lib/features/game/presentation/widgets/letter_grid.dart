@@ -36,6 +36,10 @@ class LetterGrid extends StatelessWidget {
             decoration: BoxDecoration(
               color: colors.boardWhite,
               borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+              border: Border.all(
+                color: colors.glassBorder.withValues(alpha: 0.45),
+                width: 2,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: colors.shadow,
@@ -104,6 +108,13 @@ class GridPainter extends CustomPainter {
   final double gap;
   final TextStyle letterStyle;
 
+  /// Dark letters on light tiles, light letters on dark tiles (all themes).
+  Color _contrastLetterColor(Color cellBackground) {
+    return cellBackground.computeLuminance() > 0.45
+        ? colors.onPrimary
+        : colors.onSurface;
+  }
+
   Offset _cellCenter(int row, int col) {
     final stride = cellSize + gap;
     return Offset(
@@ -161,6 +172,13 @@ class GridPainter extends CustomPainter {
         }
 
         canvas.drawRRect(rect, Paint()..color = bg);
+        canvas.drawRRect(
+          rect,
+          Paint()
+            ..color = colors.cellBorder.withValues(alpha: 0.55)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1,
+        );
 
         final isSelected =
             state.selectedCells.any((cell) => cell.row == r && cell.col == c);
@@ -175,13 +193,12 @@ class GridPainter extends CustomPainter {
         }
 
         final letter = state.grid[r][c].letter;
+        final letterColor = _contrastLetterColor(bg);
         final tp = TextPainter(
           text: TextSpan(
             text: letter,
             style: letterStyle.copyWith(
-              color: state.foundCellColors.containsKey(idx)
-                  ? colors.onPrimary
-                  : colors.onSurface,
+              color: letterColor,
               fontWeight: FontWeight.w800,
             ),
           ),

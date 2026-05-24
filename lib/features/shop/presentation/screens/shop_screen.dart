@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
-import 'package:word_game/core/widgets/scenic_page.dart';
+import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -16,6 +19,7 @@ class ShopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final preset = context.themePreset;
     return BlocProvider(
       create: (_) => getIt<ShopCubit>(),
       child: BlocListener<ShopCubit, ShopState>(
@@ -33,37 +37,87 @@ class ShopScreen extends StatelessWidget {
             );
           }
         },
-        child: ScenicPage(
-          title: 'SHOP',
-          showBack: false,
-          child: BlocBuilder<ShopCubit, ShopState>(
-            builder: (context, state) {
-              if (state is ShopLoading) {
-                return Center(
-                  child: CircularProgressIndicator(color: context.appColors.gold),
-                );
-              }
-              if (state is ShopLoaded && state.products.isNotEmpty) {
-                return _ShopList(
-                  products: state.products,
-                  extras: ShopProducts.fallbackExtras,
-                  useStore: true,
-                );
-              }
-              if (state is ShopUnavailable ||
-                  (state is ShopLoaded && state.products.isEmpty)) {
-                final packs = state is ShopLoaded
-                    ? state.fallbackPacks
-                    : ShopProducts.fallbackPacks;
-                return _ShopList(
-                  products: const [],
-                  fallbackPacks: packs,
-                  extras: ShopProducts.fallbackExtras,
-                  useStore: false,
-                );
-              }
-              return const SizedBox.shrink();
-            },
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          body: ScenicBackground(
+            imageAsset: AssetPaths.themeSplash(preset),
+            darken: 0.45,
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.paddingMd,
+                      vertical: AppSizes.paddingSm,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 48),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'SHOP',
+                                style: AppTextStyles.sectionHeading(context),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'Enhance your adventure',
+                                style: AppTextStyles.bodyMuted(context),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        BlocBuilder<CoinCubit, CoinState>(
+                          builder: (context, state) => CoinDisplay(
+                            coins: state.coins,
+                            light: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                      .animate()
+                      .fadeIn(duration: 400.ms)
+                      .slideY(begin: -0.1, end: 0),
+                  Expanded(
+                    child: BlocBuilder<ShopCubit, ShopState>(
+                      builder: (context, state) {
+                        if (state is ShopLoading) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: context.appColors.gold,
+                            ),
+                          );
+                        }
+                        if (state is ShopLoaded && state.products.isNotEmpty) {
+                          return _ShopList(
+                            products: state.products,
+                            extras: ShopProducts.fallbackExtras,
+                            useStore: true,
+                          );
+                        }
+                        if (state is ShopUnavailable ||
+                            (state is ShopLoaded && state.products.isEmpty)) {
+                          final packs = state is ShopLoaded
+                              ? state.fallbackPacks
+                              : ShopProducts.fallbackPacks;
+                          return _ShopList(
+                            products: const [],
+                            fallbackPacks: packs,
+                            extras: ShopProducts.fallbackExtras,
+                            useStore: false,
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -86,60 +140,88 @@ class _ShopList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final packWidgets = useStore
+        ? products.asMap().entries.map((e) {
+            final p = e.value;
+            final coins = ShopProducts.coinRewards[p.id];
+            return _animatedTile(
+              e.key,
+              _ShopPackTile(
+                title: p.title,
+                subtitle: coins != null ? '$coins Coins' : p.description,
+                price: p.price,
+                onBuy: () => context.read<ShopCubit>().buy(p),
+              ),
+            );
+          }).toList()
+        : fallbackPacks.asMap().entries.map((e) {
+            final p = e.value;
+            return _animatedTile(
+              e.key,
+              _ShopPackTile(
+                title: '${p.coins} Coins',
+                subtitle: p.title,
+                price: p.price,
+                bestValue: p.bestValue,
+                onBuy: () => context.read<ShopCubit>().buyFallback(p),
+              ),
+            );
+          }).toList();
+
+    final extraWidgets = extras.asMap().entries.map((e) {
+      final p = e.value;
+      return _animatedTile(
+        packWidgets.length + e.key,
+        _ShopPackTile(
+          title: p.title,
+          subtitle: p.coins > 0 ? '${p.coins} bonus coins' : null,
+          price: p.price,
+          icon: _extraIcon(p.id),
+          onBuy: () => context.read<ShopCubit>().buyFallback(p),
+        ),
+      );
+    }).toList();
+
     return ListView(
       padding: const EdgeInsets.all(AppSizes.paddingMd),
       children: [
-        if (!useStore)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
-            child: Text(
-              'Store preview — replace product IDs in shop_products.dart',
-              style: AppTextStyles.wordList(context).copyWith(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        Text('COIN PACKS', style: AppTextStyles.levelName(context)),
+        Text(
+          'COIN PACKS',
+          style: AppTextStyles.sectionHeading(context).copyWith(fontSize: 18),
+        ).animate().fadeIn(delay: 100.ms),
         const SizedBox(height: AppSizes.paddingMd),
-        if (useStore)
-          ...products.map(
-            (p) {
-              final coins = ShopProducts.coinRewards[p.id];
-              return _ShopPackTile(
-                title: p.title,
-                subtitle: coins != null && coins > 0
-                    ? '$coins coins'
-                    : p.description,
-                price: p.price,
-                onBuy: () => context.read<ShopCubit>().buy(p),
-              );
-            },
-          )
-        else
-          ...fallbackPacks.map(
-            (p) => _ShopPackTile(
-              title: p.title,
-              subtitle: p.coins > 0
-                  ? (p.bestValue
-                      ? '${p.coins} coins · BEST VALUE'
-                      : '${p.coins} coins')
-                  : null,
-              price: p.price,
-              onBuy: () => context.read<ShopCubit>().buyFallback(p),
-            ),
-          ),
+        ...packWidgets,
         const SizedBox(height: AppSizes.paddingLg),
-        Text('EXTRAS', style: AppTextStyles.levelName(context)),
+        Text(
+          'EXTRAS',
+          style: AppTextStyles.sectionHeading(context).copyWith(fontSize: 18),
+        ).animate().fadeIn(delay: 200.ms),
         const SizedBox(height: AppSizes.paddingSm),
-        ...extras.map(
-          (p) => _ShopPackTile(
-            title: p.title,
-            subtitle: p.coins > 0 ? '${p.coins} coins' : null,
-            price: p.price,
-            onBuy: () => context.read<ShopCubit>().buyFallback(p),
-          ),
-        ),
+        ...extraWidgets,
       ],
     );
+  }
+
+  Widget _animatedTile(int index, Widget tile) {
+    return tile
+        .animate(delay: (120 + index * 70).ms)
+        .fadeIn(duration: 420.ms, curve: Curves.easeOut)
+        .slideX(begin: 0.12, end: 0, curve: Curves.easeOutCubic)
+        .scale(
+          begin: const Offset(0.96, 0.96),
+          end: const Offset(1, 1),
+          duration: 420.ms,
+          curve: Curves.easeOutBack,
+        );
+  }
+
+  IconData _extraIcon(String id) {
+    return switch (id) {
+      ShopProducts.removeAds => Icons.block_rounded,
+      ShopProducts.vipMonthly => Icons.workspace_premium_rounded,
+      ShopProducts.starterPack => Icons.card_giftcard_rounded,
+      _ => Icons.shopping_bag_rounded,
+    };
   }
 }
 
@@ -149,12 +231,16 @@ class _ShopPackTile extends StatelessWidget {
     this.subtitle,
     required this.price,
     required this.onBuy,
+    this.bestValue = false,
+    this.icon,
   });
 
   final String title;
   final String? subtitle;
   final String price;
   final VoidCallback onBuy;
+  final bool bestValue;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -165,92 +251,81 @@ class _ShopPackTile extends StatelessWidget {
       child: GlassPanel(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSizes.paddingMd,
-          vertical: AppSizes.paddingSm + 2,
+          vertical: AppSizes.paddingMd,
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: colors.gold.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+                border: Border.all(color: colors.gold.withValues(alpha: 0.4)),
+              ),
+              child: Icon(
+                icon ?? Icons.monetization_on_rounded,
+                color: colors.gold,
+                size: 28,
+              ),
+            )
+                .animate(onPlay: (c) => c.repeat(reverse: true))
+                .shimmer(
+                  duration: bestValue ? 2.seconds : 3.seconds,
+                  color: colors.gold.withValues(alpha: 0.25),
+                )
+                .then()
+                .scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.06, 1.06),
+                  duration: 1.5.seconds,
+                  curve: Curves.easeInOut,
+                ),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.levelName(context).copyWith(fontSize: 16),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          title,
+                          style: AppTextStyles.levelName(context)
+                              .copyWith(fontSize: 16, color: colors.onScenic),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (bestValue) ...[
+                        const SizedBox(width: 8),
+                        JourneyDecorations.bestValueBadge(context)
+                            .animate(onPlay: (c) => c.repeat(reverse: true))
+                            .scale(
+                              begin: const Offset(1, 1),
+                              end: const Offset(1.08, 1.08),
+                              duration: 900.ms,
+                            ),
+                      ],
+                    ],
                   ),
                   if (subtitle != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       subtitle!,
-                      style: AppTextStyles.wordList(context).copyWith(
-                        fontSize: 13,
-                        color: colors.locked,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodyMuted(context),
                     ),
                   ],
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            _ShopPriceButton(price: price, onPressed: onBuy),
+            const SizedBox(width: 8),
+            JourneyDecorations.shopPriceButton(
+              context,
+              price: price,
+              onPressed: onBuy,
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Compact buy button — no outer shadow so GlassPanel clip does not cut it.
-class _ShopPriceButton extends StatelessWidget {
-  const _ShopPriceButton({
-    required this.price,
-    required this.onPressed,
-  });
-
-  final String price;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.appColors;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(12),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: colors.primaryGradient,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: colors.goldLight.withValues(alpha: 0.5),
-              width: 1,
-            ),
-          ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 72),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              child: Text(
-                price,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.visible,
-                softWrap: false,
-                style: AppTextStyles.button(context).copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0,
-                ),
-              ),
-            ),
-          ),
         ),
       ),
     );

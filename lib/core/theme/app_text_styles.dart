@@ -5,16 +5,31 @@ import 'package:word_game/core/theme/theme_context.dart';
 class AppTextStyles {
   AppTextStyles._();
 
-  static TextStyle gameTitle(BuildContext context) => GoogleFonts.montserrat(
+  static TextStyle gameTitle(BuildContext context) => GoogleFonts.cinzel(
         fontSize: 36,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         color: context.appColors.onScenic,
+        letterSpacing: 2,
       );
 
-  static TextStyle levelName(BuildContext context) => GoogleFonts.poppins(
+  static TextStyle gameSubtitle(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: context.appColors.bodyMuted,
+        letterSpacing: 4,
+      );
+
+  static TextStyle sectionHeading(BuildContext context) => GoogleFonts.cinzel(
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        color: context.appColors.onSurface,
+        color: context.appColors.gold,
+      );
+
+  static TextStyle levelName(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: context.appColors.onScenic,
+        letterSpacing: 1,
       );
 
   static TextStyle gridLetter(BuildContext context, double gridSize) =>
@@ -24,27 +39,29 @@ class AppTextStyles {
         color: context.appColors.onSurface,
       );
 
-  static TextStyle wordList(BuildContext context) => GoogleFonts.poppins(
-        fontSize: 16,
-        color: context.appColors.onSurface,
+  static TextStyle wordList(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: context.appColors.onScenic,
       );
 
-  static TextStyle wordListFound(BuildContext context) => GoogleFonts.poppins(
-        fontSize: 16,
+  static TextStyle wordListFound(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: 14,
         color: context.appColors.success,
         decoration: TextDecoration.lineThrough,
       );
 
-  static TextStyle button(BuildContext context) => GoogleFonts.poppins(
+  static TextStyle button(BuildContext context) => GoogleFonts.montserrat(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         color: context.appColors.onPrimary,
+        letterSpacing: 1,
       );
 
   static TextStyle coinsScore(BuildContext context) => GoogleFonts.orbitron(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w700,
-        color: context.appColors.gold,
+        color: context.appColors.accentCoin,
       );
 
   static TextStyle timer(BuildContext context, {required bool danger}) =>
@@ -54,27 +71,32 @@ class AppTextStyles {
         color: danger ? context.appColors.timerDanger : context.appColors.onScenic,
       );
 
-  static TextStyle wordChip(BuildContext context) => GoogleFonts.poppins(
+  static TextStyle wordChip(BuildContext context) => GoogleFonts.montserrat(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: context.appColors.onSurface,
       );
 
-  static TextStyle wordChipFound(BuildContext context) => GoogleFonts.poppins(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: context.appColors.success,
-        decoration: TextDecoration.lineThrough,
-      );
-
-  static TextStyle subtitle(BuildContext context) => GoogleFonts.poppins(
+  static TextStyle subtitle(BuildContext context) => GoogleFonts.montserrat(
         fontSize: 14,
+        fontWeight: FontWeight.w400,
         color: context.appColors.onScenicMuted,
       );
 
-  static TextStyle appBarTitle(BuildContext context) => GoogleFonts.poppins(
-        fontSize: 18,
+  static TextStyle greeting(BuildContext context) => GoogleFonts.cinzel(
+        fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: context.appColors.onScenic,
+        color: context.appColors.gold,
       );
+
+  static TextStyle bodyMuted(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: 13,
+        color: context.appColors.bodyMuted,
+      );
+
+  static TextStyle wordChipFound(BuildContext context) =>
+      wordListFound(context);
+
+  static TextStyle appBarTitle(BuildContext context) =>
+      sectionHeading(context);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
@@ -108,9 +109,7 @@ class _GameView extends StatelessWidget {
           final colors = context.appColors;
           final bg = state is GameInProgress
               ? AssetPaths.themeImage(state.backgroundImage)
-              : state is GameCompleted
-                  ? AssetPaths.themeImage('paris_bg.jpg')
-                  : AssetPaths.themeImage('paris_bg.jpg');
+              : AssetPaths.themeSplash(context.themePreset);
 
           return Scaffold(
             body: Stack(
@@ -187,7 +186,6 @@ class _GameBody extends StatelessWidget {
     return Column(
       children: [
         _TopBar(state: state),
-        _CoinHintRow(state: state),
         const SizedBox(height: _sectionGap),
         WordListPanel(state: state),
         const SizedBox(height: _sectionGap),
@@ -218,52 +216,120 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final bloc = context.read<GameBloc>();
+
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.paddingSm,
-        vertical: AppSizes.paddingXs,
-      ),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(4, 4, 8, 0),
+      child: Column(
         children: [
-          _CircleIconButton(
-            icon: Icons.arrow_back_rounded,
-            onPressed: () => context.pop(true),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Text(
-                  state.levelTheme.toUpperCase(),
-                  style: AppTextStyles.appBarTitle(context).copyWith(fontSize: 16),
-                  textAlign: TextAlign.center,
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_rounded, color: colors.gold),
+                onPressed: () =>
+                    journeyPopFromGame(context, result: true, themeId: state.themeId),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      state.levelTheme.toUpperCase(),
+                      style: AppTextStyles.levelName(context).copyWith(
+                        fontSize: 15,
+                        letterSpacing: 0.6,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Level ${state.levelId}',
+                      style: AppTextStyles.bodyMuted(context).copyWith(
+                        fontSize: 11,
+                        color: colors.onScenicMuted,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Level ${state.levelId}',
-                  style: AppTextStyles.subtitle(context).copyWith(fontSize: 12),
+              ),
+              CoinDisplay(coins: state.coins, light: true),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: state.timerDanger
+                        ? colors.timerDanger.withValues(alpha: 0.85)
+                        : colors.scrim.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: state.timerDanger
+                          ? colors.timerDanger
+                          : colors.glassBorder.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.timer_outlined,
+                        size: 16,
+                        color: state.timerDanger
+                            ? Colors.white
+                            : colors.gold,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _formatTimer(state.remainingSeconds),
+                        style: AppTextStyles.timer(
+                          context,
+                          danger: state.timerDanger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    if (state.isPaused) {
+                      bloc.add(const GameResumed());
+                    } else {
+                      bloc.add(const GamePaused());
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colors.onScenic,
+                    side: BorderSide(color: colors.glassBorder),
+                    backgroundColor: colors.scrim.withValues(alpha: 0.45),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                  ),
+                  icon: Icon(
+                    state.isPaused
+                        ? Icons.play_arrow_rounded
+                        : Icons.pause_rounded,
+                    size: 18,
+                    color: colors.gold,
+                  ),
+                  label: Text(
+                    state.isPaused ? 'Resume' : 'Pause',
+                    style: AppTextStyles.subtitle(context).copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: colors.onScenic,
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: state.timerDanger
-                  ? colors.timerDanger.withValues(alpha: 0.9)
-                  : colors.scrimLight,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: state.timerDanger ? colors.timerDanger : colors.onScenicMuted,
-              ),
-            ),
-            child: Text(
-              _formatTimer(state.remainingSeconds),
-              style: AppTextStyles.timer(context, danger: state.timerDanger),
-            ),
-          ),
-          const SizedBox(width: 4),
-          _CircleIconButton(
-            icon: Icons.settings_rounded,
-            onPressed: () => _openSettings(context),
           ),
         ],
       ),
@@ -275,93 +341,7 @@ class _TopBar extends StatelessWidget {
     final s = (seconds % 60).toString().padLeft(2, '0');
     return '$m:$s';
   }
-
-  Future<void> _openSettings(BuildContext context) async {
-    final bloc = context.read<GameBloc>();
-    bloc.add(const GamePaused());
-    await context.push('/settings');
-    if (context.mounted) {
-      bloc.add(const GameResumed());
-    }
-  }
 }
-
-class _CircleIconButton extends StatelessWidget {
-  const _CircleIconButton({required this.icon, required this.onPressed});
-
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.appColors;
-    return Material(
-      color: colors.scrimLight,
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: onPressed,
-        customBorder: const CircleBorder(),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(icon, color: colors.onScenic, size: 22),
-        ),
-      ),
-    );
-  }
-}
-
-class _CoinHintRow extends StatelessWidget {
-  const _CoinHintRow({required this.state});
-  final GameInProgress state;
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<GameBloc>();
-    final colors = context.appColors;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMd),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CoinDisplay(coins: state.coins, light: true),
-          GlassPanel(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.lightbulb_rounded, color: colors.gold, size: 20),
-                const SizedBox(width: 6),
-                Text(
-                  '${state.hintsLeft}',
-                  style: AppTextStyles.coinsScore(context).copyWith(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-          TextButton.icon(
-            onPressed: () {
-              if (state.isPaused) {
-                bloc.add(const GameResumed());
-              } else {
-                bloc.add(const GamePaused());
-              }
-            },
-            icon: Icon(
-              state.isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-              color: colors.onScenic,
-            ),
-            label: Text(
-              state.isPaused ? 'Resume' : 'Pause',
-              style: AppTextStyles.subtitle(context)
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _Toolbar extends StatelessWidget {
   const _Toolbar({required this.state});
   final GameInProgress state;
@@ -369,30 +349,16 @@ class _Toolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
-    final colors = context.appColors;
-    return Container(
-      margin: const EdgeInsets.fromLTRB(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
         AppSizes.paddingMd,
         0,
         AppSizes.paddingMd,
         AppSizes.paddingMd,
       ),
-      padding: const EdgeInsets.symmetric(vertical: AppSizes.paddingSm),
-      decoration: BoxDecoration(
-        color: colors.scrimLight,
-        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-        border: Border.all(color: colors.onScenicMuted),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ToolCircleButton(
-            label: 'Rotate',
-            subtitle: 'FREE',
-            icon: Icons.rotate_90_degrees_cw_rounded,
-            highlight: true,
-            onPressed: () => bloc.add(const BoardRotated()),
-          ),
           ToolCircleButton(
             label: 'Hint',
             subtitle: '${GameConfig.hintCost}',

@@ -32,6 +32,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     required this.gold,
     required this.goldDark,
     required this.goldLight,
+    this.accentCoin = const Color(0xFF4FC3F7),
+    this.bodyMuted = const Color(0xFFA0A0A0),
     required this.locked,
     required this.cellBorder,
     required this.timerDanger,
@@ -43,6 +45,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     required this.levelLockedEnd,
     required this.levelCompleteStart,
     required this.levelCompleteEnd,
+    this.shopPriceButton = const Color(0xFF4FC3F7),
     required this.foundWordPalette,
     required this.primaryGradient,
     required this.playButtonGradient,
@@ -80,6 +83,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
   final Color gold;
   final Color goldDark;
   final Color goldLight;
+  final Color accentCoin;
+  final Color bodyMuted;
   final Color locked;
   final Color cellBorder;
   final Color timerDanger;
@@ -91,6 +96,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
   final Color levelLockedEnd;
   final Color levelCompleteStart;
   final Color levelCompleteEnd;
+  final Color shopPriceButton;
   final List<Color> foundWordPalette;
   final Gradient primaryGradient;
   final Gradient playButtonGradient;
@@ -131,6 +137,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     gold: Color(0xFFFFB300),
     goldDark: Color(0xFFFF8F00),
     goldLight: Color(0xFFFFD54F),
+    accentCoin: Color(0xFF4FC3F7),
+    bodyMuted: Color(0xFFA0A0A0),
     locked: Color(0xFF90A4AE),
     cellBorder: Color(0xFFE0E7EF),
     timerDanger: Color(0xFFFF5252),
@@ -142,6 +150,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     levelLockedEnd: Color(0xFF90A4AE),
     levelCompleteStart: Color(0xFF66BB6A),
     levelCompleteEnd: Color(0xFF43A047),
+    shopPriceButton: Color(0xFF4FC3F7),
     foundWordPalette: [
       Color(0xFF81C784),
       Color(0xFF4FC3F7),
@@ -210,6 +219,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     Color? gold,
     Color? goldDark,
     Color? goldLight,
+    Color? accentCoin,
+    Color? bodyMuted,
     Color? locked,
     Color? cellBorder,
     Color? timerDanger,
@@ -221,6 +232,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
     Color? levelLockedEnd,
     Color? levelCompleteStart,
     Color? levelCompleteEnd,
+    Color? shopPriceButton,
     List<Color>? foundWordPalette,
     Gradient? primaryGradient,
     Gradient? playButtonGradient,
@@ -258,6 +270,8 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       gold: gold ?? this.gold,
       goldDark: goldDark ?? this.goldDark,
       goldLight: goldLight ?? this.goldLight,
+      accentCoin: accentCoin ?? this.accentCoin,
+      bodyMuted: bodyMuted ?? this.bodyMuted,
       locked: locked ?? this.locked,
       cellBorder: cellBorder ?? this.cellBorder,
       timerDanger: timerDanger ?? this.timerDanger,
@@ -269,6 +283,7 @@ class AppThemeColors extends ThemeExtension<AppThemeColors> {
       levelLockedEnd: levelLockedEnd ?? this.levelLockedEnd,
       levelCompleteStart: levelCompleteStart ?? this.levelCompleteStart,
       levelCompleteEnd: levelCompleteEnd ?? this.levelCompleteEnd,
+      shopPriceButton: shopPriceButton ?? this.shopPriceButton,
       foundWordPalette: foundWordPalette ?? this.foundWordPalette,
       primaryGradient: primaryGradient ?? this.primaryGradient,
       playButtonGradient: playButtonGradient ?? this.playButtonGradient,

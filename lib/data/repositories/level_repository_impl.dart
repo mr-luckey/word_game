@@ -13,6 +13,7 @@ class LevelRepositoryImpl implements LevelRepository {
     final packs = await Future.wait([
       rootBundle.loadString('assets/data/levels_pack_1.json'),
       rootBundle.loadString('assets/data/levels_pack_2.json'),
+      rootBundle.loadString('assets/data/levels_pack_3.json'),
     ]);
     final categories = <ThemeCategoryEntity>[];
     for (final pack in packs) {

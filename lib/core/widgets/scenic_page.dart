@@ -33,7 +33,7 @@ class ScenicPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final bg = backgroundAsset ?? AssetPaths.splashBg;
+    final bg = backgroundAsset ?? AssetPaths.themeSplash(context.themePreset);
 
     return Scaffold(
       extendBodyBehindAppBar: true,

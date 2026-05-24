@@ -5,7 +5,7 @@
       "id": 4,
       "name": "Rome Discovery",
       "theme": "travel_europe",
-      "backgroundImage": "rome_bg.jpg",
+      "backgroundImage": "classic_travel/rome.webp",
       "levels": [
         {
           "id": 401,
@@ -296,9 +296,9 @@
     },
     {
       "id": 5,
-      "name": "Sydney Escape",
+      "name": "Maldives Escape",
       "theme": "travel_oceania",
-      "backgroundImage": "sydney_bg.jpg",
+      "backgroundImage": "ocean_escape/maldives.webp",
       "levels": [
         {
           "id": 501,

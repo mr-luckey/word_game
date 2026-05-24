@@ -25,9 +25,6 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final gradient =
-        useGold ? colors.playButtonGradient : colors.primaryGradient;
-    final shadowColor = useGold ? colors.gold : colors.primary;
 
     final child = Material(
       color: Colors.transparent,
@@ -35,17 +32,7 @@ class GradientButton extends StatelessWidget {
         onTap: onPressed,
         borderRadius: BorderRadius.circular(AppSizes.radiusLg),
         child: Ink(
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            boxShadow: [
-              BoxShadow(
-                color: shadowColor.withValues(alpha: 0.45),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+          decoration: JourneyDecorations.primaryButtonDecoration(context),
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: compact ? AppSizes.paddingMd : AppSizes.paddingLg,

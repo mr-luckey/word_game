@@ -5,7 +5,7 @@
       "id": 1,
       "name": "Paris Adventure",
       "theme": "travel_europe",
-      "backgroundImage": "paris_bg.jpg",
+      "backgroundImage": "classic_travel/paris.webp",
       "levels": [
         {
           "id": 101,
@@ -316,9 +316,9 @@
     },
     {
       "id": 2,
-      "name": "Tokyo Journey",
+      "name": "Tokyo Nights",
       "theme": "travel_asia",
-      "backgroundImage": "tokyo_bg.jpg",
+      "backgroundImage": "neon_city/tokyo_nights.webp",
       "levels": [
         {
           "id": 201,
@@ -624,9 +624,9 @@
     },
     {
       "id": 3,
-      "name": "New York Rush",
+      "name": "New York Neon",
       "theme": "travel_usa",
-      "backgroundImage": "nyc_bg.jpg",
+      "backgroundImage": "neon_city/nyc_neon.webp",
       "levels": [
         {
           "id": 301,

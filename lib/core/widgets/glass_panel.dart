@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
 class GlassPanel extends StatelessWidget {
@@ -23,7 +24,32 @@ class GlassPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final radius = borderRadius ?? BorderRadius.circular(AppSizes.radiusLg);
+    final preset = context.themePreset;
+    final radius = borderRadius ?? BorderRadius.circular(preset.cardRadius);
+    final blur = preset.useGlassmorphism ? 12.0 : 0.0;
+
+    Widget panelContent = DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        color: colors.glassSurface,
+        border: Border.all(color: colors.glassBorder, width: 1.5),
+      ),
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(AppSizes.paddingMd),
+        child: child,
+      ),
+    );
+
+    if (blur > 0) {
+      panelContent = ClipRRect(
+        borderRadius: radius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+          child: panelContent,
+        ),
+      );
+    }
+
     final panel = Container(
       decoration: BoxDecoration(
         borderRadius: radius,
@@ -37,20 +63,7 @@ class GlassPanel extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: radius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: radius,
-              color: colors.glassSurface,
-              border: Border.all(color: colors.glassBorder, width: 1.5),
-            ),
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(AppSizes.paddingMd),
-              child: child,
-            ),
-          ),
-        ),
+        child: panelContent,
       ),
     );
 

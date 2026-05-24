@@ -89,7 +89,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         id: 9999,
         themeId: 0,
         themeName: 'Daily Challenge',
-        backgroundImage: 'paris_bg.jpg',
+        backgroundImage: 'classic_travel/paris.webp',
         difficultyIndex: 1,
         gridSize: GameConfig.gridMedium,
         timeLimit: 300,

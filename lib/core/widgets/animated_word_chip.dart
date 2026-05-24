@@ -10,43 +10,50 @@ class AnimatedWordChip extends StatelessWidget {
     required this.found,
     required this.index,
     this.compact = false,
+    this.scenic = false,
   });
 
   final String word;
   final bool found;
   final int index;
   final bool compact;
+  final bool scenic;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final color = found ? colors.foundColorForIndex(index) : colors.cellDefault;
-    final hPad = compact ? 8.0 : 14.0;
-    final vPad = compact ? 4.0 : 8.0;
-    final radius = compact ? 12.0 : 20.0;
+    final accent = found ? colors.foundColorForIndex(index) : null;
+    final hPad = compact ? 10.0 : 14.0;
+    final vPad = compact ? 5.0 : 8.0;
+    final radius = compact ? 14.0 : 20.0;
+
+    final bg = found
+        ? (accent ?? colors.success).withValues(alpha: 0.22)
+        : scenic
+            ? colors.scrim.withValues(alpha: 0.55)
+            : colors.glassSurface;
+    final borderColor = found
+        ? (accent ?? colors.success)
+        : scenic
+            ? colors.onScenicMuted.withValues(alpha: 0.35)
+            : colors.cellBorder;
+    final textColor = found
+        ? (accent ?? colors.success)
+        : scenic
+            ? colors.onScenicMuted
+            : colors.onSurface;
 
     return AnimatedContainer(
       duration: 300.ms,
       curve: Curves.easeOutCubic,
       padding: EdgeInsets.symmetric(horizontal: hPad, vertical: vPad),
       decoration: BoxDecoration(
-        color: found
-            ? color.withValues(alpha: 0.25)
-            : colors.glassSurface,
+        color: bg,
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(
-          color: found ? color : colors.cellBorder,
+          color: borderColor,
           width: found ? 1.5 : 1,
         ),
-        boxShadow: found
-            ? [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ]
-            : null,
       ),
       child: Text(
         word,
@@ -54,20 +61,22 @@ class AnimatedWordChip extends StatelessWidget {
                 ? AppTextStyles.wordChipFound(context)
                 : AppTextStyles.wordChip(context))
             .copyWith(
-          color: found ? color.withValues(alpha: 0.95) : colors.onSurface,
-          decorationColor: color,
+          fontSize: compact ? 11 : 12,
+          fontWeight: FontWeight.w600,
+          color: textColor,
+          decorationColor: accent ?? colors.success,
         ),
       ),
     )
         .animate(target: found ? 1 : 0)
         .scale(
           begin: const Offset(1, 1),
-          end: const Offset(1.05, 1.05),
+          end: const Offset(1.04, 1.04),
           duration: 200.ms,
         )
         .then()
         .scale(
-          begin: const Offset(1.05, 1.05),
+          begin: const Offset(1.04, 1.04),
           end: const Offset(1, 1),
           duration: 150.ms,
         );

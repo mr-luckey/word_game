@@ -9,14 +9,12 @@ class ToolCircleButton extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.onPressed,
-    this.highlight = false,
   });
 
   final String label;
   final String subtitle;
   final IconData icon;
   final VoidCallback onPressed;
-  final bool highlight;
 
   @override
   Widget build(BuildContext context) {
@@ -30,49 +28,38 @@ class ToolCircleButton extends StatelessWidget {
             onTap: onPressed,
             customBorder: const CircleBorder(),
             child: Ink(
-              width: 52,
-              height: 52,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: highlight
-                    ? colors.playButtonGradient
-                    : LinearGradient(
-                        colors: [colors.surface, colors.cellAlt],
-                      ),
+                color: colors.surface.withValues(alpha: 0.9),
+                border: Border.all(
+                  color: colors.glassBorder.withValues(alpha: 0.5),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: colors.shadow,
-                    blurRadius: 8,
+                    blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
                 ],
-                border: Border.all(
-                  color: highlight ? colors.gold : colors.cellBorder,
-                ),
               ),
-              child: Icon(
-                icon,
-                color: highlight ? colors.onPrimary : colors.primary,
-                size: 26,
-              ),
+              child: Icon(icon, color: colors.gold, size: 26),
             ),
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Text(
           label,
           style: AppTextStyles.wordList(context).copyWith(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
             color: colors.onScenic,
           ),
         ),
         Text(
-          subtitle,
-          style: AppTextStyles.wordList(context).copyWith(
-            fontSize: 9,
-            color: colors.onScenicMuted,
-          ),
+          '$subtitle coins',
+          style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 10),
         ),
       ],
     );
