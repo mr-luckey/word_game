@@ -16,28 +16,36 @@ class HomeDailyBonusCard extends StatelessWidget {
 
     return HomeGlassCard(
       onTap: onTap,
-      height: 164,
-      padding: const EdgeInsets.all(9),
+      height: 152,
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Icon + label row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
-                      colors.primary.withValues(alpha: 0.7),
-                      colors.primary,
+                      spec.dailyBonusAccent.withValues(alpha: 0.35),
+                      spec.dailyBonusAccent.withValues(alpha: 0.15),
                     ],
                   ),
+                  border: Border.all(
+                    color: spec.dailyBonusAccent.withValues(alpha: 0.5),
+                  ),
                 ),
-                child: Icon(Icons.card_giftcard_rounded,
-                    color: spec.dailyBonusAccent, size: 24),
+                child: Icon(
+                  Icons.card_giftcard_rounded,
+                  color: spec.dailyBonusAccent,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -45,19 +53,18 @@ class HomeDailyBonusCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DAILY BONUS',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
+                      'Daily Bonus',
+                      style: GoogleFonts.cinzel(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
                         color: spec.dailyBonusAccent,
-                        letterSpacing: 0.8,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     Text(
-                      'Come back every day to claim rewards!',
+                      'Claim your reward!',
                       style: GoogleFonts.montserrat(
                         fontSize: 8,
-                        height: 1.25,
                         color: colors.onScenicMuted,
                       ),
                     ),
@@ -66,15 +73,16 @@ class HomeDailyBonusCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
+          // Coin reward pill
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: colors.tertiary.withValues(alpha: 0.75),
-              borderRadius: BorderRadius.circular(12),
+              color: colors.tertiary.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: colors.glassBorder.withValues(alpha: 0.35),
+                color: colors.glassBorder.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -82,25 +90,12 @@ class HomeDailyBonusCard extends StatelessWidget {
               children: [
                 Icon(Icons.monetization_on_rounded,
                     color: colors.gold, size: 18),
+                const SizedBox(width: 4),
                 Text(
-                  ' 50 ',
+                  '50',
                   style: GoogleFonts.montserrat(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: colors.onScenic,
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 16,
-                  color: colors.glassBorder.withValues(alpha: 0.5),
-                ),
-                Icon(Icons.diamond_rounded, color: colors.accentCoin, size: 16),
-                Text(
-                  ' 1',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
                     color: colors.onScenic,
                   ),
                 ),
@@ -108,13 +103,13 @@ class HomeDailyBonusCard extends StatelessWidget {
             ),
           ),
           const Spacer(),
+          // Timer
           Row(
             children: [
-              Icon(Icons.access_time_rounded,
-                  size: 12, color: colors.accentCoin),
-              const SizedBox(width: 4),
+              Icon(Icons.timer_outlined, size: 11, color: colors.accentCoin),
+              const SizedBox(width: 3),
               Text(
-                '23h 45m left',
+                'Ready to claim!',
                 style: GoogleFonts.montserrat(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
