@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/injection.dart';
 
@@ -15,6 +17,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final preset = context.themePreset;
+    final spec = preset.homeSpec;
     return BlocProvider(
       create: (_) => getIt<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashState>(
@@ -43,90 +46,126 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.center,
+                    radius: 0.82,
+                    colors: [
+                      spec.playButtonGlow.withValues(alpha: 0.2),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
               SafeArea(
-                child: Column(
-                  children: [
-                    const Spacer(flex: 2),
-                    Icon(
-                      Icons.explore_rounded,
-                      size: 80,
-                      color: colors.gold,
-                    )
-                        .animate()
-                        .fadeIn(duration: 700.ms)
-                        .scale(
-                          begin: const Offset(0.75, 0.75),
-                          end: const Offset(1, 1),
-                          curve: Curves.elasticOut,
-                        ),
-                    const SizedBox(height: 18),
-                    Text(
-                      'WORD SEARCH',
-                      style: AppTextStyles.gameTitle(context).copyWith(
-                        fontSize: 26,
-                        letterSpacing: 4,
-                        color: colors.gold,
-                      ),
-                    ).animate(delay: 250.ms).fadeIn(),
-                    Text(
-                      'JOURNEY',
-                      style: AppTextStyles.gameTitle(context).copyWith(
-                        fontSize: 28,
-                        letterSpacing: 10,
-                        color: colors.onScenic,
-                      ),
-                    ).animate(delay: 350.ms).fadeIn(),
-                    const SizedBox(height: 6),
-                    Text(
-                      preset.subtitle,
-                      style: AppTextStyles.gameSubtitle(context).copyWith(
-                        letterSpacing: 3,
-                        fontSize: 11,
-                      ),
-                    ).animate(delay: 450.ms).fadeIn(),
-                    const Spacer(flex: 3),
-                    BlocBuilder<SplashCubit, SplashState>(
-                      builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Column(
-                            children: [
-                              Text(
-                                preset.splashTagline,
-                                style: AppTextStyles.subtitle(context).copyWith(
-                                  fontSize: 13,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(2),
-                                child: LinearProgressIndicator(
-                                  value: state.progress,
-                                  minHeight: 3,
-                                  backgroundColor:
-                                      colors.onScenicMuted.withValues(alpha: 0.35),
-                                  valueColor:
-                                      AlwaysStoppedAnimation(colors.gold),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '${state.progressPercent}%',
-                                style: AppTextStyles.coinsScore(context)
-                                    .copyWith(
-                                  color: colors.onScenic,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                child: JourneyContentWidth(
+                  child: Padding(
+                    padding: JourneyThemeKit.pagePadding(context),
+                    child: Column(
+                      children: [
+                        const Spacer(flex: 2),
+                        CompassBadge(size: 92)
+                            .animate()
+                            .fadeIn(duration: 700.ms)
+                            .scale(
+                              begin: const Offset(0.75, 0.75),
+                              end: const Offset(1, 1),
+                              curve: Curves.elasticOut,
+                            ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'WORD',
+                          style: GoogleFonts.cinzel(
+                            fontSize: 32,
+                            height: 0.98,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2,
+                            color: colors.onScenic,
+                            shadows: JourneyThemeKit.textGlow(context),
                           ),
-                        );
-                      },
+                        ).animate(delay: 200.ms).fadeIn(),
+                        Text(
+                          'SEARCH',
+                          style: GoogleFonts.cinzel(
+                            fontSize: 32,
+                            height: 0.98,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2,
+                            color: colors.onScenic,
+                            shadows: JourneyThemeKit.textGlow(context),
+                          ),
+                        ).animate(delay: 280.ms).fadeIn(),
+                        Text(
+                          'JOURNEY',
+                          style: GoogleFonts.cinzel(
+                            fontSize: 32,
+                            height: 1.05,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 3,
+                            color: colors.onScenic,
+                            shadows: JourneyThemeKit.textGlow(context),
+                          ),
+                        ).animate(delay: 360.ms).fadeIn(),
+                        const SizedBox(height: 10),
+                        Text(
+                          '${preset.label.toUpperCase()} THEME',
+                          style: AppTextStyles.gameSubtitle(context).copyWith(
+                            color: spec.taglineColor,
+                            letterSpacing: 4,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ).animate(delay: 450.ms).fadeIn(),
+                        const Spacer(flex: 3),
+                        BlocBuilder<SplashCubit, SplashState>(
+                          builder: (context, state) {
+                            return JourneyPanel(
+                              padding:
+                                  const EdgeInsets.fromLTRB(18, 14, 18, 16),
+                              radius: 20,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    preset.splashTagline,
+                                    style: AppTextStyles.subtitle(context)
+                                        .copyWith(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: colors.onScenic,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 14),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: LinearProgressIndicator(
+                                      value: state.progress,
+                                      minHeight: 7,
+                                      backgroundColor: colors.onScenicMuted
+                                          .withValues(alpha: 0.24),
+                                      valueColor: AlwaysStoppedAnimation(
+                                          spec.playButtonGlow),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${state.progressPercent}%',
+                                    style: AppTextStyles.coinsScore(context)
+                                        .copyWith(
+                                      color: colors.onScenic,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 28),
+                      ],
                     ),
-                    const SizedBox(height: 36),
-                  ],
+                  ),
                 ),
               ),
             ],

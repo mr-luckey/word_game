@@ -22,8 +22,8 @@ class HomeAchievementsCard extends StatelessWidget {
 
     return HomeGlassCard(
       onTap: onTap,
-      height: 148,
-      padding: const EdgeInsets.all(10),
+      height: 164,
+      padding: const EdgeInsets.all(9),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -65,8 +65,8 @@ class HomeAchievementsCard extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      width: 38,
-                      height: 38,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: colors.gold.withValues(alpha: 0.1),
@@ -77,13 +77,13 @@ class HomeAchievementsCard extends StatelessWidget {
                       ),
                       child: Icon(icon, color: colors.gold, size: 18),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     Text(
                       label,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
-                        fontSize: 7,
-                        height: 1.15,
+                        fontSize: 6.7,
+                        height: 1.12,
                         color: colors.onScenicMuted,
                       ),
                     ),

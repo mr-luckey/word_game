@@ -11,6 +11,7 @@ class DestinationsState extends Equatable {
     this.featuredTotal = 0,
     this.totalCompleted = 0,
     this.totalLevels = 0,
+    this.completedLevelIds = const {},
   });
 
   final List<ThemeCategoryEntity> themes;
@@ -19,6 +20,7 @@ class DestinationsState extends Equatable {
   final int featuredTotal;
   final int totalCompleted;
   final int totalLevels;
+  final Set<int> completedLevelIds;
 
   @override
   List<Object?> get props => [
@@ -28,11 +30,13 @@ class DestinationsState extends Equatable {
         featuredTotal,
         totalCompleted,
         totalLevels,
+        completedLevelIds,
       ];
 }
 
 class DestinationsCubit extends Cubit<DestinationsState> {
-  DestinationsCubit(this._levels, this._progress) : super(const DestinationsState());
+  DestinationsCubit(this._levels, this._progress)
+      : super(const DestinationsState());
 
   final LevelRepository _levels;
   final ProgressRepository _progress;
@@ -75,6 +79,7 @@ class DestinationsCubit extends Cubit<DestinationsState> {
         featuredTotal: featuredTotal,
         totalCompleted: totalCompleted,
         totalLevels: totalLevels,
+        completedLevelIds: stars.keys.toSet(),
       ),
     );
   }

@@ -16,6 +16,7 @@ class CoinDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final spec = context.themePreset.homeSpec;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.paddingSm + 2,
@@ -25,8 +26,8 @@ class CoinDisplay extends StatelessWidget {
         gradient: LinearGradient(
           colors: light
               ? [
-                  colors.onScenic.withValues(alpha: 0.25),
-                  colors.onScenic.withValues(alpha: 0.15),
+                  spec.cardFill.withValues(alpha: 0.92),
+                  colors.surface.withValues(alpha: 0.74),
                 ]
               : [
                   colors.gold.withValues(alpha: 0.2),
@@ -36,9 +37,17 @@ class CoinDisplay extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: light
-              ? colors.onScenic.withValues(alpha: 0.5)
+              ? colors.glassBorder.withValues(alpha: 0.85)
               : colors.gold.withValues(alpha: 0.6),
+          width: 1.3,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: spec.playButtonGlow.withValues(alpha: 0.18),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -52,8 +61,8 @@ class CoinDisplay extends StatelessWidget {
           Text(
             '$coins',
             style: AppTextStyles.coinsScore(context).copyWith(
-              color: light ? colors.accentCoin : colors.goldDark,
-              fontSize: 18,
+              color: light ? colors.onScenic : colors.goldDark,
+              fontSize: 15,
             ),
           ),
         ],

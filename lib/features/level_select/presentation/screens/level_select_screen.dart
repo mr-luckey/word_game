@@ -11,6 +11,7 @@ import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_level_banner.dart';
 import 'package:word_game/core/widgets/journey_screen_header.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/level_select/presentation/cubit/banner_ad_cubit.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
@@ -82,136 +83,138 @@ class _LevelSelectView extends StatelessWidget {
           body: ScenicBackground(
             showBackgroundImage: false,
             child: SafeArea(
-              child: Column(
-                children: [
-                  JourneyScreenHeader(
-                    leading: IconButton(
-                      icon: Icon(Icons.arrow_back_rounded, color: colors.gold),
-                      onPressed: () => journeyPopFromLevels(context),
-                    ),
-                  ),
-                  JourneyLevelBanner(
-                    title: state.themeName.toUpperCase(),
-                    imageAsset: bgAsset,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.paddingMd,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: colors.surface.withValues(alpha: 0.65),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: colors.glassBorder.withValues(alpha: 0.35),
-                        ),
+              child: JourneyContentWidth(
+                child: Column(
+                  children: [
+                    JourneyScreenHeader(
+                      leading: IconButton(
+                        icon:
+                            Icon(Icons.arrow_back_rounded, color: colors.gold),
+                        onPressed: () => journeyPopFromLevels(context),
                       ),
-                      padding: const EdgeInsets.all(4),
-                      child: Row(
-                        children: List.generate(4, (i) {
-                          final selected = state.difficultyIndex == i;
-                          return Expanded(
-                            child: Material(
-                              color: selected
-                                  ? colors.gold
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(20),
-                              child: InkWell(
-                                onTap: () => context
-                                    .read<LevelSelectCubit>()
-                                    .selectDifficulty(i),
+                    ),
+                    JourneyLevelBanner(
+                      title: state.themeName.toUpperCase(),
+                      imageAsset: bgAsset,
+                    ),
+                    Padding(
+                      padding: JourneyThemeKit.pagePadding(context),
+                      child: JourneyPanel(
+                        padding: const EdgeInsets.all(4),
+                        radius: 24,
+                        child: Row(
+                          children: List.generate(4, (i) {
+                            final selected = state.difficultyIndex == i;
+                            return Expanded(
+                              child: Material(
+                                color:
+                                    selected ? colors.gold : Colors.transparent,
                                 borderRadius: BorderRadius.circular(20),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: Text(
-                                    _diffLabels[i],
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.wordList(context)
-                                        .copyWith(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: selected
-                                          ? colors.onPrimary
-                                          : colors.bodyMuted,
+                                child: InkWell(
+                                  onTap: () => context
+                                      .read<LevelSelectCubit>()
+                                      .selectDifficulty(i),
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 10,
+                                    ),
+                                    child: Text(
+                                      _diffLabels[i],
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.wordList(context)
+                                          .copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                        color: selected
+                                            ? colors.onPrimary
+                                            : colors.onScenicMuted,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: state.loading
-                        ? Center(
-                            child: CircularProgressIndicator(color: colors.gold),
-                          )
-                        : GridView.builder(
-                            padding: const EdgeInsets.all(AppSizes.paddingMd),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 0.88,
+                    Expanded(
+                      child: state.loading
+                          ? Center(
+                              child:
+                                  CircularProgressIndicator(color: colors.gold),
+                            )
+                          : GridView.builder(
+                              padding: const EdgeInsets.all(AppSizes.paddingMd),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: 0.88,
+                              ),
+                              itemCount: filtered.length.clamp(0, 20),
+                              itemBuilder: (context, index) {
+                                final level = filtered[index];
+                                final stars = state.stars[level.id] ?? 0;
+                                final locked =
+                                    !state.unlocked.contains(level.id);
+                                return LevelCard(
+                                  levelNumber: index + 1,
+                                  stars: stars,
+                                  locked: locked,
+                                  isActive: !locked && level.id == activeId,
+                                  onTap: locked
+                                      ? null
+                                      : () => _openLevel(context, level.id),
+                                );
+                              },
                             ),
-                            itemCount: filtered.length.clamp(0, 20),
-                            itemBuilder: (context, index) {
-                              final level = filtered[index];
-                              final stars = state.stars[level.id] ?? 0;
-                              final locked =
-                                  !state.unlocked.contains(level.id);
-                              return LevelCard(
-                                levelNumber: index + 1,
-                                stars: stars,
-                                locked: locked,
-                                isActive: !locked && level.id == activeId,
-                                onTap: locked
-                                    ? null
-                                    : () => _openLevel(context, level.id),
-                              );
-                            },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.paddingMd,
+                        vertical: AppSizes.paddingSm,
+                      ),
+                      child: JourneyPanel(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 9,
+                        ),
+                        radius: 18,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.inventory_2_rounded,
+                              color: colors.gold,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Complete levels to earn coins',
+                              style: AppTextStyles.bodyMuted(context),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    BlocBuilder<BannerAdCubit, BannerAd?>(
+                      builder: (context, banner) {
+                        if (banner == null) return const SizedBox.shrink();
+                        return ColoredBox(
+                          color: colors.navSurface,
+                          child: SizedBox(
+                            width: banner.size.width.toDouble(),
+                            height: banner.size.height.toDouble(),
+                            child: AdWidget(ad: banner),
                           ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.paddingMd,
-                      vertical: AppSizes.paddingSm,
+                        );
+                      },
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.inventory_2_rounded,
-                          color: colors.gold,
-                          size: 18,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Complete levels to earn coins',
-                          style: AppTextStyles.bodyMuted(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                  BlocBuilder<BannerAdCubit, BannerAd?>(
-                    builder: (context, banner) {
-                      if (banner == null) return const SizedBox.shrink();
-                      return ColoredBox(
-                        color: colors.navSurface,
-                        child: SizedBox(
-                          width: banner.size.width.toDouble(),
-                          height: banner.size.height.toDouble(),
-                          child: AdWidget(ad: banner),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

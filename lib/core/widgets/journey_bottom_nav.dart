@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
@@ -29,10 +27,17 @@ class JourneyBottomNav extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: colors.navSurface,
+        color: colors.navSurface.withValues(alpha: 0.94),
         border: Border(
           top: BorderSide(color: colors.glassBorder.withValues(alpha: 0.45)),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: spec.playButtonGlow.withValues(alpha: 0.2),
+            blurRadius: 18,
+            offset: const Offset(0, -6),
+          ),
+        ],
       ),
       child: SafeArea(
         top: false,
@@ -52,10 +57,13 @@ class JourneyBottomNav extends StatelessWidget {
                     children: [
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.all(8),
+                        width: 42,
+                        height: 36,
+                        alignment: Alignment.center,
                         decoration: selected
                             ? BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
+                                color: spec.cardFill.withValues(alpha: 0.68),
                                 border: Border.all(
                                   color: colors.glassBorder,
                                   width: 1.5,
@@ -71,8 +79,10 @@ class JourneyBottomNav extends StatelessWidget {
                             : null,
                         child: Icon(
                           icon,
-                          size: 24,
-                          color: selected ? colors.gold : colors.onScenic,
+                          size: 22,
+                          color: selected
+                              ? colors.gold
+                              : colors.onScenicMuted.withValues(alpha: 0.78),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -82,7 +92,9 @@ class JourneyBottomNav extends StatelessWidget {
                           fontSize: 10,
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
-                          color: selected ? colors.gold : colors.onScenic,
+                          color: selected
+                              ? colors.gold
+                              : colors.onScenicMuted.withValues(alpha: 0.82),
                         ),
                       ),
                     ],

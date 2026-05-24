@@ -8,15 +8,15 @@ import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 
 void main() {
-  testWidgets('LetterGrid renders grid cells', (tester) async {
+  GameInProgress buildState({int size = 3}) {
     final grid = List.generate(
-      3,
+      size,
       (r) => List.generate(
-        3,
+        size,
         (c) => GridCellModel(row: r, col: c, letter: 'A'),
       ),
     );
-    final state = GameInProgress(
+    return GameInProgress(
       grid: grid,
       wordsToFind: const [WordModel(text: 'AAA')],
       foundWords: const [],
@@ -38,29 +38,51 @@ void main() {
       coinsReward: 10,
       hintsUsed: 0,
     );
+  }
 
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.light,
-        home: Builder(
-          builder: (context) {
-            return Scaffold(
-              body: SizedBox(
-                width: 300,
-                height: 300,
-                child: LetterGrid(
-                  state: state,
-                  colors: context.appColors,
-                  onDragStart: (_, __) {},
-                  onDragUpdate: (_, __) {},
-                  onDragEnd: () {},
-                ),
+  Widget buildHarness(GameInProgress state, {required Size boxSize}) {
+    return MaterialApp(
+      theme: AppTheme.light,
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: SizedBox(
+              width: boxSize.width,
+              height: boxSize.height,
+              child: LetterGrid(
+                state: state,
+                colors: context.appColors,
+                onDragStart: (_, __) {},
+                onDragUpdate: (_, __) {},
+                onDragEnd: () {},
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  testWidgets('LetterGrid renders grid cells', (tester) async {
+    await tester.pumpWidget(
+      buildHarness(buildState(), boxSize: const Size(300, 300)),
+    );
     expect(find.byType(LetterGrid), findsOneWidget);
+  });
+
+  testWidgets('LetterGrid stays square when height is constrained',
+      (tester) async {
+    await tester.pumpWidget(
+      buildHarness(buildState(size: 8), boxSize: const Size(320, 180)),
+    );
+
+    final paintSize = tester.getSize(
+      find.descendant(
+        of: find.byType(LetterGrid),
+        matching: find.byType(CustomPaint),
+      ),
+    );
+    expect(paintSize.width, closeTo(paintSize.height, 0.001));
+    expect(paintSize.height, lessThanOrEqualTo(180));
   });
 }

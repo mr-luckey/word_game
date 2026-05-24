@@ -16,8 +16,8 @@ class HomeDailyBonusCard extends StatelessWidget {
 
     return HomeGlassCard(
       onTap: onTap,
-      height: 148,
-      padding: const EdgeInsets.all(10),
+      height: 164,
+      padding: const EdgeInsets.all(9),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,10 +66,10 @@ class HomeDailyBonusCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
             decoration: BoxDecoration(
               color: colors.tertiary.withValues(alpha: 0.75),
               borderRadius: BorderRadius.circular(12),
@@ -80,7 +80,8 @@ class HomeDailyBonusCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.monetization_on_rounded, color: colors.gold, size: 18),
+                Icon(Icons.monetization_on_rounded,
+                    color: colors.gold, size: 18),
                 Text(
                   ' 50 ',
                   style: GoogleFonts.montserrat(
@@ -109,7 +110,8 @@ class HomeDailyBonusCard extends StatelessWidget {
           const Spacer(),
           Row(
             children: [
-              Icon(Icons.access_time_rounded, size: 12, color: colors.accentCoin),
+              Icon(Icons.access_time_rounded,
+                  size: 12, color: colors.accentCoin),
               const SizedBox(width: 4),
               Text(
                 '23h 45m left',

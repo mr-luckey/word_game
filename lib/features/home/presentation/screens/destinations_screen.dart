@@ -9,6 +9,7 @@ import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_screen_header.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -28,95 +29,91 @@ class DestinationsScreen extends StatelessWidget {
           darken: 0.55,
           blurSigma: 1.5,
           child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const JourneyScreenHeader(showSettings: false),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSizes.paddingMd,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'EXPLORE',
-                        style: AppTextStyles.sectionHeading(context),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        'Destinations',
-                        style: AppTextStyles.levelName(context).copyWith(
-                          fontSize: 20,
-                          color: context.appColors.onScenic,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Discover iconic cities and new word adventures.',
-                        style: AppTextStyles.bodyMuted(context),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: AppSizes.paddingSm),
-                Expanded(
-                  child: BlocBuilder<DestinationsCubit, DestinationsState>(
-                    builder: (context, state) {
-                      final colors = context.appColors;
-                      if (state.loading) {
-                        return Center(
-                          child: CircularProgressIndicator(color: colors.gold),
-                        );
-                      }
-
-                      final playableIds =
-                          state.themes.map((t) => t.id).toSet();
-                      final destinations =
-                          DestinationCatalog.forPreset(preset);
-
-                      return ListView.builder(
-                        padding: const EdgeInsets.all(AppSizes.paddingMd),
-                        itemCount: destinations.length,
-                        itemBuilder: (context, index) {
-                          final dest = destinations[index];
-                          final unlocked = playableIds.contains(dest.id);
-                          final levelCount = state.themes
-                              .where((t) => t.id == dest.id)
-                              .map((t) => t.levels.length)
-                              .firstOrNull;
-
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: AppSizes.paddingMd,
+            child: JourneyContentWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const JourneyScreenHeader(showSettings: false),
+                  Padding(
+                    padding: JourneyThemeKit.pagePadding(context),
+                    child: JourneyPanel(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                      radius: 20,
+                      child: Row(
+                        children: [
+                          const CompassBadge(size: 44),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: JourneySectionTitle(
+                              title: 'Destinations',
+                              subtitle:
+                                  'Discover iconic places and new word adventures.',
                             ),
-                            child: _ExploreDestinationCard(
-                              name: dest.name,
-                              country: dest.country,
-                              imageAsset: dest.imageAsset,
-                              levelLabel: unlocked
-                                  ? '0/${levelCount ?? 20} levels'
-                                  : 'Locked',
-                              locked: !unlocked,
-                              onTap: unlocked
-                                  ? () {
-                                      getIt<AppThemeBloc>()
-                                          .setDestinationContext(dest.id);
-                                      context.go('/levels?themeId=${dest.id}');
-                                    }
-                                  : null,
-                            )
-                                .animate(delay: (index * 80).ms)
-                                .fadeIn(duration: 400.ms)
-                                .slideY(begin: 0.06, end: 0),
-                          );
-                        },
-                      );
-                    },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppSizes.paddingSm),
+                  Expanded(
+                    child: BlocBuilder<DestinationsCubit, DestinationsState>(
+                      builder: (context, state) {
+                        final colors = context.appColors;
+                        if (state.loading) {
+                          return Center(
+                            child:
+                                CircularProgressIndicator(color: colors.gold),
+                          );
+                        }
+
+                        final playableIds =
+                            state.themes.map((t) => t.id).toSet();
+                        final destinations =
+                            DestinationCatalog.forPreset(preset);
+
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(AppSizes.paddingMd),
+                          itemCount: destinations.length,
+                          itemBuilder: (context, index) {
+                            final dest = destinations[index];
+                            final unlocked = playableIds.contains(dest.id);
+                            final levelCount = state.themes
+                                .where((t) => t.id == dest.id)
+                                .map((t) => t.levels.length)
+                                .firstOrNull;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSizes.paddingMd,
+                              ),
+                              child: _ExploreDestinationCard(
+                                name: dest.name,
+                                country: dest.country,
+                                imageAsset: dest.imageAsset,
+                                levelLabel: unlocked
+                                    ? '0/${levelCount ?? 20} levels'
+                                    : 'Locked',
+                                locked: !unlocked,
+                                onTap: unlocked
+                                    ? () {
+                                        getIt<AppThemeBloc>()
+                                            .setDestinationContext(dest.id);
+                                        context
+                                            .go('/levels?themeId=${dest.id}');
+                                      }
+                                    : null,
+                              )
+                                  .animate(delay: (index * 80).ms)
+                                  .fadeIn(duration: 400.ms)
+                                  .slideY(begin: 0.06, end: 0),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -153,12 +150,21 @@ class _ExploreDestinationCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(preset.cardRadius),
         child: Ink(
-          height: 120,
+          height: 124,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(preset.cardRadius),
             border: Border.all(
               color: colors.glassBorder.withValues(alpha: locked ? 0.25 : 0.55),
+              width: 1.4,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: context.themePreset.homeSpec.playButtonGlow
+                    .withValues(alpha: locked ? 0.08 : 0.22),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(preset.cardRadius),
@@ -209,12 +215,26 @@ class _ExploreDestinationCard extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              levelLabel,
-                              style: AppTextStyles.wordList(context).copyWith(
-                                fontSize: 12,
-                                color: colors.gold,
-                                fontWeight: FontWeight.w600,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 9,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: colors.scrim.withValues(alpha: 0.45),
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: colors.glassBorder
+                                      .withValues(alpha: 0.35),
+                                ),
+                              ),
+                              child: Text(
+                                levelLabel,
+                                style: AppTextStyles.wordList(context).copyWith(
+                                  fontSize: 12,
+                                  color: colors.gold,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           ],

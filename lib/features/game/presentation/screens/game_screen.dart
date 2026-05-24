@@ -11,6 +11,7 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/features/game/presentation/widgets/word_list_panel.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/loading_overlay.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/core/widgets/tool_circle_button.dart';
@@ -79,7 +80,8 @@ class _GameView extends StatelessWidget {
           listener: (context, state) {
             if (state is! GameNoMoreLevels) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('All levels complete in this pack!')),
+              const SnackBar(
+                  content: Text('All levels complete in this pack!')),
             );
             context.go('/levels?themeId=${state.themeId}');
           },
@@ -120,26 +122,28 @@ class _GameView extends StatelessWidget {
                   darken: 0.45,
                 ),
                 SafeArea(
-                  child: Stack(
-                    children: [
-                      if (state is GameInProgress)
-                        _GameBody(state: state)
-                      else if (state is GameLoading || state is GameInitial)
-                        const LoadingOverlay(message: 'Loading level...')
-                      else if (state is GameCompleted)
-                        const SizedBox.shrink()
-                      else if (state is GameError)
-                        Center(
-                          child: GlassPanel(
-                            child: Text(
-                              state.message,
-                              style: AppTextStyles.levelName(context),
+                  child: JourneyContentWidth(
+                    child: Stack(
+                      children: [
+                        if (state is GameInProgress)
+                          _GameBody(state: state)
+                        else if (state is GameLoading || state is GameInitial)
+                          const LoadingOverlay(message: 'Loading level...')
+                        else if (state is GameCompleted)
+                          const SizedBox.shrink()
+                        else if (state is GameError)
+                          Center(
+                            child: GlassPanel(
+                              child: Text(
+                                state.message,
+                                style: AppTextStyles.levelName(context),
+                              ),
                             ),
-                          ),
-                        )
-                      else
-                        const SizedBox.shrink(),
-                    ],
+                          )
+                        else
+                          const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                 ),
                 if (state is GameInProgress && state.isPaused)
@@ -150,11 +154,13 @@ class _GameView extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Paused', style: AppTextStyles.levelName(context)),
+                            Text('Paused',
+                                style: AppTextStyles.levelName(context)),
                             const SizedBox(height: 16),
                             FilledButton.icon(
-                              onPressed: () =>
-                                  context.read<GameBloc>().add(const GameResumed()),
+                              onPressed: () => context
+                                  .read<GameBloc>()
+                                  .add(const GameResumed()),
                               icon: const Icon(Icons.play_arrow_rounded),
                               label: const Text('Resume'),
                             ),
@@ -189,15 +195,15 @@ class _GameBody extends StatelessWidget {
         const SizedBox(height: _sectionGap),
         WordListPanel(state: state),
         const SizedBox(height: _sectionGap),
-        Expanded(
+        Flexible(
+          fit: FlexFit.loose,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingSm),
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMd),
             child: LetterGrid(
               state: state,
               colors: colors,
               onDragStart: (r, c) => bloc.add(CellDragStarted(row: r, col: c)),
-              onDragUpdate: (r, c) =>
-                  bloc.add(CellDragUpdated(row: r, col: c)),
+              onDragUpdate: (r, c) => bloc.add(CellDragUpdated(row: r, col: c)),
               onDragEnd: () => bloc.add(const CellDragEnded()),
             ),
           ),
@@ -219,119 +225,122 @@ class _TopBar extends StatelessWidget {
     final bloc = context.read<GameBloc>();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 8, 0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back_rounded, color: colors.gold),
-                onPressed: () =>
-                    journeyPopFromGame(context, result: true, themeId: state.themeId),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      state.levelTheme.toUpperCase(),
-                      style: AppTextStyles.levelName(context).copyWith(
-                        fontSize: 15,
-                        letterSpacing: 0.6,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Level ${state.levelId}',
-                      style: AppTextStyles.bodyMuted(context).copyWith(
-                        fontSize: 11,
-                        color: colors.onScenicMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CoinDisplay(coins: state.coins, light: true),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+      child: JourneyPanel(
+        padding: const EdgeInsets.fromLTRB(6, 6, 8, 8),
+        radius: 20,
+        child: Column(
+          children: [
+            Row(
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: state.timerDanger
-                        ? colors.timerDanger.withValues(alpha: 0.85)
-                        : colors.scrim.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: state.timerDanger
-                          ? colors.timerDanger
-                          : colors.glassBorder.withValues(alpha: 0.4),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                IconButton(
+                  icon: Icon(Icons.arrow_back_rounded, color: colors.gold),
+                  onPressed: () => journeyPopFromGame(context,
+                      result: true, themeId: state.themeId),
+                ),
+                Expanded(
+                  child: Column(
                     children: [
-                      Icon(
-                        Icons.timer_outlined,
-                        size: 16,
-                        color: state.timerDanger
-                            ? Colors.white
-                            : colors.gold,
-                      ),
-                      const SizedBox(width: 4),
                       Text(
-                        _formatTimer(state.remainingSeconds),
-                        style: AppTextStyles.timer(
-                          context,
-                          danger: state.timerDanger,
+                        state.levelTheme.toUpperCase(),
+                        style: AppTextStyles.levelName(context).copyWith(
+                          fontSize: 15,
+                          letterSpacing: 0.6,
+                          shadows: JourneyThemeKit.textGlow(context),
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        'Level ${state.levelId}',
+                        style: AppTextStyles.bodyMuted(context).copyWith(
+                          fontSize: 11,
+                          color: colors.onScenicMuted,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
-                OutlinedButton.icon(
-                  onPressed: () {
-                    if (state.isPaused) {
-                      bloc.add(const GameResumed());
-                    } else {
-                      bloc.add(const GamePaused());
-                    }
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: colors.onScenic,
-                    side: BorderSide(color: colors.glassBorder),
-                    backgroundColor: colors.scrim.withValues(alpha: 0.45),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                  ),
-                  icon: Icon(
-                    state.isPaused
-                        ? Icons.play_arrow_rounded
-                        : Icons.pause_rounded,
-                    size: 18,
-                    color: colors.gold,
-                  ),
-                  label: Text(
-                    state.isPaused ? 'Resume' : 'Pause',
-                    style: AppTextStyles.subtitle(context).copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: colors.onScenic,
-                    ),
-                  ),
-                ),
+                CoinDisplay(coins: state.coins, light: true),
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: state.timerDanger
+                          ? colors.timerDanger.withValues(alpha: 0.85)
+                          : colors.scrim.withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: state.timerDanger
+                            ? colors.timerDanger
+                            : colors.glassBorder.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.timer_outlined,
+                          size: 16,
+                          color: state.timerDanger ? Colors.white : colors.gold,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          _formatTimer(state.remainingSeconds),
+                          style: AppTextStyles.timer(
+                            context,
+                            danger: state.timerDanger,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      if (state.isPaused) {
+                        bloc.add(const GameResumed());
+                      } else {
+                        bloc.add(const GamePaused());
+                      }
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colors.onScenic,
+                      side: BorderSide(color: colors.glassBorder),
+                      backgroundColor: colors.scrim.withValues(alpha: 0.45),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                    ),
+                    icon: Icon(
+                      state.isPaused
+                          ? Icons.play_arrow_rounded
+                          : Icons.pause_rounded,
+                      size: 18,
+                      color: colors.gold,
+                    ),
+                    label: Text(
+                      state.isPaused ? 'Resume' : 'Pause',
+                      style: AppTextStyles.subtitle(context).copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: colors.onScenic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -342,6 +351,7 @@ class _TopBar extends StatelessWidget {
     return '$m:$s';
   }
 }
+
 class _Toolbar extends StatelessWidget {
   const _Toolbar({required this.state});
   final GameInProgress state;
@@ -356,28 +366,32 @@ class _Toolbar extends StatelessWidget {
         AppSizes.paddingMd,
         AppSizes.paddingMd,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ToolCircleButton(
-            label: 'Hint',
-            subtitle: '${GameConfig.hintCost}',
-            icon: Icons.lightbulb_outline_rounded,
-            onPressed: () => bloc.add(const HintRequested()),
-          ),
-          ToolCircleButton(
-            label: 'Reveal',
-            subtitle: '${GameConfig.revealCost}',
-            icon: Icons.visibility_rounded,
-            onPressed: () => bloc.add(const RevealRequested()),
-          ),
-          ToolCircleButton(
-            label: 'Shuffle',
-            subtitle: '${GameConfig.shuffleCost}',
-            icon: Icons.shuffle_rounded,
-            onPressed: () => bloc.add(const ShuffleRequested()),
-          ),
-        ],
+      child: JourneyPanel(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        radius: 22,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ToolCircleButton(
+              label: 'Hint',
+              subtitle: '${GameConfig.hintCost}',
+              icon: Icons.lightbulb_outline_rounded,
+              onPressed: () => bloc.add(const HintRequested()),
+            ),
+            ToolCircleButton(
+              label: 'Reveal',
+              subtitle: '${GameConfig.revealCost}',
+              icon: Icons.visibility_rounded,
+              onPressed: () => bloc.add(const RevealRequested()),
+            ),
+            ToolCircleButton(
+              label: 'Shuffle',
+              subtitle: '${GameConfig.shuffleCost}',
+              icon: Icons.shuffle_rounded,
+              onPressed: () => bloc.add(const ShuffleRequested()),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_theme_extension.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class ScenicBackground extends StatelessWidget {
   const ScenicBackground({
@@ -21,12 +22,14 @@ class ScenicBackground extends StatelessWidget {
   final double blurSigma;
   final double darken;
   final AppThemeColors? colors;
+
   /// When false, only the theme gradient is shown (no photo wallpaper).
   final bool showBackgroundImage;
 
   @override
   Widget build(BuildContext context) {
     final c = colors ?? context.appColors;
+    final spec = context.themePreset.homeSpec;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -56,6 +59,31 @@ class ScenicBackground extends StatelessWidget {
               ),
             ),
           ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment.topCenter,
+              radius: 1.2,
+              colors: [
+                spec.playButtonGlow.withValues(alpha: 0.13),
+                Colors.transparent,
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 54,
+          left: 0,
+          right: 0,
+          child: IgnorePointer(
+            child: Center(
+              child: Opacity(
+                opacity: 0.16,
+                child: CompassBadge(size: 78, dimmed: true),
+              ),
+            ),
+          ),
+        ),
         if (child != null) child!,
       ],
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:word_game/core/theme/home_screen_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/home/presentation/widgets/home_glass_card.dart';
 

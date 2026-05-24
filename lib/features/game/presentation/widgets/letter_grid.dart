@@ -26,7 +26,10 @@ class LetterGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final gap = AppSizes.gridGap;
-        final cellSize = (constraints.maxWidth - gap * (n + 1)) / n;
+        final available = constraints.maxHeight.isFinite
+            ? constraints.maxWidth.clamp(0, constraints.maxHeight).toDouble()
+            : constraints.maxWidth;
+        final cellSize = (available - gap * (n + 1)) / n;
         final totalSize = cellSize * n + gap * (n + 1);
 
         return Center(
@@ -165,7 +168,8 @@ class GridPainter extends CustomPainter {
           bg = colors.cellRevealed;
         } else if (state.hintCells.contains(idx)) {
           bg = colors.cellHint;
-        } else if (state.selectedCells.any((cell) => cell.row == r && cell.col == c)) {
+        } else if (state.selectedCells
+            .any((cell) => cell.row == r && cell.col == c)) {
           bg = state.selectionState == SelectionState.wrong
               ? colors.cellWrong
               : colors.cellSelected;

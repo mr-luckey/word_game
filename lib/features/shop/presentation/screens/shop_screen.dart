@@ -8,7 +8,7 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
-import 'package:word_game/core/widgets/glass_panel.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
@@ -43,79 +43,78 @@ class ShopScreen extends StatelessWidget {
             imageAsset: AssetPaths.themeSplash(preset),
             darken: 0.45,
             child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.paddingMd,
-                      vertical: AppSizes.paddingSm,
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 48),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'SHOP',
-                                style: AppTextStyles.sectionHeading(context),
-                                textAlign: TextAlign.center,
+              child: JourneyContentWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.paddingMd,
+                        vertical: AppSizes.paddingSm,
+                      ),
+                      child: JourneyPanel(
+                        padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                        radius: 20,
+                        child: Row(
+                          children: [
+                            const CompassBadge(
+                                size: 42, icon: Icons.store_rounded),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: JourneySectionTitle(
+                                title: 'Shop',
+                                subtitle: 'Enhance your adventure',
                               ),
-                              Text(
-                                'Enhance your adventure',
-                                style: AppTextStyles.bodyMuted(context),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        BlocBuilder<CoinCubit, CoinState>(
-                          builder: (context, state) => CoinDisplay(
-                            coins: state.coins,
-                            light: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .slideY(begin: -0.1, end: 0),
-                  Expanded(
-                    child: BlocBuilder<ShopCubit, ShopState>(
-                      builder: (context, state) {
-                        if (state is ShopLoading) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: context.appColors.gold,
                             ),
-                          );
-                        }
-                        if (state is ShopLoaded && state.products.isNotEmpty) {
-                          return _ShopList(
-                            products: state.products,
-                            extras: ShopProducts.fallbackExtras,
-                            useStore: true,
-                          );
-                        }
-                        if (state is ShopUnavailable ||
-                            (state is ShopLoaded && state.products.isEmpty)) {
-                          final packs = state is ShopLoaded
-                              ? state.fallbackPacks
-                              : ShopProducts.fallbackPacks;
-                          return _ShopList(
-                            products: const [],
-                            fallbackPacks: packs,
-                            extras: ShopProducts.fallbackExtras,
-                            useStore: false,
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
+                            BlocBuilder<CoinCubit, CoinState>(
+                              builder: (context, state) => CoinDisplay(
+                                coins: state.coins,
+                                light: true,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 400.ms)
+                        .slideY(begin: -0.1, end: 0),
+                    Expanded(
+                      child: BlocBuilder<ShopCubit, ShopState>(
+                        builder: (context, state) {
+                          if (state is ShopLoading) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: context.appColors.gold,
+                              ),
+                            );
+                          }
+                          if (state is ShopLoaded &&
+                              state.products.isNotEmpty) {
+                            return _ShopList(
+                              products: state.products,
+                              extras: ShopProducts.fallbackExtras,
+                              useStore: true,
+                            );
+                          }
+                          if (state is ShopUnavailable ||
+                              (state is ShopLoaded && state.products.isEmpty)) {
+                            final packs = state is ShopLoaded
+                                ? state.fallbackPacks
+                                : ShopProducts.fallbackPacks;
+                            return _ShopList(
+                              products: const [],
+                              fallbackPacks: packs,
+                              extras: ShopProducts.fallbackExtras,
+                              useStore: false,
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -248,7 +247,8 @@ class _ShopPackTile extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSizes.paddingSm),
-      child: GlassPanel(
+      child: JourneyPanel(
+        radius: 16,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSizes.paddingMd,
           vertical: AppSizes.paddingMd,

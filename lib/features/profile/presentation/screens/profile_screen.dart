@@ -6,6 +6,7 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
@@ -25,204 +26,245 @@ class ProfileScreen extends StatelessWidget {
           darken: 0.5,
           blurSigma: 1,
           child: SafeArea(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 48),
-                      Expanded(
-                        child: Text(
-                          'PROFILE',
-                          style: AppTextStyles.sectionHeading(context).copyWith(
-                            fontSize: 22,
-                            letterSpacing: 2,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      BlocBuilder<CoinCubit, CoinState>(
-                        builder: (context, coinState) =>
-                            CoinDisplay(coins: coinState.coins, light: true),
-                      ),
-                    ],
-                  ),
-                ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.08, end: 0),
-                Expanded(
-                  child: BlocBuilder<ProfileCubit, ProfileState>(
-                    builder: (context, state) {
-                      final colors = context.appColors;
-                      if (state.loading) {
-                        return Center(
-                          child: CircularProgressIndicator(color: colors.gold),
-                        );
-                      }
-                      return ListView(
-                        padding: const EdgeInsets.all(AppSizes.paddingMd),
+            child: JourneyContentWidth(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.paddingMd,
+                      vertical: AppSizes.paddingSm,
+                    ),
+                    child: JourneyPanel(
+                      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                      radius: 20,
+                      child: Row(
                         children: [
-                          _ProfileCard(
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 84,
-                                  height: 84,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: colors.gold,
-                                      width: 2.5,
+                          const CompassBadge(
+                              size: 42, icon: Icons.person_rounded),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: JourneySectionTitle(
+                              title: 'Profile',
+                              subtitle: 'Track and achieve',
+                            ),
+                          ),
+                          BlocBuilder<CoinCubit, CoinState>(
+                            builder: (context, coinState) => CoinDisplay(
+                                coins: coinState.coins, light: true),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                      .animate()
+                      .fadeIn(duration: 400.ms)
+                      .slideY(begin: -0.08, end: 0),
+                  Expanded(
+                    child: BlocBuilder<ProfileCubit, ProfileState>(
+                      builder: (context, state) {
+                        final colors = context.appColors;
+                        if (state.loading) {
+                          return Center(
+                            child:
+                                CircularProgressIndicator(color: colors.gold),
+                          );
+                        }
+                        return ListView(
+                          padding: const EdgeInsets.all(AppSizes.paddingMd),
+                          children: [
+                            _ProfileCard(
+                              child: Column(
+                                children: [
+                                  _ThemedAvatar(colors: colors),
+                                  const SizedBox(height: 14),
+                                  Text(
+                                    context.themePreset.profilePersona
+                                        .toUpperCase(),
+                                    style: AppTextStyles.greeting(context)
+                                        .copyWith(
+                                      fontSize: 20,
+                                      letterSpacing: 1.5,
+                                      shadows:
+                                          JourneyThemeKit.textGlow(context),
                                     ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: colors.gold.withValues(alpha: 0.35),
-                                        blurRadius: 14,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Level 1',
+                                    style: AppTextStyles.bodyMuted(context)
+                                        .copyWith(
+                                      color: colors.accentCoin,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: LinearProgressIndicator(
+                                      value: 0.0,
+                                      minHeight: 10,
+                                      backgroundColor: colors.tertiary
+                                          .withValues(alpha: 0.8),
+                                      valueColor: AlwaysStoppedAnimation(
+                                        colors.accentCoin,
                                       ),
-                                    ],
-                                  ),
-                                  child: Icon(
-                                    Icons.person_rounded,
-                                    size: 46,
-                                    color: colors.gold,
-                                  ),
-                                )
-                                    .animate(onPlay: (c) => c.repeat(reverse: true))
-                                    .shimmer(
-                                      duration: 3.seconds,
-                                      color: colors.gold.withValues(alpha: 0.2),
                                     ),
-                                const SizedBox(height: 14),
-                                Text(
-                                  context.themePreset.profilePersona
-                                      .toUpperCase(),
-                                  style: AppTextStyles.greeting(context).copyWith(
-                                    fontSize: 20,
-                                    letterSpacing: 1.5,
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Level 1',
-                                  style: AppTextStyles.bodyMuted(context).copyWith(
-                                    color: colors.accentCoin,
-                                    fontSize: 13,
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '0 / 100 XP',
+                                    style: AppTextStyles.bodyMuted(context)
+                                        .copyWith(
+                                      fontSize: 12,
+                                      color: colors.accentCoin,
+                                    ),
                                   ),
+                                ],
+                              ),
+                            ).animate().fadeIn(duration: 500.ms).slideY(
+                                  begin: 0.1,
+                                  end: 0,
+                                  curve: Curves.easeOutCubic,
                                 ),
-                                const SizedBox(height: 14),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
-                                  child: LinearProgressIndicator(
-                                    value: 0.0,
-                                    minHeight: 10,
-                                    backgroundColor:
-                                        colors.tertiary.withValues(alpha: 0.8),
-                                    valueColor:
-                                        AlwaysStoppedAnimation(colors.accentCoin),
-                                  ),
+                            const SizedBox(height: AppSizes.paddingMd),
+                            Row(
+                              children: [
+                                _StatTile(
+                                  index: 0,
+                                  label: 'Levels\nCompleted',
+                                  value: '${state.completedLevels}',
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  '0 / 100 XP',
-                                  style: AppTextStyles.bodyMuted(context).copyWith(
-                                    fontSize: 12,
-                                    color: colors.accentCoin,
+                                const SizedBox(width: 8),
+                                _StatTile(
+                                  index: 1,
+                                  label: 'Words\nFound',
+                                  value: '${state.completedLevels * 6}',
+                                ),
+                                const SizedBox(width: 8),
+                                BlocBuilder<CoinCubit, CoinState>(
+                                  builder: (context, coinState) => _StatTile(
+                                    index: 2,
+                                    label: 'Coins\nCollected',
+                                    value: '${coinState.coins}',
                                   ),
                                 ),
                               ],
                             ),
-                          )
-                              .animate()
-                              .fadeIn(duration: 500.ms)
-                              .slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
-                          const SizedBox(height: AppSizes.paddingMd),
-                          Row(
-                            children: [
-                              _StatTile(
-                                index: 0,
-                                label: 'Levels\nCompleted',
-                                value: '${state.completedLevels}',
-                              ),
-                              const SizedBox(width: 8),
-                              _StatTile(
-                                index: 1,
-                                label: 'Words\nFound',
-                                value: '${state.completedLevels * 6}',
-                              ),
-                              const SizedBox(width: 8),
-                              BlocBuilder<CoinCubit, CoinState>(
-                                builder: (context, coinState) => _StatTile(
-                                  index: 2,
-                                  label: 'Coins\nCollected',
-                                  value: '${coinState.coins}',
+                            const SizedBox(height: AppSizes.paddingLg),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'ACHIEVEMENTS',
+                                  style: AppTextStyles.sectionHeading(context)
+                                      .copyWith(fontSize: 17, letterSpacing: 1),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSizes.paddingLg),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'ACHIEVEMENTS',
-                                style: AppTextStyles.sectionHeading(context)
-                                    .copyWith(fontSize: 17, letterSpacing: 1),
-                              ),
-                              Text(
-                                'View All',
-                                style: AppTextStyles.bodyMuted(context).copyWith(
-                                  color: colors.gold,
-                                  fontWeight: FontWeight.w600,
+                                Text(
+                                  'View All',
+                                  style:
+                                      AppTextStyles.bodyMuted(context).copyWith(
+                                    color: colors.gold,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ).animate(delay: 300.ms).fadeIn(),
-                          const SizedBox(height: AppSizes.paddingSm),
-                          ...state.achievements.asMap().entries.map(
-                            (entry) {
-                              final index = entry.key;
-                              final a = entry.value;
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: AppSizes.paddingSm,
-                                ),
-                                child: _AchievementTile(
-                                  title: a.title,
-                                  description: a.description,
-                                  coinReward: a.coinReward,
-                                  unlocked: a.unlocked,
-                                )
-                                    .animate(
-                                      delay: (350 + index * 90).ms,
-                                    )
-                                    .fadeIn(
-                                      duration: 450.ms,
-                                      curve: Curves.easeOut,
-                                    )
-                                    .slideX(
-                                      begin: 0.15,
-                                      end: 0,
-                                      curve: Curves.easeOutCubic,
-                                    )
-                                    .scale(
-                                      begin: const Offset(0.94, 0.94),
-                                      end: const Offset(1, 1),
-                                      duration: 450.ms,
-                                      curve: Curves.easeOutBack,
-                                    ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                              ],
+                            ).animate(delay: 300.ms).fadeIn(),
+                            const SizedBox(height: AppSizes.paddingSm),
+                            ...state.achievements.asMap().entries.map(
+                              (entry) {
+                                final index = entry.key;
+                                final a = entry.value;
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: AppSizes.paddingSm,
+                                  ),
+                                  child: _AchievementTile(
+                                    title: a.title,
+                                    description: a.description,
+                                    coinReward: a.coinReward,
+                                    unlocked: a.unlocked,
+                                  )
+                                      .animate(
+                                        delay: (350 + index * 90).ms,
+                                      )
+                                      .fadeIn(
+                                        duration: 450.ms,
+                                        curve: Curves.easeOut,
+                                      )
+                                      .slideX(
+                                        begin: 0.15,
+                                        end: 0,
+                                        curve: Curves.easeOutCubic,
+                                      )
+                                      .scale(
+                                        begin: const Offset(0.94, 0.94),
+                                        end: const Offset(1, 1),
+                                        duration: 450.ms,
+                                        curve: Curves.easeOutBack,
+                                      ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class _ThemedAvatar extends StatelessWidget {
+  const _ThemedAvatar({required this.colors});
+
+  final dynamic colors;
+
+  @override
+  Widget build(BuildContext context) {
+    final preset = context.themePreset;
+    return Container(
+      width: 92,
+      height: 92,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: colors.gold, width: 2.5),
+        boxShadow: [
+          BoxShadow(
+            color: colors.gold.withValues(alpha: 0.35),
+            blurRadius: 16,
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              AssetPaths.themeSplash(preset),
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => DecoratedBox(
+                decoration: BoxDecoration(gradient: colors.primaryGradient),
+              ),
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.scrim.withValues(alpha: 0.36),
+              ),
+            ),
+            Center(child: CompassBadge(size: 54)),
+          ],
+        ),
+      ),
+    ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
+          duration: 3.seconds,
+          color: colors.gold.withValues(alpha: 0.2),
+        );
   }
 }
 

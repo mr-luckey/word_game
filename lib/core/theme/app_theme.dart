@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
 class AppTheme {

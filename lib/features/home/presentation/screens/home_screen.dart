@@ -15,6 +15,7 @@ import 'package:word_game/features/home/presentation/widgets/home_play_button.da
 import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -63,91 +64,107 @@ class _HomeViewState extends State<_HomeView> {
       extendBodyBehindAppBar: true,
       body: HomeBackground(
         child: SafeArea(
-          child: Column(
-            children: [
-              const HomeTopBar(),
-              const HomeBrandTitle(),
-              Expanded(
-                child: BlocBuilder<DestinationsCubit, DestinationsState>(
-                  builder: (context, state) {
-                    if (state.loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+          child: JourneyContentWidth(
+            child: Column(
+              children: [
+                const HomeTopBar(),
+                const HomeBrandTitle(),
+                Expanded(
+                  child: BlocBuilder<DestinationsCubit, DestinationsState>(
+                    builder: (context, state) {
+                      if (state.loading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
 
-                    final theme =
-                        state.themes.isNotEmpty ? state.themes.first : null;
-                    final featured = DestinationCatalog.forPreset(preset)
-                        .where((d) => d.unlockOrder == 1)
-                        .first;
-                    final meta =
-                        (theme != null ? DestinationCatalog.byId(theme.id) : null) ??
-                            featured;
-                    final imagePath = theme != null
-                        ? AssetPaths.themeImage(theme.backgroundImage)
-                        : meta.imageAsset;
-                    final completed = state.featuredCompleted;
-                    final total =
-                        state.featuredTotal > 0 ? state.featuredTotal : 20;
+                      final featured = DestinationCatalog.forPreset(preset)
+                          .where((d) => d.unlockOrder == 1)
+                          .first;
+                      final theme = state.themes
+                          .where((t) => t.id == featured.id)
+                          .firstOrNull;
+                      final imagePath =
+                          theme?.backgroundImage.isNotEmpty == true
+                              ? AssetPaths.themeImage(theme!.backgroundImage)
+                              : featured.imageAsset;
+                      final completed = theme == null
+                          ? 0
+                          : theme.levels
+                              .where((level) =>
+                                  state.completedLevelIds.contains(level.id))
+                              .length;
+                      final total = theme?.levels.length ?? 20;
+                      final destinationId = theme?.id ?? featured.id;
 
-                    return SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          HomeFeaturedCard(
-                            title: theme?.name ?? meta.name,
-                            completed: completed,
-                            total: total,
-                            imageAsset: imagePath,
-                            onTap: () =>
-                                _goLevels(context, theme?.id ?? meta.id),
-                          ),
-                          const SizedBox(height: 14),
-                          HomePlayButton(
-                            onPressed: () =>
-                                _goLevels(context, theme?.id ?? meta.id),
-                          ),
-                          const SizedBox(height: 14),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: HomeDailyBonusCard(
-                                    onTap: () async {
-                                      final updated = await context
-                                          .push<bool>('/game?levelId=9999');
-                                      if (updated == true && context.mounted) {
-                                        context
-                                            .read<DestinationsCubit>()
-                                            .refresh();
-                                        context.read<CoinCubit>().refresh();
-                                      }
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: HomeAchievementsCard(
-                                    onTap: () => context.go('/profile'),
-                                  ),
-                                ),
-                              ],
+                      return SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          children: [
+                            HomeFeaturedCard(
+                              title: theme?.name ?? featured.name,
+                              completed: completed,
+                              total: total,
+                              imageAsset: imagePath,
+                              onTap: () => _goLevels(context, destinationId),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    );
-                  },
+                            const SizedBox(height: 14),
+                            HomePlayButton(
+                              onPressed: () =>
+                                  _goLevels(context, destinationId),
+                            ),
+                            const SizedBox(height: 14),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: HomeDailyBonusCard(
+                                      onTap: () async {
+                                        final updated = await context
+                                            .push<bool>('/game?levelId=9999');
+                                        if (updated == true &&
+                                            context.mounted) {
+                                          context
+                                              .read<DestinationsCubit>()
+                                              .refresh();
+                                          context.read<CoinCubit>().refresh();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: HomeAchievementsCard(
+                                      onTap: () => context.go('/profile'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+extension _FirstOrNull<T> on Iterable<T> {
+  T? get firstOrNull {
+    final iterator = this.iterator;
+    if (iterator.moveNext()) return iterator.current;
+    return null;
   }
 }

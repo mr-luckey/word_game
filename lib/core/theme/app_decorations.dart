@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
-import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
 /// Centralized decorations — all screens access styling from here.
@@ -108,12 +107,12 @@ class JourneyDecorations {
   }) {
     final colors = context.appColors;
     return BoxDecoration(
-      color: found
-          ? colors.success.withValues(alpha: 0.25)
-          : colors.glassSurface,
+      color:
+          found ? colors.success.withValues(alpha: 0.25) : colors.glassSurface,
       borderRadius: BorderRadius.circular(20),
       border: Border.all(
-        color: found ? colors.success : colors.glassBorder.withValues(alpha: 0.5),
+        color:
+            found ? colors.success : colors.glassBorder.withValues(alpha: 0.5),
       ),
     );
   }
