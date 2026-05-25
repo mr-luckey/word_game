@@ -12,6 +12,7 @@ class HomeGlassCard extends StatelessWidget {
     this.padding,
     this.radius = 16,
     this.height,
+    this.minHeight,
   });
 
   final Widget child;
@@ -19,6 +20,7 @@ class HomeGlassCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double radius;
   final double? height;
+  final double? minHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,9 @@ class HomeGlassCard extends StatelessWidget {
 
     Widget panel = Container(
       height: height,
+      constraints: minHeight != null && height == null
+          ? BoxConstraints(minHeight: minHeight!)
+          : null,
       padding: padding ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
@@ -51,7 +56,12 @@ class HomeGlassCard extends StatelessWidget {
                 ),
               ],
       ),
-      child: child,
+      child: height != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(radius - 1),
+              child: child,
+            )
+          : child,
     );
 
     if (spec.useGlassCards) {

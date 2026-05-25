@@ -7,6 +7,7 @@ import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/screens/game_screen.dart';
 import 'package:word_game/features/home/presentation/screens/destinations_screen.dart';
+import 'package:word_game/features/daily_rewards/presentation/screens/daily_rewards_screen.dart';
 import 'package:word_game/features/home/presentation/screens/home_screen.dart';
 import 'package:word_game/features/level_select/presentation/screens/level_select_screen.dart';
 import 'package:word_game/features/profile/presentation/screens/profile_screen.dart';
@@ -147,6 +148,14 @@ final _router = GoRouter(
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: '/daily-rewards',
+      pageBuilder: (context, state) => _slideFromBottomPage(
+        state,
+        child: const DailyRewardsScreen(),
+        keyName: 'daily-rewards-${state.uri}',
+      ),
     ),
     GoRoute(
       path: '/settings',

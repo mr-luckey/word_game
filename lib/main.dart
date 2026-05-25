@@ -8,10 +8,7 @@ import 'package:word_game/injection.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Firebase disabled for now — enable when flutterfire configure is done.
-  // try {
-  //   await Firebase.initializeApp();
-  // } catch (_) {}
+
   await configureDependencies();
   await getIt<AdService>().initialize();
   await getIt<AudioService>().startBackgroundMusic();

@@ -16,8 +16,6 @@ class JourneyBottomNav extends StatelessWidget {
   static const _items = [
     (Icons.home_rounded, 'Home'),
     (Icons.explore_rounded, 'Explore'),
-    (Icons.store_rounded, 'Shop'),
-    (Icons.person_rounded, 'Profile'),
   ];
 
   @override
@@ -45,9 +43,15 @@ class JourneyBottomNav extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(_items.length, (i) {
+            children: List.generate(4, (i) {
               final selected = i == selectedIndex;
-              final (icon, label) = _items[i];
+              final (icon, label) = switch (i) {
+                0 => _items[0],
+                1 => _items[1],
+                2 => (spec.navShopIcon, 'Shop'),
+                3 => (spec.navProfileIcon, 'Profile'),
+                _ => _items[0],
+              };
               return Expanded(
                 child: InkWell(
                   onTap: () => onSelected(i),

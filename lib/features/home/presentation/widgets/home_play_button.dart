@@ -4,13 +4,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 
 class HomePlayButton extends StatelessWidget {
-  const HomePlayButton({super.key, required this.onPressed});
+  const HomePlayButton({
+    super.key,
+    required this.onPressed,
+    this.height = 56,
+  });
 
   final VoidCallback? onPressed;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    final spec = context.themePreset.homeSpec;
+    final preset = context.themePreset;
+    final spec = preset.homeSpec;
+    final colors = context.appColors;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -20,20 +27,29 @@ class HomePlayButton extends StatelessWidget {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(30),
           child: Ink(
-            height: 56,
+            height: height,
             decoration: BoxDecoration(
               gradient: spec.playButtonGradient,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: spec.playButtonGlow.withValues(alpha: 0.85),
-                width: 1.5,
+                color: spec.playWoodAccent
+                    ? const Color(0xFF2E7D32)
+                    : spec.playButtonGlow.withValues(alpha: 0.85),
+                width: spec.playWoodAccent ? 2 : 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: spec.playButtonGlow.withValues(alpha: 0.55),
-                  blurRadius: 18,
+                  blurRadius: preset.useNeonGlow ? 22 : 18,
+                  spreadRadius: preset.useNeonGlow ? 1 : 0,
                   offset: const Offset(0, 5),
                 ),
+                if (spec.playWoodAccent)
+                  BoxShadow(
+                    color: colors.success.withValues(alpha: 0.35),
+                    blurRadius: 12,
+                    offset: const Offset(0, 3),
+                  ),
               ],
             ),
             child: Row(
@@ -49,13 +65,19 @@ class HomePlayButton extends StatelessWidget {
                       : spec.playButtonTextColor,
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  'PLAY NOW',
-                  style: GoogleFonts.cinzel(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 2.5,
-                    color: spec.playButtonTextColor,
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'PLAY NOW',
+                      maxLines: 1,
+                      style: GoogleFonts.cinzel(
+                        fontSize: height < 52 ? 16 : 19,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 2.5,
+                        color: spec.playButtonTextColor,
+                      ),
+                    ),
                   ),
                 ),
               ],

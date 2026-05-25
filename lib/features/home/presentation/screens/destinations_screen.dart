@@ -45,9 +45,8 @@ class DestinationsScreen extends StatelessWidget {
                           const SizedBox(width: 14),
                           Expanded(
                             child: JourneySectionTitle(
-                              title: 'Destinations',
-                              subtitle:
-                                  'Discover iconic places and new word adventures.',
+                              title: 'Explore',
+                              subtitle: preset.exploreSubtitle,
                             ),
                           ),
                         ],

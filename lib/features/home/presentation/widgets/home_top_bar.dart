@@ -46,15 +46,24 @@ class HomeTopBar extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 6),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: spec.dailyBonusAccent.withValues(alpha: 0.2),
-                        border: Border.all(color: spec.dailyBonusAccent),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => context.push('/shop'),
+                        customBorder: const CircleBorder(),
+                        child: Ink(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                spec.dailyBonusAccent.withValues(alpha: 0.2),
+                            border: Border.all(color: spec.dailyBonusAccent),
+                          ),
+                          child: Icon(Icons.add,
+                              size: 14, color: spec.dailyBonusAccent),
+                        ),
                       ),
-                      child: Icon(Icons.add, size: 14, color: spec.dailyBonusAccent),
                     ),
                   ],
                 ),

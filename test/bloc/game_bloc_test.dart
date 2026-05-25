@@ -1,7 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:word_game/core/services/achievement_service.dart';
+import 'package:word_game/core/services/daily_challenge_service.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
@@ -29,6 +33,10 @@ class MockAnalytics extends Mock implements AnalyticsService {}
 
 class MockAchievements extends Mock implements AchievementService {}
 
+class MockDailyChallenge extends Mock implements DailyChallengeService {}
+
+class MockThemeBloc extends Mock implements AppThemeBloc {}
+
 void main() {
   const sampleLevel = LevelEntity(
     id: 101,
@@ -50,6 +58,8 @@ void main() {
   late MockAudio audio;
   late MockAnalytics analytics;
   late MockAchievements achievements;
+  late MockDailyChallenge dailyChallenge;
+  late MockThemeBloc themeBloc;
 
   GameBloc buildBloc() => GameBloc(
         loadLevel: loadLevel,
@@ -61,6 +71,8 @@ void main() {
         audio: audio,
         analytics: analytics,
         achievements: achievements,
+        dailyChallenge: dailyChallenge,
+        themeBloc: themeBloc,
       );
 
   setUp(() {
@@ -71,6 +83,18 @@ void main() {
     audio = MockAudio();
     analytics = MockAnalytics();
     achievements = MockAchievements();
+    dailyChallenge = MockDailyChallenge();
+    themeBloc = MockThemeBloc();
+    when(() => dailyChallenge.todayRewardCoins).thenReturn(50);
+    when(() => themeBloc.state).thenReturn(
+      AppThemeState(
+        mode: ThemeSelectionMode.fixed,
+        fixedPreset: AppThemePreset.classicTravel,
+        activePreset: AppThemePreset.classicTravel,
+        activeDestinationId: 1,
+        themeData: ThemeData(),
+      ),
+    );
     when(() => achievements.onWordFound()).thenAnswer((_) async => []);
     when(
       () => achievements.onLevelComplete(

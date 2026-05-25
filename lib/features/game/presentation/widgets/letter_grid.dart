@@ -111,11 +111,19 @@ class GridPainter extends CustomPainter {
   final double gap;
   final TextStyle letterStyle;
 
-  /// Dark letters on light tiles, light letters on dark tiles (all themes).
+  /// Readable letter on any tile — avoids white-on-white (Winter Alps, Ocean).
   Color _contrastLetterColor(Color cellBackground) {
-    return cellBackground.computeLuminance() > 0.45
-        ? colors.onPrimary
-        : colors.onSurface;
+    final lightTile = cellBackground.computeLuminance() > 0.45;
+    if (lightTile) {
+      for (final c in [colors.primary, colors.tertiary, colors.cream]) {
+        if (c.computeLuminance() < 0.42) return c;
+      }
+      return const Color(0xFF1A2744);
+    }
+    for (final c in [colors.onSurface, colors.onScenic]) {
+      if (c.computeLuminance() > 0.58) return c;
+    }
+    return const Color(0xFFFFFFFF);
   }
 
   Offset _cellCenter(int row, int col) {

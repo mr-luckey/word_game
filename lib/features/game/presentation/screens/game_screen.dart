@@ -21,6 +21,7 @@ import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 import 'package:word_game/features/game/presentation/widgets/level_complete_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/injection.dart';
 
 class GameScreen extends StatelessWidget {
@@ -50,6 +51,7 @@ class _GameView extends StatelessWidget {
             getIt<AdService>().onLevelComplete();
             context.read<CoinCubit>().refresh();
             final bloc = context.read<GameBloc>();
+            final isDaily = state.levelId == 9999;
             showDialog<void>(
               context: context,
               barrierDismissible: false,
@@ -59,9 +61,20 @@ class _GameView extends StatelessWidget {
                 time: state.time,
                 hintsUsed: state.hintsUsed,
                 levelId: state.levelId,
-                onHome: () {
+                isDailyChallenge: isDaily,
+                onHome: () async {
                   Navigator.of(dialogContext).pop();
-                  context.go('/home');
+                  if (isDaily) {
+                    await getIt<DailyChallengeService>()
+                        .recordSuccessfulClaim();
+                    if (context.mounted && context.canPop()) {
+                      context.pop(true);
+                    } else if (context.mounted) {
+                      context.go('/home');
+                    }
+                  } else {
+                    context.go('/home');
+                  }
                 },
                 onReplay: () {
                   Navigator.of(dialogContext).pop();

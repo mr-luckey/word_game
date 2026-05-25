@@ -2,129 +2,112 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/features/home/presentation/widgets/home_glass_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_side_action_card.dart';
 
 class HomeDailyBonusCard extends StatelessWidget {
-  const HomeDailyBonusCard({super.key, this.onTap});
+  const HomeDailyBonusCard({
+    super.key,
+    this.onTap,
+    this.height,
+    this.compact = false,
+    this.dense = false,
+  });
 
   final VoidCallback? onTap;
+  final double? height;
+  final bool compact;
+  final bool dense;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final spec = context.themePreset.homeSpec;
+    final iconSize = dense ? 38.0 : (compact ? 42.0 : 46.0);
 
-    return HomeGlassCard(
+    return HomeSideActionCard(
       onTap: onTap,
-      height: 164,
-      padding: const EdgeInsets.all(9),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      height: height,
+      title: 'DAILY BONUS',
+      subtitle: dense
+          ? 'Claim daily rewards!'
+          : 'Come back every day to claim rewards!',
+      accentColor: spec.dailyBonusAccent,
+      leading: HomeSideIconBadge(
+        icon: Icons.card_giftcard_rounded,
+        accentColor: spec.dailyBonusAccent,
+        size: iconSize,
+      ),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    colors: [
-                      colors.primary.withValues(alpha: 0.7),
-                      colors.primary,
-                    ],
-                  ),
-                ),
-                child: Icon(Icons.card_giftcard_rounded,
-                    color: spec.dailyBonusAccent, size: 24),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'DAILY BONUS',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: spec.dailyBonusAccent,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                    Text(
-                      'Come back every day to claim rewards!',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 8,
-                        height: 1.25,
-                        color: colors.onScenicMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          _RewardChip(
+            icon: Icons.monetization_on_rounded,
+            value: '50',
+            iconColor: colors.gold,
           ),
-          const SizedBox(height: 8),
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-            decoration: BoxDecoration(
-              color: colors.tertiary.withValues(alpha: 0.75),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: colors.glassBorder.withValues(alpha: 0.35),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.monetization_on_rounded,
-                    color: colors.gold, size: 18),
-                Text(
-                  ' 50 ',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: colors.onScenic,
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 16,
-                  color: colors.glassBorder.withValues(alpha: 0.5),
-                ),
-                Icon(Icons.diamond_rounded, color: colors.accentCoin, size: 16),
-                Text(
-                  ' 1',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: colors.onScenic,
-                  ),
-                ),
-              ],
-            ),
+            width: 1,
+            height: 22,
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            color: colors.glassBorder.withValues(alpha: 0.45),
           ),
-          const Spacer(),
-          Row(
-            children: [
-              Icon(Icons.access_time_rounded,
-                  size: 12, color: colors.accentCoin),
-              const SizedBox(width: 4),
-              Text(
-                '23h 45m left',
-                style: GoogleFonts.montserrat(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w600,
-                  color: colors.accentCoin,
-                ),
-              ),
-            ],
+          _RewardChip(
+            icon: Icons.diamond_rounded,
+            value: '1',
+            iconColor: colors.accentCoin,
           ),
         ],
       ),
-    ).animate(delay: 180.ms).fadeIn().slideY(begin: 0.06, end: 0);
+      footer: Row(
+        children: [
+          Icon(Icons.schedule_rounded, size: 13, color: colors.accentCoin),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              '23h 45m left',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.montserrat(
+                fontSize: dense ? 8 : 9,
+                fontWeight: FontWeight.w600,
+                color: colors.accentCoin,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).animate(delay: 180.ms).fadeIn().slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _RewardChip extends StatelessWidget {
+  const _RewardChip({
+    required this.icon,
+    required this.value,
+    required this.iconColor,
+  });
+
+  final IconData icon;
+  final String value;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: iconColor, size: 20),
+        const SizedBox(width: 4),
+        Text(
+          value,
+          style: GoogleFonts.montserrat(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: colors.onScenic,
+          ),
+        ),
+      ],
+    );
   }
 }

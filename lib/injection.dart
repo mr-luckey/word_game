@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/services/achievement_service.dart';
+import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
@@ -42,6 +43,7 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AnalyticsService());
   getIt.registerLazySingleton(() => AdService(prefs));
   getIt.registerLazySingleton(() => AchievementService(db, getIt()));
+  getIt.registerLazySingleton(() => DailyChallengeService(prefs));
   getIt.registerLazySingleton(() => AppThemeBloc(prefs)..add(const AppThemeStarted()));
 
   getIt.registerFactory(() => CoinCubit(getIt()));
@@ -57,6 +59,8 @@ Future<void> configureDependencies() async {
       audio: getIt(),
       analytics: getIt(),
       achievements: getIt(),
+      dailyChallenge: getIt(),
+      themeBloc: getIt(),
     ),
   );
   getIt.registerFactory(() => ShopCubit(getIt(), getIt()));

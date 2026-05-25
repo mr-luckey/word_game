@@ -2,106 +2,133 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/features/home/presentation/widgets/home_glass_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_side_action_card.dart';
 
 class HomeAchievementsCard extends StatelessWidget {
-  const HomeAchievementsCard({super.key, this.onTap});
+  const HomeAchievementsCard({
+    super.key,
+    this.onTap,
+    this.height,
+    this.compact = false,
+    this.dense = false,
+  });
 
   final VoidCallback? onTap;
+  final double? height;
+  final bool compact;
+  final bool dense;
 
-  static const _badges = [
-    (Icons.explore_rounded, 'Word\nNovice', '0 / 1'),
-    (Icons.public_rounded, 'Word\nHunter', '0 / 50'),
-    (Icons.star_rounded, 'Word\nMaster', '0 / 200'),
-  ];
+  static const _progress = ['0 / 1', '0 / 50', '0 / 200'];
+
+  @override
+  Widget build(BuildContext context) {
+    final spec = context.themePreset.homeSpec;
+    final badges = spec.achievementBadges;
+    final badgeSize = dense ? 32.0 : (compact ? 36.0 : 40.0);
+
+    return HomeSideActionCard(
+      onTap: onTap,
+      height: height,
+      title: 'ACHIEVEMENTS',
+      subtitle: dense
+          ? 'Keep unlocking!'
+          : 'Keep playing, keep unlocking!',
+      accentColor: spec.achievementAccent,
+      trailing: Icon(
+        Icons.emoji_events_rounded,
+        color: spec.achievementAccent,
+        size: dense ? 28 : 34,
+        shadows: [
+          Shadow(
+            color: spec.playButtonGlow.withValues(alpha: 0.5),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      body: Row(
+        children: List.generate(badges.length, (i) {
+          final badge = badges[i];
+          return Expanded(
+            child: _AchievementBadge(
+              icon: badge.icon,
+              label: badge.label,
+              progress: _progress[i],
+              size: badgeSize,
+              accent: spec.achievementAccent,
+            ),
+          );
+        }),
+      ),
+      footer: const SizedBox(height: 4),
+    ).animate(delay: 220.ms).fadeIn().slideY(begin: 0.05, end: 0);
+  }
+}
+
+class _AchievementBadge extends StatelessWidget {
+  const _AchievementBadge({
+    required this.icon,
+    required this.label,
+    required this.progress,
+    required this.size,
+    required this.accent,
+  });
+
+  final IconData icon;
+  final String label;
+  final String progress;
+  final double size;
+  final Color accent;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final spec = context.themePreset.homeSpec;
+    final short = label.replaceFirst('Word ', '');
 
-    return HomeGlassCard(
-      onTap: onTap,
-      height: 164,
-      padding: const EdgeInsets.all(9),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ACHIEVEMENTS',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: spec.achievementAccent,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                    Text(
-                      'Keep playing, keep unlocking!',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 8,
-                        color: colors.onScenicMuted,
-                      ),
-                    ),
-                  ],
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(
+              colors: [
+                colors.tertiary.withValues(alpha: 0.95),
+                colors.surface.withValues(alpha: 0.9),
+              ],
+            ),
+            border: Border.all(color: accent.withValues(alpha: 0.85), width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: accent.withValues(alpha: 0.25),
+                blurRadius: 8,
               ),
-              Icon(Icons.emoji_events_rounded,
-                  color: spec.achievementAccent, size: 30),
             ],
           ),
-          const Spacer(),
-          Row(
-            children: List.generate(_badges.length, (i) {
-              final (icon, label, progress) = _badges[i];
-              return Expanded(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: colors.gold.withValues(alpha: 0.1),
-                        border: Border.all(
-                          color: colors.glassBorder.withValues(alpha: 0.65),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Icon(icon, color: colors.gold, size: 18),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 6.7,
-                        height: 1.12,
-                        color: colors.onScenicMuted,
-                      ),
-                    ),
-                    Text(
-                      progress,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: colors.gold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+          child: Icon(icon, color: accent, size: size * 0.48),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          short,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.montserrat(
+            fontSize: 6.5,
+            fontWeight: FontWeight.w700,
+            color: colors.onScenicMuted,
           ),
-        ],
-      ),
-    ).animate(delay: 220.ms).fadeIn().slideY(begin: 0.06, end: 0);
+        ),
+        Text(
+          progress,
+          style: GoogleFonts.montserrat(
+            fontSize: 7.5,
+            fontWeight: FontWeight.w800,
+            color: colors.gold,
+          ),
+        ),
+      ],
+    );
   }
 }

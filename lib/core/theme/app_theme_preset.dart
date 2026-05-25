@@ -56,6 +56,22 @@ extension AppThemePresetX on AppThemePreset {
         _ => 'Voyager',
       };
 
+  String get exploreSubtitle => switch (this) {
+        AppThemePreset.forestQuest =>
+          'Discover forest paths and new word adventures.',
+        AppThemePreset.neonCity =>
+          'Explore neon cities and unlock new word packs.',
+        AppThemePreset.sunsetSafari =>
+          'Discover iconic places and new word adventures.',
+        AppThemePreset.winterAlps =>
+          'Chart snowy peaks and unlock alpine word packs.',
+        AppThemePreset.darkLuxury =>
+          'Discover luxury destinations and word adventures.',
+        AppThemePreset.oceanEscape =>
+          'Sail to tropical shores and new word adventures.',
+        _ => 'Discover iconic places and new word adventures.',
+      };
+
   bool get useGlassmorphism => this == AppThemePreset.winterAlps ||
       this == AppThemePreset.oceanEscape;
 
@@ -345,7 +361,7 @@ extension AppThemePresetX on AppThemePreset {
         tertiary: const Color(0xFF0D2137),
         surface: const Color(0xCCFFFFFF),
         onSurface: const Color(0xFF1E3A5F),
-        onPrimary: const Color(0xFFFFFFFF),
+        onPrimary: const Color(0xFF0D2137),
         onScenic: const Color(0xFFFFFFFF),
         onScenicMuted: const Color(0xB3FFFFFF),
         scrim: const Color(0x80000000),
@@ -357,7 +373,7 @@ extension AppThemePresetX on AppThemePreset {
         cream: const Color(0xFF0D2137),
         boardWhite: const Color(0xFFF0F8FF),
         cellDefault: const Color(0xFFFFFFFF),
-        cellAlt: const Color(0xFFE3F2FD),
+        cellAlt: const Color(0xFFE8F4FC),
         cellSelected: const Color(0xFFA5C9E1),
         selectionLine: const Color(0xFF1E88E5),
         cellWrong: const Color(0xFFEF5350),
@@ -468,8 +484,8 @@ extension AppThemePresetX on AppThemePreset {
         secondary: const Color(0xFF26C6DA),
         tertiary: const Color(0xFF002B49),
         surface: const Color(0xCC002B49),
-        onSurface: const Color(0xFFFFFFFF),
-        onPrimary: const Color(0xFFFFFFFF),
+        onSurface: const Color(0xFFE0F7FA),
+        onPrimary: const Color(0xFF002B49),
         onScenic: const Color(0xFFFFFFFF),
         onScenicMuted: const Color(0xB3FFFFFF),
         scrim: const Color(0x99000000),

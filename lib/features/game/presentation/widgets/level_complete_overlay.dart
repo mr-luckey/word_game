@@ -24,6 +24,7 @@ class LevelCompleteOverlay extends StatefulWidget {
     required this.onHome,
     required this.onReplay,
     required this.onNext,
+    this.isDailyChallenge = false,
     this.wordsFound,
     this.wordsTotal,
   });
@@ -36,6 +37,7 @@ class LevelCompleteOverlay extends StatefulWidget {
   final VoidCallback onHome;
   final VoidCallback onReplay;
   final VoidCallback onNext;
+  final bool isDailyChallenge;
   final int? wordsFound;
   final int? wordsTotal;
 
@@ -217,30 +219,37 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
                               visualDensity: VisualDensity.compact,
                               padding: const EdgeInsets.symmetric(vertical: 10),
                             ),
-                            child: const Text('Home'),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: widget.onReplay,
-                            style: OutlinedButton.styleFrom(
-                              visualDensity: VisualDensity.compact,
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              widget.isDailyChallenge ? 'Done' : 'Home',
                             ),
-                            child: const Text('Replay'),
                           ),
                         ),
+                        if (!widget.isDailyChallenge) ...[
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: widget.onReplay,
+                              style: OutlinedButton.styleFrom(
+                                visualDensity: VisualDensity.compact,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                              ),
+                              child: const Text('Replay'),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    GradientButton(
-                      label: 'Next Level',
-                      expanded: true,
-                      useGold: true,
-                      compact: true,
-                      onPressed: widget.onNext,
-                    ),
+                    if (!widget.isDailyChallenge) ...[
+                      const SizedBox(height: 8),
+                      GradientButton(
+                        label: 'Next Level',
+                        expanded: true,
+                        useGold: true,
+                        compact: true,
+                        onPressed: widget.onNext,
+                      ),
+                    ],
                   ],
                 ),
               ),

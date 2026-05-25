@@ -9,11 +9,11 @@ import 'package:word_game/features/home/presentation/cubit/destinations_cubit.da
 import 'package:word_game/features/home/presentation/widgets/home_achievements_card.dart';
 import 'package:word_game/features/home/presentation/widgets/home_background.dart';
 import 'package:word_game/features/home/presentation/widgets/home_brand_title.dart';
-import 'package:word_game/features/home/presentation/widgets/home_daily_bonus_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_treasure_box.dart';
 import 'package:word_game/features/home/presentation/widgets/home_featured_card.dart';
+import 'package:word_game/features/home/presentation/widgets/home_layout_metrics.dart';
 import 'package:word_game/features/home/presentation/widgets/home_play_button.dart';
 import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
-import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
@@ -59,100 +59,106 @@ class _HomeViewState extends State<_HomeView> {
   @override
   Widget build(BuildContext context) {
     final preset = context.themePreset;
+    final metrics = HomeLayoutMetrics.of(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: HomeBackground(
         child: SafeArea(
+          bottom: false,
           child: JourneyContentWidth(
-            child: Column(
-              children: [
-                const HomeTopBar(),
-                const HomeBrandTitle(),
-                Expanded(
-                  child: BlocBuilder<DestinationsCubit, DestinationsState>(
-                    builder: (context, state) {
-                      if (state.loading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
+            child: BlocBuilder<DestinationsCubit, DestinationsState>(
+              builder: (context, state) {
+                if (state.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                      final featured = DestinationCatalog.forPreset(preset)
-                          .where((d) => d.unlockOrder == 1)
-                          .first;
-                      final theme = state.themes
-                          .where((t) => t.id == featured.id)
-                          .firstOrNull;
-                      final imagePath =
-                          theme?.backgroundImage.isNotEmpty == true
-                              ? AssetPaths.themeImage(theme!.backgroundImage)
-                              : featured.imageAsset;
-                      final completed = theme == null
-                          ? 0
-                          : theme.levels
-                              .where((level) =>
-                                  state.completedLevelIds.contains(level.id))
-                              .length;
-                      final total = theme?.levels.length ?? 20;
-                      final destinationId = theme?.id ?? featured.id;
+                final featured = DestinationCatalog.forPreset(preset)
+                    .where((d) => d.unlockOrder == 1)
+                    .first;
+                final theme = state.themes
+                    .where((t) => t.id == featured.id)
+                    .firstOrNull;
+                final imagePath = theme?.backgroundImage.isNotEmpty == true
+                    ? AssetPaths.themeImage(theme!.backgroundImage)
+                    : featured.imageAsset;
+                final completed = theme == null
+                    ? 0
+                    : theme.levels
+                        .where((level) =>
+                            state.completedLevelIds.contains(level.id))
+                        .length;
+                final total = theme?.levels.length ?? 20;
+                final destinationId = theme?.id ?? featured.id;
 
-                      return SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          children: [
-                            HomeFeaturedCard(
-                              title: theme?.name ?? featured.name,
-                              completed: completed,
-                              total: total,
-                              imageAsset: imagePath,
-                              onTap: () => _goLevels(context, destinationId),
-                            ),
-                            const SizedBox(height: 14),
-                            HomePlayButton(
-                              onPressed: () =>
-                                  _goLevels(context, destinationId),
-                            ),
-                            const SizedBox(height: 14),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                return CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const HomeTopBar(),
+                          const HomeBrandTitle(),
+                          HomeFeaturedCard(
+                            title: theme?.name ?? featured.name,
+                            country: featured.country,
+                            completed: completed,
+                            total: total,
+                            imageAsset: imagePath,
+                            height: metrics.featuredHeight,
+                            compact: metrics.compact,
+                            dense: metrics.dense,
+                            onTap: () => _goLevels(context, destinationId),
+                          ),
+                          SizedBox(height: metrics.sectionGap),
+                          HomePlayButton(
+                            height: metrics.playButtonHeight,
+                            onPressed: () =>
+                                _goLevels(context, destinationId),
+                          ),
+                          SizedBox(height: metrics.sectionGap),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16),
+                            child: SizedBox(
+                              height: metrics.sideCardHeight,
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
                                 children: [
                                   Expanded(
-                                    child: HomeDailyBonusCard(
-                                      onTap: () async {
-                                        final updated = await context
-                                            .push<bool>('/game?levelId=9999');
-                                        if (updated == true &&
-                                            context.mounted) {
-                                          context
-                                              .read<DestinationsCubit>()
-                                              .refresh();
-                                          context.read<CoinCubit>().refresh();
-                                        }
-                                      },
+                                    child: HomeTreasureBox(
+                                      height: metrics.sideCardHeight,
+                                      compact: metrics.compact,
+                                      dense: metrics.dense,
+                                      onTap: () =>
+                                          context.push('/daily-rewards'),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: HomeAchievementsCard(
+                                      height: metrics.sideCardHeight,
+                                      compact: metrics.compact,
+                                      dense: metrics.dense,
                                       onTap: () => context.go('/profile'),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                          ),
+                          SizedBox(
+                            height: metrics.sectionGap +
+                                MediaQuery.paddingOf(context).bottom +
+                                72,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
