@@ -27,4 +27,12 @@ class AssetPaths {
       'assets/images/themes/${preset.folder}/$slug.webp';
 
   static String splashForPreset(AppThemePreset preset) => themeSplash(preset);
+
+  /// World Tour splash background (design layer under title/progress).
+  static const worldTourSplashBg =
+      'assets/images/themes/world_tour/splash_bg.png';
+
+  /// World Tour home journey card illustration.
+  static const worldTourHomeCardBg =
+      'assets/images/themes/world_tour/home_card_bg.png';
 }

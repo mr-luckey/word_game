@@ -59,5 +59,5 @@ class AppTheme {
     );
   }
 
-  static ThemeData get light => build(preset: AppThemePreset.classicTravel);
+  static ThemeData get light => build(preset: AppThemePreset.worldTour);
 }

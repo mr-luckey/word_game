@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_theme_extension.dart';
 
 enum AppThemePreset {
+  worldTour,
   classicTravel,
   forestQuest,
   neonCity,
@@ -17,6 +18,7 @@ enum PlayButtonStyle { goldSolid, woodTexture, neonGradient, icyBlue, tealSolid 
 
 extension AppThemePresetX on AppThemePreset {
   String get label => switch (this) {
+        AppThemePreset.worldTour => 'World Tour',
         AppThemePreset.classicTravel => 'Classic Travel',
         AppThemePreset.forestQuest => 'Forest Quest',
         AppThemePreset.neonCity => 'Neon City',
@@ -27,6 +29,7 @@ extension AppThemePresetX on AppThemePreset {
       };
 
   String get folder => switch (this) {
+        AppThemePreset.worldTour => 'world_tour',
         AppThemePreset.classicTravel => 'classic_travel',
         AppThemePreset.forestQuest => 'forest_quest',
         AppThemePreset.neonCity => 'neon_city',
@@ -39,6 +42,8 @@ extension AppThemePresetX on AppThemePreset {
   String get subtitle => label.toUpperCase();
 
   String get splashTagline => switch (this) {
+        AppThemePreset.worldTour =>
+            'Exploring the world, one word at a time...',
         AppThemePreset.classicTravel => 'Exploring new places...',
         AppThemePreset.forestQuest => 'Every path hides a word.',
         AppThemePreset.neonCity => 'Exploring neon cities...',
@@ -79,6 +84,7 @@ extension AppThemePresetX on AppThemePreset {
 
   AppThemeColors colors({required bool dark}) {
     return switch (this) {
+      AppThemePreset.worldTour => _worldTour(),
       AppThemePreset.classicTravel => _classicTravel(),
       AppThemePreset.forestQuest => _forestQuest(),
       AppThemePreset.neonCity => _neonCity(),
@@ -88,6 +94,72 @@ extension AppThemePresetX on AppThemePreset {
       AppThemePreset.oceanEscape => _oceanEscape(),
     };
   }
+
+  static AppThemeColors _worldTour() => AppThemeColors(
+        primary: const Color(0xFF1B3A6E),
+        secondary: const Color(0xFFFFC107),
+        tertiary: const Color(0xFF0D2347),
+        surface: const Color(0xFF1A3A6B),
+        onSurface: const Color(0xFFFFFFFF),
+        onPrimary: const Color(0xFFFFFFFF),
+        onScenic: const Color(0xFF1B3A6E),
+        onScenicMuted: const Color(0xB31B3A6E),
+        scrim: const Color(0x66000000),
+        scrimLight: const Color(0x33000000),
+        glassSurface: const Color(0xCC1A3A6B),
+        glassBorder: const Color(0xFFFFC107),
+        navSurface: const Color(0xEB1B3A6E),
+        shadow: const Color(0x66000000),
+        cream: const Color(0xFFE8F4FF),
+        boardWhite: const Color(0xFFF5F8FC),
+        cellDefault: const Color(0xFFFFFFFF),
+        cellAlt: const Color(0xFFE8F0FA),
+        cellSelected: const Color(0xFFFFC107),
+        selectionLine: const Color(0xFFFFD54F),
+        cellWrong: const Color(0xFFEF5350),
+        cellRevealed: const Color(0xFF5C9FD6),
+        cellHint: const Color(0xFFFFF59D),
+        success: const Color(0xFF66BB6A),
+        warning: const Color(0xFFFF7043),
+        gold: const Color(0xFFFFC107),
+        goldDark: const Color(0xFFE6A800),
+        goldLight: const Color(0xFFFFD54F),
+        accentCoin: const Color(0xFF4FC3F7),
+        bodyMuted: const Color(0xFF5C7A9E),
+        locked: const Color(0xFF78909C),
+        cellBorder: const Color(0xFFB0C4DE),
+        timerDanger: const Color(0xFFFF5252),
+        easy: const Color(0xFF66BB6A),
+        medium: const Color(0xFF42A5F5),
+        hard: const Color(0xFFFFA726),
+        pro: const Color(0xFFEF5350),
+        levelLockedStart: const Color(0xFF37474F),
+        levelLockedEnd: const Color(0xFF263238),
+        levelCompleteStart: const Color(0xFFFFC107),
+        levelCompleteEnd: const Color(0xFFE6A800),
+        shopPriceButton: const Color(0xFF1B6BB5),
+        foundWordPalette: _goldFoundPalette,
+        primaryGradient: const LinearGradient(
+          colors: [Color(0xFFE8F4FF), Color(0xFFB3D9FF)],
+        ),
+        playButtonGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFFFFE566), Color(0xFFFFC107), Color(0xFFE6A800)],
+        ),
+        overlayGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x33E8F4FF), Color(0x661B3A6E)],
+        ),
+        glassGradient: const LinearGradient(
+          colors: [Color(0xCC1A3A6B), Color(0x991A3A6B)],
+        ),
+        useScenicImages: true,
+        solidBackground: const LinearGradient(
+          colors: [Color(0xFFE8F4FF), Color(0xFFB3D9FF), Color(0xFF1B3A6E)],
+        ),
+      );
 
   static AppThemeColors _classicTravel() => AppThemeColors(
         primary: const Color(0xFF1A6BB5),
@@ -563,9 +635,10 @@ extension AppThemePresetX on AppThemePreset {
 
   /// Migrate legacy preset names from SharedPreferences.
   static AppThemePreset fromLegacyName(String? name) {
-    if (name == null) return AppThemePreset.classicTravel;
+    if (name == null) return AppThemePreset.worldTour;
     return switch (name) {
-      'journey' => AppThemePreset.classicTravel,
+      'journey' => AppThemePreset.worldTour,
+      'classicTravel' => AppThemePreset.classicTravel,
       'ocean' => AppThemePreset.oceanEscape,
       'sunset' => AppThemePreset.sunsetSafari,
       'forest' => AppThemePreset.forestQuest,
@@ -573,7 +646,7 @@ extension AppThemePresetX on AppThemePreset {
       'midnight' => AppThemePreset.darkLuxury,
       _ => AppThemePreset.values.firstWhere(
           (p) => p.name == name,
-          orElse: () => AppThemePreset.classicTravel,
+          orElse: () => AppThemePreset.worldTour,
         ),
     };
   }

@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
+import 'package:word_game/features/home/presentation/screens/world_tour_home_screen.dart';
 import 'package:word_game/features/home/presentation/widgets/home_achievements_card.dart';
 import 'package:word_game/features/home/presentation/widgets/home_background.dart';
 import 'package:word_game/features/home/presentation/widgets/home_brand_title.dart';
@@ -23,19 +25,27 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DestinationsCubit(getIt(), getIt())..load(),
-      child: const _HomeView(),
+      child: BlocBuilder<AppThemeBloc, AppThemeState>(
+        buildWhen: (p, c) => p.activePreset != c.activePreset,
+        builder: (context, themeState) {
+          if (themeState.activePreset == AppThemePreset.worldTour) {
+            return const WorldTourHomeScreen();
+          }
+          return const _ClassicHomeView();
+        },
+      ),
     );
   }
 }
 
-class _HomeView extends StatefulWidget {
-  const _HomeView();
+class _ClassicHomeView extends StatefulWidget {
+  const _ClassicHomeView();
 
   @override
-  State<_HomeView> createState() => _HomeViewState();
+  State<_ClassicHomeView> createState() => _ClassicHomeViewState();
 }
 
-class _HomeViewState extends State<_HomeView> {
+class _ClassicHomeViewState extends State<_ClassicHomeView> {
   bool _isFirstActivate = true;
 
   void _goLevels(BuildContext context, int themeId) {

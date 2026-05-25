@@ -51,6 +51,30 @@ extension HomeScreenSpecX on AppThemePreset {
       'assets/images/themes/$folder/grid_full.webp';
 
   HomeScreenSpec get homeSpec => switch (this) {
+        AppThemePreset.worldTour => const HomeScreenSpec(
+              featuredLayout: HomeFeaturedLayout.fullBleed,
+              journeyWordColor: Color(0xFFFFC107),
+              searchWordColor: Color(0xFF1B3A6E),
+              taglineColor: Color(0xFF1B3A6E),
+              featuredLine1Color: Color(0xFF1B3A6E),
+              featuredLine2Color: Color(0xFFFFFFFF),
+              playButtonGradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFFFFE566), Color(0xFFFFC107), Color(0xFFE6A800)],
+              ),
+              playButtonTextColor: Color(0xFF1B3A6E),
+              playButtonGlow: Color(0xFFFFD54F),
+              cardFill: Color(0xCC1B3A6E),
+              cardBorderWidth: 1.5,
+              useNeonCardGlow: false,
+              useGlassCards: true,
+              dailyBonusAccent: Color(0xFFFFC107),
+              achievementAccent: Color(0xFFFFC107),
+              featuredLabelIcon: Icons.flight_rounded,
+              playUsesCompass: true,
+              playIconLight: false,
+            ),
         AppThemePreset.classicTravel => const HomeScreenSpec(
               featuredLayout: HomeFeaturedLayout.fullBleed,
               journeyWordColor: Color(0xFFD4AF37),

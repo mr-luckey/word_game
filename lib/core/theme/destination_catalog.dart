@@ -11,7 +11,7 @@ class DestinationCatalog {
       id: 1,
       name: 'Paris Adventure',
       country: 'France',
-      preset: AppThemePreset.classicTravel,
+      preset: AppThemePreset.worldTour,
       imageSlug: 'paris.webp',
       unlockOrder: 1,
       hasLevels: true,
@@ -20,7 +20,7 @@ class DestinationCatalog {
       id: 101,
       name: 'London Heritage',
       country: 'United Kingdom',
-      preset: AppThemePreset.classicTravel,
+      preset: AppThemePreset.worldTour,
       imageSlug: 'london.webp',
       unlockOrder: 2,
       hasLevels: true,
@@ -29,7 +29,7 @@ class DestinationCatalog {
       id: 4,
       name: 'Roman Quest',
       country: 'Italy',
-      preset: AppThemePreset.classicTravel,
+      preset: AppThemePreset.worldTour,
       imageSlug: 'rome.webp',
       unlockOrder: 3,
       hasLevels: true,
@@ -216,7 +216,7 @@ class DestinationCatalog {
         ..sort((a, b) => a.unlockOrder.compareTo(b.unlockOrder));
 
   static AppThemePreset presetForDestinationId(int id) =>
-      byId(id)?.preset ?? AppThemePreset.classicTravel;
+      byId(id)?.preset ?? AppThemePreset.worldTour;
 }
 
 class DestinationSpec {

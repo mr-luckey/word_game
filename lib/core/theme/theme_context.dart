@@ -11,7 +11,7 @@ extension ThemeContextX on BuildContext {
 
   AppThemePreset get themePreset {
     final name = Theme.of(this).extension<_ThemePresetMarker>()?.preset;
-    return name ?? AppThemePreset.classicTravel;
+    return name ?? AppThemePreset.worldTour;
   }
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
