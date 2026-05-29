@@ -12,71 +12,60 @@
   },
   "coinSchedule": [50, 100, 150, 250, 500, 750, 1000],
   "wordsPerDay": 6,
-  "games": [
-    {
-      "id": 1,
-      "words": ["OCEAN", "BEACH", "CORAL", "WAVE", "SHELL", "FISH"],
-      "gridSize": 10,
-      "timeLimit": 300,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    },
-    {
-      "id": 2,
-      "words": ["SUN", "SAND", "TIDE", "REEF", "CRAB", "SAIL"],
-      "gridSize": 9,
-      "timeLimit": 280,
-      "hintsAllowed": 2,
-      "difficultyIndex": 0
-    },
-    {
-      "id": 3,
-      "words": ["PORT", "ISLAND", "PALM", "BOAT", "HARBOR", "LAGOON"],
-      "gridSize": 10,
-      "timeLimit": 300,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    },
-    {
-      "id": 4,
-      "words": ["TRAVEL", "MAP", "PASS", "TRIP", "ROUTE", "GUIDE"],
-      "gridSize": 8,
-      "timeLimit": 260,
-      "hintsAllowed": 3,
-      "difficultyIndex": 0
-    },
-    {
-      "id": 5,
-      "words": ["QUEST", "STAR", "GOLD", "COIN", "GEM", "KEY"],
-      "gridSize": 9,
-      "timeLimit": 270,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    },
-    {
-      "id": 6,
-      "words": ["FOREST", "TREE", "MOSS", "DEER", "OWL", "PATH"],
-      "gridSize": 10,
-      "timeLimit": 290,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    },
-    {
-      "id": 7,
-      "words": ["CITY", "NEON", "LIGHT", "METRO", "TAXI", "CAFE"],
-      "gridSize": 9,
-      "timeLimit": 275,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    },
-    {
-      "id": 8,
-      "words": ["SNOW", "ALPS", "SKI", "COLD", "PEAK", "FROST"],
-      "gridSize": 10,
-      "timeLimit": 300,
-      "hintsAllowed": 2,
-      "difficultyIndex": 1
-    }
+"games": [
+    {"id":1,"words":["ATTIC","CLOSET","DRAWER","CHIMNEY","GUTTER","DOORMAT"],"gridSize":10,"timeLimit":260,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":2,"words":["VACUUM","WASHER","DRYER","BLEACH","RINSE","SCRUB"],"gridSize":10,"timeLimit":265,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":3,"words":["FRIDGE","BLENDER","COOKER","NAPKIN","PITCHER","PLATTER"],"gridSize":10,"timeLimit":270,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":4,"words":["PEN","PAPER","SCHOOL","LOCKER","BLACKBOARD","BOOK"],"gridSize":10,"timeLimit":275,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":5,"words":["SEESAW","TOYBOX","HOPSCOTCH","SWINGSET","BALLPIT","PLAYMAT"],"gridSize":10,"timeLimit":280,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":6,"words":["SHOVEL","RAKE","HOSE","SPRINKLER","WEEDER","PLANTER"],"gridSize":10,"timeLimit":285,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":7,"words":["LAPTOP","EMAIL","MEMORY","CURSOR","WINDOWS","ICON"],"gridSize":10,"timeLimit":290,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":8,"words":["RED","BLUE","GREEN","YELLOW","TAN","CREAMY"],"gridSize":10,"timeLimit":295,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":9,"words":["SWEATER","JACKET","SHORTS","SUIT","UNIFORM","RAINBOOT"],"gridSize":10,"timeLimit":300,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":10,"words":["LOVE","HATE","SORRY","WORRY","PANIC","SHAME"],"gridSize":10,"timeLimit":305,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":11,"words":["SING","DREAM","THINK","LEARN","TEACH","BUILD"],"gridSize":10,"timeLimit":310,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":12,"words":["BACK","NECK","WAIST","CHEST","FINGER","TOE"],"gridSize":10,"timeLimit":315,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":13,"words":["RECTANGLE","PENTAGON","OCTAGON","CONE","SPHERE","CRESCENT"],"gridSize":10,"timeLimit":320,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":14,"words":["WATER","JUICE","COFFEE","SODA","LEMONADE","MILKSHAKE"],"gridSize":10,"timeLimit":325,"hintsAllowed":5,"difficultyIndex":0},
+    {"id":15,"words":["CHIPS","POPCORN","PRETZELS","CRACKER","NACHOS","CANDY"],"gridSize":10,"timeLimit":330,"hintsAllowed":5,"difficultyIndex":0},
+
+    {"id":16,"words":["WAITER","CLERK","BANKER","WRITER","SINGER","BUILDER"],"gridSize":11,"timeLimit":300,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":17,"words":["PRICE","LABEL","SALE","COUNTER","AISLE","TROLLEY"],"gridSize":11,"timeLimit":305,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":18,"words":["RAINY","WINDY","CLOUDY","FOGGY","BREEZY","STARRY"],"gridSize":11,"timeLimit":310,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":19,"words":["CREEK","BUSH","GLADE","COPSE","THICKET","GROUND"],"gridSize":11,"timeLimit":315,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":20,"words":["HATCHET","MALLET","AWL","WEDGE","BOLT","NUT"],"gridSize":11,"timeLimit":320,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":21,"words":["TUBA","LYRE","BONGO","HIHAT","SNARE","TRIAD"],"gridSize":11,"timeLimit":325,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":22,"words":["COURT","NET","RACKET","LAP","LANE","KICK"],"gridSize":11,"timeLimit":330,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":23,"words":["VISA","BOOKING","DEPART","ARRIVE","TOURIST","TAXICAB"],"gridSize":11,"timeLimit":335,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":24,"words":["TRACTOR","SILO","FODDER","BALE","PADDOCK","HAYLOFT"],"gridSize":11,"timeLimit":340,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":25,"words":["PUPPY","GOLDFISH","GERBIL","PARAKEET","BUDGIE","GUINEAPIG"],"gridSize":11,"timeLimit":345,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":26,"words":["BATHTUB","TOOTHPASTE","LOTION","DEODORANT","SHAVER","BATHROBE"],"gridSize":11,"timeLimit":350,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":27,"words":["BUTTERFLY","ROACH","APHID","WEEVIL","MAYFLY","EARWIG"],"gridSize":11,"timeLimit":355,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":28,"words":["BLUEJAY","CARDINAL","CUCKOO","EGRET","PHEASANT","QUAIL"],"gridSize":11,"timeLimit":360,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":29,"words":["BASS","CARP","PIKE","GUPPY","MARLIN","SWORDFISH"],"gridSize":11,"timeLimit":365,"hintsAllowed":4,"difficultyIndex":1},
+    {"id":30,"words":["MOON","EARTH","SATURN","URANUS","NEPTUNE","PLUTO"],"gridSize":11,"timeLimit":370,"hintsAllowed":4,"difficultyIndex":1},
+
+    {"id":31,"words":["LIQUID","SOLID","GAS","ACID","BASE","MIXTURE"],"gridSize":12,"timeLimit":340,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":32,"words":["FEVER","COUGH","SNEEZE","WOUND","BRUISE","CAST"],"gridSize":12,"timeLimit":345,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":33,"words":["USER","PASSWORD","LOGOUT","DOWNLOAD","FILENAME","DATA"],"gridSize":12,"timeLimit":350,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":34,"words":["STAIRS","LIFT","ELEVATOR","LOBBY","BASEMENT","ROOFTOP"],"gridSize":12,"timeLimit":355,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":35,"words":["SIDEWALK","TRAFFIC","PARKING","BUSSTOP","FLYOVER","CROSSROAD"],"gridSize":12,"timeLimit":360,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":36,"words":["CAMPFIRE","SLEEPBAG","HIKING","MATCHBOX","CAMPSITE","TRAILHEAD"],"gridSize":12,"timeLimit":365,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":37,"words":["SEASIDE","SEASHELL","TIDELINE","SANDCASTLE","SURFBOARD","SUNSCREEN"],"gridSize":12,"timeLimit":370,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":38,"words":["OFFICE","MANAGER","PROJECT","PROFIT","MARKETING","SALESMAN"],"gridSize":12,"timeLimit":375,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":39,"words":["POLICE","FIREMAN","AMBULANCE","FIRSTAID","WHISTLE","FLASHER"],"gridSize":12,"timeLimit":380,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":40,"words":["BOIL","FRY","BAKE","GRILL","SLICE","CHOP"],"gridSize":12,"timeLimit":385,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":41,"words":["MOUNTAIN","WATERFALL","HILLTOP","RIVERBED","LAKESIDE","SEASHORE"],"gridSize":12,"timeLimit":390,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":42,"words":["SHELVES","FICTION","NONFICTION","REFERENCE","CATALOG","READERS"],"gridSize":12,"timeLimit":395,"hintsAllowed":3,"difficultyIndex":2},
+    {"id":43,"words":["PLAYER","MISSION","BONUS","WINNER","LOSER","REMATCH"],"gridSize":12,"timeLimit":400,"hintsAllowed":3,"difficultyIndex":2},
+
+    {"id":44,"words":["GIANT","DWARF","ELF","MERMAID","WAND","CLOAK"],"gridSize":13,"timeLimit":380,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":45,"words":["PIRATE","CANNON","TREASURE","ISLE","PLANK","CROWNS"],"gridSize":13,"timeLimit":385,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":46,"words":["RAILWAY","ENGINEER","CABOOSE","TUNNELING","TRACKS","CARRIAGE"],"gridSize":13,"timeLimit":390,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":47,"words":["SOYBEAN","PEANUT","CABBAGE","PUMPKIN","BROCCOLI","ZUCCHINI"],"gridSize":13,"timeLimit":395,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":48,"words":["BIRDHOUSE","TREEHOUSE","MAILBOX","FLOWERBED","LAWNMOWER","BARBECUE"],"gridSize":13,"timeLimit":400,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":49,"words":["MINIBUS","TRAMCAR","TAXIBOAT","SNOWMOBILE","BULLETTRAIN","MOTORBIKE"],"gridSize":13,"timeLimit":405,"hintsAllowed":2,"difficultyIndex":3},
+    {"id":50,"words":["YOGA","JOGGING","PUSHUP","SITUP","STRETCH","DUMBBELL"],"gridSize":13,"timeLimit":410,"hintsAllowed":2,"difficultyIndex":3}
   ],
   "wordPool": [
     "OCEAN",
