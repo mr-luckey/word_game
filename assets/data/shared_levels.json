@@ -1,0 +1,311 @@
+{
+  "version": "3.0",
+  "description": "Single level pack — same gameplay for every explore location & theme.",
+  "levels": [
+    {
+      "id": 101,
+      "difficultyIndex": 0,
+      "gridSize": 8,
+      "timeLimit": 180,
+      "hintsAllowed": 3,
+      "coinsReward": 30,
+      "words": [
+        "EIFFEL",
+        "PARIS",
+        "LOUVRE",
+        "CAFE",
+        "METRO",
+        "BERET"
+      ]
+    },
+    {
+      "id": 102,
+      "difficultyIndex": 0,
+      "gridSize": 8,
+      "timeLimit": 195,
+      "hintsAllowed": 3,
+      "coinsReward": 35,
+      "words": [
+        "CAFE",
+        "LOUVRE",
+        "EIFFEL",
+        "PARIS",
+        "METRO",
+        "BERET"
+      ]
+    },
+    {
+      "id": 103,
+      "difficultyIndex": 0,
+      "gridSize": 8,
+      "timeLimit": 210,
+      "hintsAllowed": 3,
+      "coinsReward": 40,
+      "words": [
+        "PARIS",
+        "LOUVRE",
+        "METRO",
+        "EIFFEL",
+        "CAFE",
+        "WINE"
+      ]
+    },
+    {
+      "id": 104,
+      "difficultyIndex": 0,
+      "gridSize": 8,
+      "timeLimit": 225,
+      "hintsAllowed": 3,
+      "coinsReward": 45,
+      "words": [
+        "LOUVRE",
+        "WINE",
+        "EIFFEL",
+        "BERET",
+        "METRO",
+        "PARIS"
+      ]
+    },
+    {
+      "id": 105,
+      "difficultyIndex": 0,
+      "gridSize": 8,
+      "timeLimit": 240,
+      "hintsAllowed": 3,
+      "coinsReward": 50,
+      "words": [
+        "LOUVRE",
+        "METRO",
+        "WINE",
+        "CAFE",
+        "EIFFEL",
+        "PARIS"
+      ]
+    },
+    {
+      "id": 106,
+      "difficultyIndex": 1,
+      "gridSize": 10,
+      "timeLimit": 240,
+      "hintsAllowed": 2,
+      "coinsReward": 50,
+      "words": [
+        "SEINE",
+        "BAGUETTE",
+        "VERSAILLES",
+        "MONTMARTRE",
+        "NAPOLEON"
+      ]
+    },
+    {
+      "id": 107,
+      "difficultyIndex": 1,
+      "gridSize": 10,
+      "timeLimit": 255,
+      "hintsAllowed": 2,
+      "coinsReward": 55,
+      "words": [
+        "VERSAILLES",
+        "SEINE",
+        "BAGUETTE",
+        "MONTMARTRE",
+        "NAPOLEON"
+      ]
+    },
+    {
+      "id": 108,
+      "difficultyIndex": 1,
+      "gridSize": 10,
+      "timeLimit": 270,
+      "hintsAllowed": 2,
+      "coinsReward": 60,
+      "words": [
+        "NAPOLEON",
+        "VERSAILLES",
+        "SEINE",
+        "MONTMARTRE",
+        "BAGUETTE"
+      ]
+    },
+    {
+      "id": 109,
+      "difficultyIndex": 1,
+      "gridSize": 10,
+      "timeLimit": 285,
+      "hintsAllowed": 2,
+      "coinsReward": 65,
+      "words": [
+        "SEINE",
+        "BAGUETTE",
+        "VERSAILLES",
+        "NAPOLEON",
+        "MONTMARTRE"
+      ]
+    },
+    {
+      "id": 110,
+      "difficultyIndex": 1,
+      "gridSize": 10,
+      "timeLimit": 300,
+      "hintsAllowed": 2,
+      "coinsReward": 70,
+      "words": [
+        "VERSAILLES",
+        "SEINE",
+        "MONTMARTRE",
+        "BAGUETTE",
+        "NAPOLEON"
+      ]
+    },
+    {
+      "id": 111,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 300,
+      "hintsAllowed": 1,
+      "coinsReward": 70,
+      "words": [
+        "CHAMPS",
+        "ELYSEES",
+        "MUSEE",
+        "ORSAY",
+        "SACRE",
+        "BASTILLE"
+      ]
+    },
+    {
+      "id": 112,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 315,
+      "hintsAllowed": 1,
+      "coinsReward": 75,
+      "words": [
+        "ORSAY",
+        "MUSEE",
+        "ELYSEES",
+        "CHAMPS",
+        "SACRE",
+        "BASTILLE"
+      ]
+    },
+    {
+      "id": 113,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 330,
+      "hintsAllowed": 1,
+      "coinsReward": 80,
+      "words": [
+        "ORSAY",
+        "BASTILLE",
+        "ELYSEES",
+        "MUSEE",
+        "SACRE",
+        "CHAMPS"
+      ]
+    },
+    {
+      "id": 114,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 345,
+      "hintsAllowed": 1,
+      "coinsReward": 85,
+      "words": [
+        "ORSAY",
+        "MUSEE",
+        "ELYSEES",
+        "CHAMPS",
+        "BASTILLE",
+        "SACRE"
+      ]
+    },
+    {
+      "id": 115,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 360,
+      "hintsAllowed": 1,
+      "coinsReward": 90,
+      "words": [
+        "MUSEE",
+        "CHAMPS",
+        "BASTILLE",
+        "SACRE",
+        "ORSAY",
+        "ELYSEES"
+      ]
+    },
+    {
+      "id": 116,
+      "difficultyIndex": 3,
+      "gridSize": 14,
+      "timeLimit": 360,
+      "hintsAllowed": 1,
+      "coinsReward": 90,
+      "words": [
+        "CATACOMBS",
+        "POMPIDOU",
+        "PALAISROYAL",
+        "GRANDPALAIS"
+      ]
+    },
+    {
+      "id": 117,
+      "difficultyIndex": 3,
+      "gridSize": 14,
+      "timeLimit": 375,
+      "hintsAllowed": 1,
+      "coinsReward": 95,
+      "words": [
+        "CATACOMBS",
+        "PALAISROYAL",
+        "POMPIDOU",
+        "GRANDPALAIS"
+      ]
+    },
+    {
+      "id": 118,
+      "difficultyIndex": 3,
+      "gridSize": 14,
+      "timeLimit": 390,
+      "hintsAllowed": 1,
+      "coinsReward": 100,
+      "words": [
+        "PALAISROYAL",
+        "POMPIDOU",
+        "GRANDPALAIS",
+        "CATACOMBS"
+      ]
+    },
+    {
+      "id": 119,
+      "difficultyIndex": 3,
+      "gridSize": 14,
+      "timeLimit": 405,
+      "hintsAllowed": 1,
+      "coinsReward": 105,
+      "words": [
+        "PALAISROYAL",
+        "POMPIDOU",
+        "GRANDPALAIS",
+        "CATACOMBS"
+      ]
+    },
+    {
+      "id": 120,
+      "difficultyIndex": 3,
+      "gridSize": 14,
+      "timeLimit": 420,
+      "hintsAllowed": 1,
+      "coinsReward": 110,
+      "words": [
+        "PALAISROYAL",
+        "GRANDPALAIS",
+        "POMPIDOU",
+        "CATACOMBS"
+      ]
+    }
+  ]
+}

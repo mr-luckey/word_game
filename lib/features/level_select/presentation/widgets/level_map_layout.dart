@@ -6,7 +6,7 @@ class LevelMapLayout {
     required this.count,
     required this.mapWidth,
     this.nodeSpacing = 108,
-    this.topPadding = 48,
+    this.topPadding = 56,
     this.bottomPadding = 56,
     this.leftXFactor = 0.22,
     this.rightXFactor = 0.78,

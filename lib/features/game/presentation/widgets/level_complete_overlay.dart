@@ -9,6 +9,7 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/gradient_button.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -149,9 +150,13 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
                     ),
                     Text(
                       'LEVEL COMPLETE!',
+                      textAlign: TextAlign.center,
                       style: AppTextStyles.levelName(context).copyWith(
-                        fontSize: 20,
-                        color: colors.tertiary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: colors.gold,
+                        letterSpacing: 1.4,
+                        shadows: JourneyThemeKit.textGlow(context),
                       ),
                     ).animate().fadeIn().scale(
                           begin: const Offset(0.85, 0.85),
@@ -503,17 +508,21 @@ class _StatRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 14, color: colors.locked),
+          Icon(icon, size: 14, color: colors.gold),
           const SizedBox(width: 6),
           Text(
             '$label: ',
-            style: AppTextStyles.wordList(context).copyWith(fontSize: 13),
+            style: AppTextStyles.wordList(context).copyWith(
+              fontSize: 13,
+              color: colors.onScenicMuted,
+            ),
           ),
           Text(
             value,
             style: AppTextStyles.wordList(context).copyWith(
               fontSize: 13,
               fontWeight: FontWeight.w700,
+              color: colors.onScenic,
             ),
           ),
         ],

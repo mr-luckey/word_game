@@ -14,7 +14,6 @@ Reference mockups: `deisgn/home/` (7 themes: Paris, Maldives, Amazon, Safari, To
 
 ## Next (visual polish)
 - [ ] Per-theme passport stamp assets (replace generic verified icon)
-- [ ] Use `assets/images/home/` reference JPEGs only in design — wire theme splash/grid in app
 - [ ] Daily bonus: real countdown from backend / local storage
 - [ ] Achievements: live progress from profile cubit (not hardcoded 0/1)
 - [ ] Play button: theme-specific textures (snow, moss, neon) from mockup

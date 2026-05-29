@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "defaultBadges": [
+    { "icon": "explore", "label": "Word Novice", "progressTarget": 1 },
+    { "icon": "public", "label": "Word Hunter", "progressTarget": 50 },
+    { "icon": "star", "label": "Word Master", "progressTarget": 200 }
+  ],
+  "themeBadges": {
+    "forest_quest": [
+      { "icon": "eco", "label": "Word Novice", "progressTarget": 1 },
+      { "icon": "explore", "label": "Word Hunter", "progressTarget": 50 },
+      { "icon": "pets", "label": "Word Master", "progressTarget": 200 }
+    ],
+    "winter_alps": [
+      { "icon": "star", "label": "Word Novice", "progressTarget": 1 },
+      { "icon": "terrain", "label": "Word Hunter", "progressTarget": 50 },
+      { "icon": "ac_unit", "label": "Word Master", "progressTarget": 200 }
+    ],
+    "ocean_escape": [
+      { "icon": "waves", "label": "Word Novice", "progressTarget": 1 },
+      { "icon": "sailing", "label": "Word Hunter", "progressTarget": 50 },
+      { "icon": "anchor", "label": "Word Master", "progressTarget": 200 }
+    ]
+  }
+}

@@ -27,6 +27,12 @@ class HomeGlassCard extends StatelessWidget {
     final colors = context.appColors;
     final spec = context.themePreset.homeSpec;
 
+    final resolvedPad =
+        (padding ?? const EdgeInsets.all(12)).resolve(Directionality.of(context));
+    final innerHeight = height != null
+        ? (height! - resolvedPad.top - resolvedPad.bottom).clamp(0.0, double.infinity)
+        : null;
+
     Widget panel = Container(
       height: height,
       constraints: minHeight != null && height == null
@@ -56,10 +62,14 @@ class HomeGlassCard extends StatelessWidget {
                 ),
               ],
       ),
-      child: height != null
+      child: innerHeight != null
           ? ClipRRect(
               borderRadius: BorderRadius.circular(radius - 1),
-              child: child,
+              child: SizedBox(
+                width: double.infinity,
+                height: innerHeight,
+                child: child,
+              ),
             )
           : child,
     );

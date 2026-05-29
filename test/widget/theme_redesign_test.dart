@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/theme/destination_catalog.dart';
+import 'package:word_game/core/data/game_content_loader.dart';
 import 'package:word_game/core/theme/app_theme.dart';
+import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_bottom_nav.dart';
 
@@ -55,29 +55,21 @@ void main() {
     }
   });
 
-  test('each preset has a playable first destination in level packs', () {
-    final categories = <int, Map<String, dynamic>>{};
-    for (final file in Directory('assets/data')
-        .listSync()
-        .whereType<File>()
-        .where((file) => file.path.contains('levels_pack_'))) {
-      final data = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
-      for (final category in data['categories'] as List<dynamic>) {
-        final map = category as Map<String, dynamic>;
-        categories[map['id'] as int] = map;
-      }
-    }
+  test('every explore card has a valid background image', () async {
+    final content = await GameContentLoader.load();
+    DestinationCatalog.bind(content);
 
     for (final preset in AppThemePreset.values) {
-      final featured = DestinationCatalog.forPreset(preset)
-          .where((destination) => destination.unlockOrder == 1)
-          .single;
-      expect(categories[featured.id], isNotNull, reason: preset.label);
-      expect(
-        File(featured.imageAsset).existsSync(),
-        isTrue,
-        reason: featured.name,
-      );
+      final destinations = DestinationCatalog.forPreset(preset);
+      expect(destinations.length, 10, reason: preset.label);
+
+      for (final dest in destinations) {
+        expect(
+          File(dest.imageAsset).existsSync(),
+          isTrue,
+          reason: '${preset.label} slot ${dest.id} (${dest.name})',
+        );
+      }
     }
   });
 }

@@ -19,8 +19,10 @@ import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 import 'package:word_game/features/game/presentation/widgets/level_complete_overlay.dart';
+import 'package:word_game/features/game/presentation/widgets/pause_menu_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/injection.dart';
 
@@ -51,7 +53,8 @@ class _GameView extends StatelessWidget {
             getIt<AdService>().onLevelComplete();
             context.read<CoinCubit>().refresh();
             final bloc = context.read<GameBloc>();
-            final isDaily = state.levelId == 9999;
+            final isDaily =
+                state.levelId == getIt<GameContentRegistry>().dailyChallenge.levelId;
             showDialog<void>(
               context: context,
               barrierDismissible: false,
@@ -121,7 +124,6 @@ class _GameView extends StatelessWidget {
       ],
       child: BlocBuilder<GameBloc, GameState>(
         builder: (context, state) {
-          final colors = context.appColors;
           final bg = state is GameInProgress
               ? AssetPaths.themeImage(state.backgroundImage)
               : AssetPaths.themeSplash(context.themePreset);
@@ -160,26 +162,18 @@ class _GameView extends StatelessWidget {
                   ),
                 ),
                 if (state is GameInProgress && state.isPaused)
-                  Container(
-                    color: colors.scrim,
-                    child: Center(
-                      child: GlassPanel(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Paused',
-                                style: AppTextStyles.levelName(context)),
-                            const SizedBox(height: 16),
-                            FilledButton.icon(
-                              onPressed: () => context
-                                  .read<GameBloc>()
-                                  .add(const GameResumed()),
-                              icon: const Icon(Icons.play_arrow_rounded),
-                              label: const Text('Resume'),
-                            ),
-                          ],
-                        ),
-                      ),
+                  PauseMenuOverlay(
+                    state: state,
+                    onResume: () =>
+                        context.read<GameBloc>().add(const GameResumed()),
+                    onRestart: () {
+                      final bloc = context.read<GameBloc>();
+                      bloc.add(LoadLevel(state.levelId));
+                    },
+                    onSettings: () => context.push('/settings'),
+                    onQuit: () => journeyPopFromGame(
+                      context,
+                      themeId: state.themeId,
                     ),
                   ),
               ],

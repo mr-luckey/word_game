@@ -2,6 +2,9 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
+import 'package:word_game/core/data/models/achievement_badge_config.dart';
+import 'package:word_game/core/data/models/daily_challenge_config.dart';
 import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
@@ -60,6 +63,7 @@ void main() {
   late MockAchievements achievements;
   late MockDailyChallenge dailyChallenge;
   late MockThemeBloc themeBloc;
+  late GameContentRegistry testContent;
 
   GameBloc buildBloc() => GameBloc(
         loadLevel: loadLevel,
@@ -73,6 +77,7 @@ void main() {
         achievements: achievements,
         dailyChallenge: dailyChallenge,
         themeBloc: themeBloc,
+        content: testContent,
       );
 
   setUp(() {
@@ -85,6 +90,26 @@ void main() {
     achievements = MockAchievements();
     dailyChallenge = MockDailyChallenge();
     themeBloc = MockThemeBloc();
+    testContent = GameContentRegistry(
+      sharedLevels: const [],
+      exploreByPreset: const {},
+      dailyChallenge: DailyChallengeConfig(
+        levelId: 9999,
+        name: 'Daily',
+        difficultyIndex: 1,
+        gridSize: 10,
+        timeLimit: 300,
+        hintsAllowed: 2,
+        backgroundImageTemplate: '{themeFolder}/grid_full.webp',
+        coinSchedule: const [50, 100],
+        wordPool: const ['TEST'],
+        wordsPerDay: 1,
+      ),
+      achievements: const AchievementsConfig(
+        defaultBadges: [],
+        themeBadges: {},
+      ),
+    );
     when(() => dailyChallenge.todayRewardCoins).thenReturn(50);
     when(() => themeBloc.state).thenReturn(
       AppThemeState(

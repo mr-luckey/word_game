@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
 
 enum DailyDayStatus { collected, available, locked }
 
@@ -19,15 +20,18 @@ class DailyRewardDay {
 }
 
 class DailyChallengeService {
-  DailyChallengeService(this._prefs);
+  DailyChallengeService(this._prefs, this._content);
 
   final SharedPreferences _prefs;
+  final GameContentRegistry _content;
   static const _lastDailyKey = 'last_daily_date';
   static const _lastClaimMsKey = 'last_claim_timestamp_ms';
   static const _streakKey = 'daily_streak';
   static const _cooldown = Duration(hours: 24);
 
-  static const coinSchedule = [50, 100, 150, 250, 500, 750, 1000];
+  List<int> get _coinSchedule => _content.dailyChallenge.coinSchedule;
+
+  int get dailyLevelId => _content.dailyChallenge.levelId;
 
   static int getDailySeed() {
     final now = DateTime.now();
@@ -55,7 +59,8 @@ class DailyChallengeService {
 
   int get todayRewardCoins {
     final day = _nextClaimDay;
-    return coinSchedule[(day - 1).clamp(0, coinSchedule.length - 1)];
+    final schedule = _coinSchedule;
+    return schedule[(day - 1).clamp(0, schedule.length - 1)];
   }
 
   int get _nextClaimDay {
@@ -64,14 +69,14 @@ class DailyChallengeService {
   }
 
   List<DailyRewardDay> buildWeekRewards() {
-    return List.generate(7, (i) {
+    final schedule = _coinSchedule;
+    return List.generate(schedule.length, (i) {
       final day = i + 1;
-      final coins = coinSchedule[i];
       return DailyRewardDay(
         day: day,
-        coins: coins,
+        coins: schedule[i],
         status: _statusForDay(day),
-        isMilestone: day == 7,
+        isMilestone: day == schedule.length,
       );
     });
   }
@@ -82,7 +87,7 @@ class DailyChallengeService {
       if (day <= s) return DailyDayStatus.collected;
       return DailyDayStatus.locked;
     }
-    final next = (s + 1).clamp(1, 7);
+    final next = (s + 1).clamp(1, _coinSchedule.length);
     if (day < next) return DailyDayStatus.collected;
     if (day == next) return DailyDayStatus.available;
     return DailyDayStatus.locked;
@@ -114,25 +119,14 @@ class DailyChallengeService {
     );
   }
 
-  static List<String> getDailyWords() {
+  List<String> pickDailyWords() {
+    final config = _content.dailyChallenge;
     final r = Random(getDailySeed());
-    const allWords = [
-      'OCEAN',
-      'BEACH',
-      'CORAL',
-      'WAVE',
-      'SHELL',
-      'FISH',
-      'SAND',
-      'TIDE',
-      'REEF',
-      'CRAB',
-      'SAIL',
-      'PORT',
-    ];
+    final pool = config.wordPool;
     final picked = <String>{};
-    while (picked.length < 6) {
-      picked.add(allWords[r.nextInt(allWords.length)]);
+    final count = config.wordsPerDay.clamp(1, pool.length);
+    while (picked.length < count) {
+      picked.add(pool[r.nextInt(pool.length)]);
     }
     return picked.toList();
   }

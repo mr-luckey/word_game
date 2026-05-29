@@ -1,7 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/data/game_content_loader.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/achievement_service.dart';
+import 'package:word_game/core/services/auth_service.dart';
+import 'package:word_game/core/services/firestore_user_service.dart';
+import 'package:word_game/core/services/leaderboard_service.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
+import 'package:word_game/core/services/progress_sync_service.dart';
+import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
@@ -13,6 +23,7 @@ import 'package:word_game/features/game/domain/repositories/level_repository.dar
 import 'package:word_game/features/game/domain/usecases/load_level_usecase.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
+import 'package:word_game/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 
@@ -22,15 +33,33 @@ Future<void> configureDependencies() async {
   final prefs = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(prefs);
 
+  final content = await GameContentLoader.load();
+  getIt.registerSingleton<GameContentRegistry>(content);
+  DestinationCatalog.bind(content);
+
   final db = AppDatabase();
   getIt.registerSingleton<AppDatabase>(db);
 
-  getIt.registerLazySingleton<LevelRepository>(LevelRepositoryImpl.new);
+  getIt.registerLazySingleton(() => FirestoreUserService(FirebaseFirestore.instance));
+  getIt.registerLazySingleton(() => ProgressSyncService(db, getIt()));
+  getIt.registerLazySingleton(
+    () => AuthService(
+      FirebaseAuth.instance,
+      GoogleSignIn(),
+      prefs,
+      getIt(),
+      getIt(),
+    ),
+  );
+
+  getIt.registerLazySingleton<LevelRepository>(
+    () => LevelRepositoryImpl(content),
+  );
   getIt.registerLazySingleton<ProgressRepository>(
-    () => ProgressRepositoryImpl(db),
+    () => ProgressRepositoryImpl(db, getIt()),
   );
   getIt.registerLazySingleton<WalletRepository>(
-    () => WalletRepositoryImpl(db),
+    () => WalletRepositoryImpl(db, getIt()),
   );
 
   getIt.registerLazySingleton(() => LoadLevelUseCase(getIt()));
@@ -42,9 +71,13 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
   getIt.registerLazySingleton(() => AdService(prefs));
-  getIt.registerLazySingleton(() => AchievementService(db, getIt()));
-  getIt.registerLazySingleton(() => DailyChallengeService(prefs));
+  getIt.registerLazySingleton(
+    () => AchievementService(db, getIt(), content.dailyChallenge.levelId),
+  );
+  getIt.registerLazySingleton(() => DailyChallengeService(prefs, content));
+  getIt.registerLazySingleton(() => LeaderboardService(getIt(), getIt(), db));
   getIt.registerLazySingleton(() => AppThemeBloc(prefs)..add(const AppThemeStarted()));
+  getIt.registerLazySingleton(() => AuthCubit(getIt()));
 
   getIt.registerFactory(() => CoinCubit(getIt()));
   getIt.registerFactory(SplashCubit.new);
@@ -61,6 +94,7 @@ Future<void> configureDependencies() async {
       achievements: getIt(),
       dailyChallenge: getIt(),
       themeBloc: getIt(),
+      content: getIt(),
     ),
   );
   getIt.registerFactory(() => ShopCubit(getIt(), getIt()));

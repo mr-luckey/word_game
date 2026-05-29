@@ -1,21 +1,20 @@
 # Game assets
 
-Regenerate or refresh media with:
+## Data (JSON)
+| Path | Purpose |
+|------|---------|
+| `data/manifest.json` | Points to shared levels + explore catalog |
+| `data/shared_levels.json` | One level pack — same gameplay for all explore cards |
+| `data/explore_catalog.json` | 10 explore cards × 7 themes (names + images only) |
+| `data/daily_challenge.json` | Daily bonus level config |
+| `data/achievements.json` | Home achievement badge labels |
 
-```bash
-python tool/generate_assets.py
-```
+Regenerate explore images/names: `dart run tool/build_explore_catalog.dart`
 
-## Layout
-
-| Folder | Files |
-|--------|--------|
-| `images/splash/` | `travel_bg.jpg` — splash background |
-| `images/themes/` | `paris_bg.jpg`, `tokyo_bg.jpg`, `nyc_bg.jpg`, `rome_bg.jpg`, `sydney_bg.jpg` |
-| `animations/` | `word_logo.json`, `confetti.json`, `star_burst.json`, `word_found.json` (Lottie) |
-| `audio/` | `word_found.wav`, `level_complete.wav`, `wrong.wav`, `bg_music.wav` |
-| `data/` | Level packs + dictionary JSON |
-
-Audio is synthesized WAV (royalty-free). Images are from Unsplash (splash/themes) where download succeeds. Lottie files are from LottieFiles public packages.
-
-Replace any file with your own branded assets; paths are centralized in `lib/core/constants/asset_paths.dart`.
+## Images
+| Path | Purpose |
+|------|---------|
+| `images/themes/<theme>/` | Destination `.webp`, `grid_full.webp`, `splash.webp` |
+| `images/ui/` | UI icons (e.g. treasure chest) |
+| `animations/` | Lottie files |
+| `audio/` | Sound effects and music |

@@ -68,6 +68,20 @@ class AppDatabase extends _$AppDatabase {
         ),
       );
 
+  Future<String?> getString(String key) async {
+    final row = await (select(keyValueTable)..where((t) => t.key.equals(key)))
+        .getSingleOrNull();
+    return row?.value;
+  }
+
+  Future<void> setString(String key, String value) =>
+      into(keyValueTable).insertOnConflictUpdate(
+        KeyValueTableCompanion(
+          key: Value(key),
+          value: Value(value),
+        ),
+      );
+
   Future<void> unlockAchievement(String id) =>
       into(achievementTable).insertOnConflictUpdate(
         AchievementTableCompanion(

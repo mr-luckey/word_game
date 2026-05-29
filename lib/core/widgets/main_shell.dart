@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/widgets/journey_bottom_nav.dart';
+import 'package:word_game/core/widgets/shell_nav_metrics.dart';
 
 /// Wraps main tab routes with persistent bottom navigation.
 class MainShell extends StatelessWidget {
@@ -21,9 +22,18 @@ class MainShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
     final selectedIndex = indexForLocation(location);
+    final mediaQuery = MediaQuery.of(context);
+    final shellPadding = mediaQuery.padding.copyWith(
+      bottom: ShellNavMetrics.contentBottomPadding(context),
+    );
 
     return Scaffold(
-      body: child,
+      backgroundColor: Colors.transparent,
+      extendBody: true,
+      body: MediaQuery(
+        data: mediaQuery.copyWith(padding: shellPadding),
+        child: child,
+      ),
       bottomNavigationBar: JourneyBottomNav(
         selectedIndex: selectedIndex,
         onSelected: (i) {

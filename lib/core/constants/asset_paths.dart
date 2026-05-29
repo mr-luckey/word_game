@@ -8,6 +8,7 @@ class AssetPaths {
   static const starBurstLottie = 'assets/animations/star_burst.json';
   static const wordFoundLottie = 'assets/animations/word_found.json';
   static const treasureChestLottie = 'assets/animations/treasure_chest.json';
+  static const treasureChestImage = 'assets/images/ui/treasure_chest.png';
 
   static const wordFoundSfx = 'audio/word_found.wav';
   static const levelCompleteSfx = 'audio/level_complete.wav';

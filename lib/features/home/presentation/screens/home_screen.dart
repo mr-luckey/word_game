@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
-import 'package:word_game/features/home/presentation/widgets/home_achievements_card.dart';
 import 'package:word_game/features/home/presentation/widgets/home_background.dart';
 import 'package:word_game/features/home/presentation/widgets/home_brand_title.dart';
 import 'package:word_game/features/home/presentation/widgets/home_treasure_box.dart';
+import 'package:word_game/features/home/presentation/widgets/home_achievements_card.dart';
 import 'package:word_game/features/home/presentation/widgets/home_featured_card.dart';
 import 'package:word_game/features/home/presentation/widgets/home_layout_metrics.dart';
 import 'package:word_game/features/home/presentation/widgets/home_play_button.dart';
@@ -24,7 +23,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DestinationsCubit(getIt(), getIt())..load(),
-      child: const _HomeView(),
+      child: BlocListener<AppThemeBloc, AppThemeState>(
+        listenWhen: (prev, next) => prev.activePreset != next.activePreset,
+        listener: (context, _) {
+          final cubit = context.read<DestinationsCubit>();
+          if (!cubit.isClosed) cubit.load();
+        },
+        child: const _HomeView(),
+      ),
     );
   }
 }
@@ -65,7 +71,6 @@ class _HomeViewState extends State<_HomeView> {
       extendBodyBehindAppBar: true,
       body: HomeBackground(
         child: SafeArea(
-          bottom: false,
           child: JourneyContentWidth(
             child: BlocBuilder<DestinationsCubit, DestinationsState>(
               builder: (context, state) {
@@ -73,23 +78,20 @@ class _HomeViewState extends State<_HomeView> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final featured = DestinationCatalog.forPreset(preset)
-                    .where((d) => d.unlockOrder == 1)
-                    .first;
-                final theme = state.themes
-                    .where((t) => t.id == featured.id)
-                    .firstOrNull;
-                final imagePath = theme?.backgroundImage.isNotEmpty == true
-                    ? AssetPaths.themeImage(theme!.backgroundImage)
-                    : featured.imageAsset;
-                final completed = theme == null
-                    ? 0
-                    : theme.levels
-                        .where((level) =>
-                            state.completedLevelIds.contains(level.id))
-                        .length;
-                final total = theme?.levels.length ?? 20;
-                final destinationId = theme?.id ?? featured.id;
+                final presetDestinations = DestinationCatalog.forPreset(preset);
+                if (presetDestinations.isEmpty) {
+                  return const Center(
+                    child: Text('Destinations could not be loaded'),
+                  );
+                }
+                final featured = presetDestinations
+                        .where((d) => d.unlockOrder == 1)
+                        .firstOrNull ??
+                    presetDestinations.first;
+                final completed = state.featuredCompleted;
+                final total =
+                    state.featuredTotal > 0 ? state.featuredTotal : 20;
+                final destinationId = featured.id;
 
                 return CustomScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -100,11 +102,12 @@ class _HomeViewState extends State<_HomeView> {
                           const HomeTopBar(),
                           const HomeBrandTitle(),
                           HomeFeaturedCard(
-                            title: theme?.name ?? featured.name,
+                            key: ValueKey('featured-${preset.name}-$destinationId'),
+                            title: featured.name,
                             country: featured.country,
                             completed: completed,
                             total: total,
-                            imageAsset: imagePath,
+                            imageAsset: featured.imageAsset,
                             height: metrics.featuredHeight,
                             compact: metrics.compact,
                             dense: metrics.dense,
@@ -141,18 +144,15 @@ class _HomeViewState extends State<_HomeView> {
                                       height: metrics.sideCardHeight,
                                       compact: metrics.compact,
                                       dense: metrics.dense,
-                                      onTap: () => context.go('/profile'),
+                                      onTap: () =>
+                                          context.push('/achievements'),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: metrics.sectionGap +
-                                MediaQuery.paddingOf(context).bottom +
-                                72,
-                          ),
+                          SizedBox(height: metrics.sectionGap),
                         ],
                       ),
                     ),

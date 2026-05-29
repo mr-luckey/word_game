@@ -5,10 +5,11 @@ import 'package:word_game/features/profile/domain/entities/achievement.dart';
 
 /// Tracks stats and unlocks achievements with coin rewards.
 class AchievementService {
-  AchievementService(this._db, this._wallet);
+  AchievementService(this._db, this._wallet, this._dailyLevelId);
 
   final AppDatabase _db;
   final WalletRepository _wallet;
+  final int _dailyLevelId;
 
   static const _statWords = 'stat_words_found';
   static const _statLevels = 'stat_levels_completed';
@@ -65,7 +66,7 @@ class AchievementService {
       final streak = await _stat(_statNoHintStreak);
       if (streak >= 5) ids.add('hint_free');
     }
-    if (levelId == 9999) ids.add('daily_bonus');
+    if (levelId == _dailyLevelId) ids.add('daily_bonus');
 
     final coins = await _wallet.getCoins();
     if (coins >= 1000) ids.add('coin_collector');

@@ -1,0 +1,581 @@
+{
+  "version": "3.0",
+  "description": "Explore list per visual theme — names/images only; levels from shared_levels.json.",
+  "slotCount": 10,
+  "themes": {
+    "classic_travel": [
+      {
+        "slotId": 1,
+        "name": "Paris Adventure",
+        "country": "World Tour",
+        "backgroundImage": "classic_travel/london.webp",
+        "imageSlug": "london.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "London Heritage",
+        "country": "Adventure Zone",
+        "backgroundImage": "classic_travel/paris.webp",
+        "imageSlug": "paris.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Roman Quest",
+        "country": "Discovery Path",
+        "backgroundImage": "classic_travel/rome.webp",
+        "imageSlug": "rome.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Barcelona Escape",
+        "country": "Explorer Route",
+        "backgroundImage": "classic_travel/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Amsterdam Canals",
+        "country": "Journey Stop",
+        "backgroundImage": "classic_travel/london.webp",
+        "imageSlug": "london.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Vienna Waltz",
+        "country": "Quest Point",
+        "backgroundImage": "classic_travel/paris.webp",
+        "imageSlug": "paris.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Prague Old Town",
+        "country": "Travel Hub",
+        "backgroundImage": "classic_travel/rome.webp",
+        "imageSlug": "rome.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Athens Odyssey",
+        "country": "Voyage Bay",
+        "backgroundImage": "classic_travel/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Edinburgh Castle",
+        "country": "Wander Trail",
+        "backgroundImage": "classic_travel/london.webp",
+        "imageSlug": "london.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Dublin Green",
+        "country": "Odyssey Land",
+        "backgroundImage": "classic_travel/paris.webp",
+        "imageSlug": "paris.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "forest_quest": [
+      {
+        "slotId": 1,
+        "name": "Amazon Quest",
+        "country": "World Tour",
+        "backgroundImage": "forest_quest/alpine.webp",
+        "imageSlug": "alpine.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Redwood Trails",
+        "country": "Adventure Zone",
+        "backgroundImage": "forest_quest/amazon.webp",
+        "imageSlug": "amazon.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Alpine Forest",
+        "country": "Discovery Path",
+        "backgroundImage": "forest_quest/redwood.webp",
+        "imageSlug": "redwood.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Congo Wild",
+        "country": "Explorer Route",
+        "backgroundImage": "forest_quest/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Bamboo Grove",
+        "country": "Journey Stop",
+        "backgroundImage": "forest_quest/alpine.webp",
+        "imageSlug": "alpine.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Rainforest Path",
+        "country": "Quest Point",
+        "backgroundImage": "forest_quest/amazon.webp",
+        "imageSlug": "amazon.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Pine Ridge",
+        "country": "Travel Hub",
+        "backgroundImage": "forest_quest/redwood.webp",
+        "imageSlug": "redwood.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Jungle Falls",
+        "country": "Voyage Bay",
+        "backgroundImage": "forest_quest/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Moss Valley",
+        "country": "Wander Trail",
+        "backgroundImage": "forest_quest/alpine.webp",
+        "imageSlug": "alpine.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Canopy Walk",
+        "country": "Odyssey Land",
+        "backgroundImage": "forest_quest/amazon.webp",
+        "imageSlug": "amazon.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "neon_city": [
+      {
+        "slotId": 1,
+        "name": "Tokyo Nights",
+        "country": "World Tour",
+        "backgroundImage": "neon_city/nyc_neon.webp",
+        "imageSlug": "nyc_neon.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Seoul Pulse",
+        "country": "Adventure Zone",
+        "backgroundImage": "neon_city/seoul_pulse.webp",
+        "imageSlug": "seoul_pulse.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "New York Neon",
+        "country": "Discovery Path",
+        "backgroundImage": "neon_city/tokyo_nights.webp",
+        "imageSlug": "tokyo_nights.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Hong Kong Glow",
+        "country": "Explorer Route",
+        "backgroundImage": "neon_city/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Shanghai Spark",
+        "country": "Journey Stop",
+        "backgroundImage": "neon_city/nyc_neon.webp",
+        "imageSlug": "nyc_neon.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Singapore Pulse",
+        "country": "Quest Point",
+        "backgroundImage": "neon_city/seoul_pulse.webp",
+        "imageSlug": "seoul_pulse.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Bangkok Lights",
+        "country": "Travel Hub",
+        "backgroundImage": "neon_city/tokyo_nights.webp",
+        "imageSlug": "tokyo_nights.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Dubai Skyline",
+        "country": "Voyage Bay",
+        "backgroundImage": "neon_city/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Berlin Beat",
+        "country": "Wander Trail",
+        "backgroundImage": "neon_city/nyc_neon.webp",
+        "imageSlug": "nyc_neon.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Las Vegas Rush",
+        "country": "Odyssey Land",
+        "backgroundImage": "neon_city/seoul_pulse.webp",
+        "imageSlug": "seoul_pulse.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "sunset_safari": [
+      {
+        "slotId": 1,
+        "name": "Safari Adventure",
+        "country": "World Tour",
+        "backgroundImage": "sunset_safari/cairo.webp",
+        "imageSlug": "cairo.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Cairo Dunes",
+        "country": "Adventure Zone",
+        "backgroundImage": "sunset_safari/marrakech.webp",
+        "imageSlug": "marrakech.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Marrakech Escape",
+        "country": "Discovery Path",
+        "backgroundImage": "sunset_safari/safari.webp",
+        "imageSlug": "safari.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Serengeti Dawn",
+        "country": "Explorer Route",
+        "backgroundImage": "sunset_safari/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Kalahari Sun",
+        "country": "Journey Stop",
+        "backgroundImage": "sunset_safari/cairo.webp",
+        "imageSlug": "cairo.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Victoria Falls",
+        "country": "Quest Point",
+        "backgroundImage": "sunset_safari/marrakech.webp",
+        "imageSlug": "marrakech.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Zanzibar Coast",
+        "country": "Travel Hub",
+        "backgroundImage": "sunset_safari/safari.webp",
+        "imageSlug": "safari.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Namib Desert",
+        "country": "Voyage Bay",
+        "backgroundImage": "sunset_safari/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Okavango Delta",
+        "country": "Wander Trail",
+        "backgroundImage": "sunset_safari/cairo.webp",
+        "imageSlug": "cairo.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Kruger Trail",
+        "country": "Odyssey Land",
+        "backgroundImage": "sunset_safari/marrakech.webp",
+        "imageSlug": "marrakech.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "winter_alps": [
+      {
+        "slotId": 1,
+        "name": "Swiss Alps",
+        "country": "World Tour",
+        "backgroundImage": "winter_alps/aurora.webp",
+        "imageSlug": "aurora.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Iceland Quest",
+        "country": "Adventure Zone",
+        "backgroundImage": "winter_alps/iceland.webp",
+        "imageSlug": "iceland.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Aurora Escape",
+        "country": "Discovery Path",
+        "backgroundImage": "winter_alps/swiss.webp",
+        "imageSlug": "swiss.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Norwegian Fjord",
+        "country": "Explorer Route",
+        "backgroundImage": "winter_alps/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Lapland Snow",
+        "country": "Journey Stop",
+        "backgroundImage": "winter_alps/aurora.webp",
+        "imageSlug": "aurora.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Aspen Peak",
+        "country": "Quest Point",
+        "backgroundImage": "winter_alps/iceland.webp",
+        "imageSlug": "iceland.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Banff Frost",
+        "country": "Travel Hub",
+        "backgroundImage": "winter_alps/swiss.webp",
+        "imageSlug": "swiss.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Chamonix Ridge",
+        "country": "Voyage Bay",
+        "backgroundImage": "winter_alps/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Hokkaido White",
+        "country": "Wander Trail",
+        "backgroundImage": "winter_alps/aurora.webp",
+        "imageSlug": "aurora.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Patagonia Ice",
+        "country": "Odyssey Land",
+        "backgroundImage": "winter_alps/iceland.webp",
+        "imageSlug": "iceland.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "dark_luxury": [
+      {
+        "slotId": 1,
+        "name": "Dubai Luxury",
+        "country": "World Tour",
+        "backgroundImage": "dark_luxury/dubai.webp",
+        "imageSlug": "dubai.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Monaco Nights",
+        "country": "Adventure Zone",
+        "backgroundImage": "dark_luxury/milan.webp",
+        "imageSlug": "milan.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Milan Prestige",
+        "country": "Discovery Path",
+        "backgroundImage": "dark_luxury/monaco.webp",
+        "imageSlug": "monaco.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Paris Noir",
+        "country": "Explorer Route",
+        "backgroundImage": "dark_luxury/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Singapore Elite",
+        "country": "Journey Stop",
+        "backgroundImage": "dark_luxury/dubai.webp",
+        "imageSlug": "dubai.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Hong Kong Jade",
+        "country": "Quest Point",
+        "backgroundImage": "dark_luxury/milan.webp",
+        "imageSlug": "milan.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Las Vegas VIP",
+        "country": "Travel Hub",
+        "backgroundImage": "dark_luxury/monaco.webp",
+        "imageSlug": "monaco.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "London Royal",
+        "country": "Voyage Bay",
+        "backgroundImage": "dark_luxury/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "New York Gold",
+        "country": "Wander Trail",
+        "backgroundImage": "dark_luxury/dubai.webp",
+        "imageSlug": "dubai.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Riviera Glam",
+        "country": "Odyssey Land",
+        "backgroundImage": "dark_luxury/milan.webp",
+        "imageSlug": "milan.webp",
+        "unlockOrder": 10
+      }
+    ],
+    "ocean_escape": [
+      {
+        "slotId": 1,
+        "name": "Maldives Escape",
+        "country": "World Tour",
+        "backgroundImage": "ocean_escape/bali.webp",
+        "imageSlug": "bali.webp",
+        "unlockOrder": 1
+      },
+      {
+        "slotId": 2,
+        "name": "Santorini Coast",
+        "country": "Adventure Zone",
+        "backgroundImage": "ocean_escape/maldives.webp",
+        "imageSlug": "maldives.webp",
+        "unlockOrder": 2
+      },
+      {
+        "slotId": 3,
+        "name": "Bali Waves",
+        "country": "Discovery Path",
+        "backgroundImage": "ocean_escape/santorini.webp",
+        "imageSlug": "santorini.webp",
+        "unlockOrder": 3
+      },
+      {
+        "slotId": 4,
+        "name": "Caribbean Blue",
+        "country": "Explorer Route",
+        "backgroundImage": "ocean_escape/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 4
+      },
+      {
+        "slotId": 5,
+        "name": "Hawaii Reef",
+        "country": "Journey Stop",
+        "backgroundImage": "ocean_escape/bali.webp",
+        "imageSlug": "bali.webp",
+        "unlockOrder": 5
+      },
+      {
+        "slotId": 6,
+        "name": "Croatia Cove",
+        "country": "Quest Point",
+        "backgroundImage": "ocean_escape/maldives.webp",
+        "imageSlug": "maldives.webp",
+        "unlockOrder": 6
+      },
+      {
+        "slotId": 7,
+        "name": "Phuket Shore",
+        "country": "Travel Hub",
+        "backgroundImage": "ocean_escape/santorini.webp",
+        "imageSlug": "santorini.webp",
+        "unlockOrder": 7
+      },
+      {
+        "slotId": 8,
+        "name": "Mauritius Lagoon",
+        "country": "Voyage Bay",
+        "backgroundImage": "ocean_escape/grid_full.webp",
+        "imageSlug": "grid_full.webp",
+        "unlockOrder": 8
+      },
+      {
+        "slotId": 9,
+        "name": "Fiji Islands",
+        "country": "Wander Trail",
+        "backgroundImage": "ocean_escape/bali.webp",
+        "imageSlug": "bali.webp",
+        "unlockOrder": 9
+      },
+      {
+        "slotId": 10,
+        "name": "Amalfi Coast",
+        "country": "Odyssey Land",
+        "backgroundImage": "ocean_escape/maldives.webp",
+        "imageSlug": "maldives.webp",
+        "unlockOrder": 10
+      }
+    ]
+  }
+}

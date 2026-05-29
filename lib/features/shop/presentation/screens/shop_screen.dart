@@ -10,6 +10,7 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/shell_nav_metrics.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -43,6 +44,7 @@ class ShopScreen extends StatelessWidget {
             imageAsset: AssetPaths.themeSplash(preset),
             darken: 0.45,
             child: SafeArea(
+              bottom: false,
               child: JourneyContentWidth(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -182,7 +184,12 @@ class _ShopList extends StatelessWidget {
     }).toList();
 
     return ListView(
-      padding: const EdgeInsets.all(AppSizes.paddingMd),
+      padding: EdgeInsets.fromLTRB(
+        AppSizes.paddingMd,
+        AppSizes.paddingMd,
+        AppSizes.paddingMd,
+        ShellNavMetrics.listBottomPadding(context),
+      ),
       children: [
         Text(
           'COIN PACKS',

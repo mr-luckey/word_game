@@ -553,7 +553,8 @@ class _SplitGlassCard extends StatelessWidget {
           Expanded(
             flex: 11,
             child: Padding(
-              padding: EdgeInsets.only(left: dense ? 2 : 4, right: dense ? 4 : 6),
+              padding:
+                  EdgeInsets.only(left: dense ? 2 : 4, right: dense ? 4 : 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

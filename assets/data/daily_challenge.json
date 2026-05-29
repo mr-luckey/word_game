@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "level": {
+    "id": 9999,
+    "name": "Daily Bonus",
+    "difficultyIndex": 1,
+    "gridSize": 10,
+    "timeLimit": 300,
+    "hintsAllowed": 2,
+    "backgroundImage": "{themeFolder}/grid_full.webp"
+  },
+  "coinSchedule": [50, 100, 150, 250, 500, 750, 1000],
+  "wordPool": [
+    "OCEAN",
+    "BEACH",
+    "CORAL",
+    "WAVE",
+    "SHELL",
+    "FISH",
+    "SAND",
+    "TIDE",
+    "REEF",
+    "CRAB",
+    "SAIL",
+    "PORT",
+    "ISLAND",
+    "PALM",
+    "SUN"
+  ],
+  "wordsPerDay": 6
+}

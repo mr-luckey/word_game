@@ -3,7 +3,9 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_layout.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_active_marker.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_node.dart';
+import 'package:word_game/features/level_select/presentation/widgets/level_map_difficulty_banner.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_path_painter.dart';
+import 'package:word_game/features/level_select/presentation/widgets/level_map_sections.dart';
 
 class LevelMapEntry {
   const LevelMapEntry({
@@ -30,11 +32,13 @@ class LevelMapView extends StatefulWidget {
     required this.levels,
     required this.activeIndex,
     required this.progressThroughIndex,
+    this.sections = const [],
   });
 
   final List<LevelMapEntry> levels;
   final int activeIndex;
   final int progressThroughIndex;
+  final List<LevelMapSection> sections;
 
   @override
   State<LevelMapView> createState() => _LevelMapViewState();
@@ -93,9 +97,14 @@ class _LevelMapViewState extends State<LevelMapView> {
   }
 
   LevelMapLayout _layoutForWidth(double width) {
-    final spacing = width < 340 ? 96.0 : 108.0;
+    final count = widget.levels.length;
+    final spacing = count > 30
+        ? (width < 340 ? 82.0 : 90.0)
+        : count > 20
+            ? (width < 340 ? 90.0 : 98.0)
+            : (width < 340 ? 96.0 : 108.0);
     return LevelMapLayout(
-      count: widget.levels.length,
+      count: count,
       mapWidth: width,
       nodeSpacing: spacing,
     );
@@ -167,6 +176,25 @@ class _LevelMapViewState extends State<LevelMapView> {
                               context.themePreset.useNeonGlow ? 4 : 5,
                         ),
                       ),
+                      ...widget.sections.map((section) {
+                        final i = section.nodeIndex;
+                        if (i < 0 || i >= centers.length) {
+                          return const SizedBox.shrink();
+                        }
+                        final c = centers[i];
+                        final bannerW = mapWidth * 0.52;
+                        return Positioned(
+                          left: ((mapWidth - bannerW) / 2).clamp(8.0, mapWidth - bannerW - 8),
+                          top: (c.dy - nodeSize - 52).clamp(4.0, mapHeight - 40),
+                          width: bannerW,
+                          child: Center(
+                            child: LevelMapDifficultyBanner(
+                              label: section.label,
+                              color: sectionColor(colors, section.difficultyIndex),
+                            ),
+                          ),
+                        );
+                      }),
                       ...List.generate(widget.levels.length, (i) {
                         final entry = widget.levels[i];
                         final c = centers[i];

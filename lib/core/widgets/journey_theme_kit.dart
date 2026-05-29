@@ -147,14 +147,25 @@ class CompassBadge extends StatelessWidget {
     this.size = 46,
     this.icon,
     this.dimmed = false,
+    this.simple = false,
   });
 
   final double size;
   final IconData? icon;
   final bool dimmed;
+  /// When true, shows a clean icon circle without compass crosshairs.
+  final bool simple;
 
   @override
   Widget build(BuildContext context) {
+    if (simple) {
+      return JourneyIconBadge(
+        size: size,
+        icon: icon ?? Icons.explore_rounded,
+        dimmed: dimmed,
+      );
+    }
+
     final colors = context.appColors;
     final spec = context.themePreset.homeSpec;
     final color =
@@ -195,6 +206,55 @@ class CompassBadge extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Clean circular icon badge for headers and cards.
+class JourneyIconBadge extends StatelessWidget {
+  const JourneyIconBadge({
+    super.key,
+    required this.icon,
+    this.size = 46,
+    this.dimmed = false,
+    this.accent,
+  });
+
+  final IconData icon;
+  final double size;
+  final bool dimmed;
+  final Color? accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final spec = context.themePreset.homeSpec;
+    final color = dimmed
+        ? colors.onScenic.withValues(alpha: 0.55)
+        : (accent ?? spec.playButtonGlow);
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            color.withValues(alpha: 0.22),
+            colors.scrim.withValues(alpha: 0.35),
+          ],
+        ),
+        border: Border.all(color: color.withValues(alpha: 0.85), width: 1.4),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.28),
+            blurRadius: size * 0.2,
+          ),
+        ],
+      ),
+      child: Icon(icon, color: color, size: size * 0.48),
     );
   }
 }

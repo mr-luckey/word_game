@@ -1,10 +1,12 @@
+import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
 class ProgressRepositoryImpl implements ProgressRepository {
-  ProgressRepositoryImpl(this._db);
+  ProgressRepositoryImpl(this._db, this._sync);
 
   final AppDatabase _db;
+  final ProgressSyncService _sync;
 
   @override
   Future<int?> getStarsForLevel(int levelId) async {
@@ -26,12 +28,18 @@ class ProgressRepositoryImpl implements ProgressRepository {
     required int levelId,
     required int stars,
     required int timeSeconds,
-  }) =>
-      _db.saveProgress(
-        levelId: levelId,
-        stars: stars,
-        timeSeconds: timeSeconds,
-      );
+  }) async {
+    await _db.saveProgress(
+      levelId: levelId,
+      stars: stars,
+      timeSeconds: timeSeconds,
+    );
+    await _sync.syncLevelProgress(
+      levelId: levelId,
+      stars: stars,
+      timeSeconds: timeSeconds,
+    );
+  }
 
   @override
   Future<Map<int, int>> getAllStars() async {
@@ -41,9 +49,10 @@ class ProgressRepositoryImpl implements ProgressRepository {
 }
 
 class WalletRepositoryImpl implements WalletRepository {
-  WalletRepositoryImpl(this._db);
+  WalletRepositoryImpl(this._db, this._sync);
 
   final AppDatabase _db;
+  final ProgressSyncService _sync;
 
   @override
   Future<int> getCoins() => _db.getCoins();
@@ -53,6 +62,7 @@ class WalletRepositoryImpl implements WalletRepository {
     final current = await getCoins();
     if (current < amount) return false;
     await _db.setCoins(current - amount);
+    await _sync.syncCoins();
     return true;
   }
 
@@ -60,5 +70,6 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<void> addCoins(int amount) async {
     final current = await getCoins();
     await _db.setCoins(current + amount);
+    await _sync.syncCoins();
   }
 }

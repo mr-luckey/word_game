@@ -11,6 +11,7 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_screen_header.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/shell_nav_metrics.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
 import 'package:word_game/injection.dart';
 
@@ -19,16 +20,39 @@ class DestinationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final preset = context.themePreset;
     return BlocProvider(
       create: (_) => DestinationsCubit(getIt(), getIt())..load(),
-      child: Scaffold(
+      child: BlocListener<AppThemeBloc, AppThemeState>(
+        listenWhen: (prev, next) => prev.activePreset != next.activePreset,
+        listener: (context, _) {
+          final cubit = context.read<DestinationsCubit>();
+          if (!cubit.isClosed) cubit.load();
+        },
+        child: BlocBuilder<AppThemeBloc, AppThemeState>(
+          buildWhen: (prev, next) => prev.activePreset != next.activePreset,
+          builder: (context, themeState) =>
+              _DestinationsBody(preset: themeState.activePreset),
+        ),
+      ),
+    );
+  }
+}
+
+class _DestinationsBody extends StatelessWidget {
+  const _DestinationsBody({required this.preset});
+
+  final AppThemePreset preset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         extendBodyBehindAppBar: true,
         body: ScenicBackground(
           imageAsset: AssetPaths.themeGrid(preset),
           darken: 0.55,
           blurSigma: 1.5,
           child: SafeArea(
+            bottom: false,
             child: JourneyContentWidth(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,7 +65,7 @@ class DestinationsScreen extends StatelessWidget {
                       radius: 20,
                       child: Row(
                         children: [
-                          const CompassBadge(size: 44),
+                          const CompassBadge(size: 44, simple: true, icon: Icons.map_rounded),
                           const SizedBox(width: 14),
                           Expanded(
                             child: JourneySectionTitle(
@@ -65,42 +89,51 @@ class DestinationsScreen extends StatelessWidget {
                           );
                         }
 
-                        final playableIds =
-                            state.themes.map((t) => t.id).toSet();
-                        final destinations =
-                            DestinationCatalog.forPreset(preset);
+                        if (state.themes.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No explore locations in JSON',
+                              style: AppTextStyles.bodyMuted(context),
+                            ),
+                          );
+                        }
 
                         return ListView.builder(
-                          padding: const EdgeInsets.all(AppSizes.paddingMd),
-                          itemCount: destinations.length,
+                          padding: EdgeInsets.fromLTRB(
+                            AppSizes.paddingMd,
+                            AppSizes.paddingMd,
+                            AppSizes.paddingMd,
+                            ShellNavMetrics.listBottomPadding(context),
+                          ),
+                          itemCount: state.themes.length,
                           itemBuilder: (context, index) {
-                            final dest = destinations[index];
-                            final unlocked = playableIds.contains(dest.id);
-                            final levelCount = state.themes
-                                .where((t) => t.id == dest.id)
-                                .map((t) => t.levels.length)
-                                .firstOrNull;
+                            final theme = state.themes[index];
+                            final meta =
+                                DestinationCatalog.byId(theme.id, preset);
+                            final completed = theme.levels
+                                .where((l) =>
+                                    state.completedLevelIds.contains(l.id))
+                                .length;
+                            final total = theme.levels.length;
+                            final imagePath = theme.backgroundImage.isNotEmpty
+                                ? AssetPaths.themeImage(theme.backgroundImage)
+                                : meta?.imageAsset ??
+                                    AssetPaths.themeSplash(preset);
 
                             return Padding(
                               padding: const EdgeInsets.only(
                                 bottom: AppSizes.paddingMd,
                               ),
                               child: _ExploreDestinationCard(
-                                name: dest.name,
-                                country: dest.country,
-                                imageAsset: dest.imageAsset,
-                                levelLabel: unlocked
-                                    ? '0/${levelCount ?? 20} levels'
-                                    : 'Locked',
-                                locked: !unlocked,
-                                onTap: unlocked
-                                    ? () {
-                                        getIt<AppThemeBloc>()
-                                            .setDestinationContext(dest.id);
-                                        context
-                                            .go('/levels?themeId=${dest.id}');
-                                      }
-                                    : null,
+                                name: theme.name,
+                                country: meta?.country ?? '',
+                                imageAsset: imagePath,
+                                levelLabel: '$completed/$total levels',
+                                onTap: () {
+                                  getIt<AppThemeBloc>()
+                                      .setDestinationContext(theme.id);
+                                  context.go('/levels?themeId=${theme.id}');
+                                },
                               )
                                   .animate(delay: (index * 80).ms)
                                   .fadeIn(duration: 400.ms)
@@ -116,7 +149,6 @@ class DestinationsScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }
@@ -127,16 +159,14 @@ class _ExploreDestinationCard extends StatelessWidget {
     required this.country,
     required this.imageAsset,
     required this.levelLabel,
-    required this.locked,
-    this.onTap,
+    required this.onTap,
   });
 
   final String name;
   final String country;
   final String imageAsset;
   final String levelLabel;
-  final bool locked;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +183,13 @@ class _ExploreDestinationCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(preset.cardRadius),
             border: Border.all(
-              color: colors.glassBorder.withValues(alpha: locked ? 0.25 : 0.55),
+              color: colors.glassBorder.withValues(alpha: 0.55),
               width: 1.4,
             ),
             boxShadow: [
               BoxShadow(
                 color: context.themePreset.homeSpec.playButtonGlow
-                    .withValues(alpha: locked ? 0.08 : 0.22),
+                    .withValues(alpha: 0.22),
                 blurRadius: 14,
                 offset: const Offset(0, 6),
               ),
@@ -173,8 +203,6 @@ class _ExploreDestinationCard extends StatelessWidget {
                 Image.asset(
                   imageAsset,
                   fit: BoxFit.cover,
-                  color: locked ? Colors.black54 : null,
-                  colorBlendMode: locked ? BlendMode.darken : null,
                   errorBuilder: (_, __, ___) => DecoratedBox(
                     decoration: BoxDecoration(gradient: colors.primaryGradient),
                   ),
@@ -204,7 +232,7 @@ class _ExploreDestinationCard extends StatelessWidget {
                               name.toUpperCase(),
                               style: AppTextStyles.levelName(context).copyWith(
                                 fontSize: 16,
-                                color: locked ? colors.locked : colors.onScenic,
+                                color: colors.onScenic,
                               ),
                             ),
                             Text(
@@ -239,11 +267,8 @@ class _ExploreDestinationCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (locked)
-                        Icon(Icons.lock_rounded, color: colors.gold, size: 28)
-                      else
-                        Icon(Icons.chevron_right_rounded,
-                            color: colors.gold, size: 28),
+                      Icon(Icons.chevron_right_rounded,
+                          color: colors.gold, size: 28),
                     ],
                   ),
                 ),
@@ -253,13 +278,5 @@ class _ExploreDestinationCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-extension _FirstOrNull<T> on Iterable<T> {
-  T? get firstOrNull {
-    final it = iterator;
-    if (it.moveNext()) return it.current;
-    return null;
   }
 }

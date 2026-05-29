@@ -7,6 +7,8 @@ import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/screens/game_screen.dart';
 import 'package:word_game/features/home/presentation/screens/destinations_screen.dart';
+import 'package:word_game/features/achievements/presentation/screens/achievements_screen.dart';
+import 'package:word_game/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:word_game/features/daily_rewards/presentation/screens/daily_rewards_screen.dart';
 import 'package:word_game/features/home/presentation/screens/home_screen.dart';
 import 'package:word_game/features/level_select/presentation/screens/level_select_screen.dart';
@@ -26,6 +28,7 @@ class WordSearchApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => getIt<CoinCubit>()),
         BlocProvider.value(value: getIt<AppThemeBloc>()),
+        BlocProvider.value(value: getIt<AuthCubit>()),
       ],
       child: BlocBuilder<AppThemeBloc, AppThemeState>(
         builder: (context, themeState) => MaterialApp.router(
@@ -148,6 +151,14 @@ final _router = GoRouter(
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: '/achievements',
+      pageBuilder: (context, state) => _slideFromRightPage(
+        state,
+        child: const AchievementsScreen(),
+        keyName: 'achievements-${state.uri}',
+      ),
     ),
     GoRoute(
       path: '/daily-rewards',

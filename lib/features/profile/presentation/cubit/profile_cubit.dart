@@ -32,10 +32,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> load() async {
     final progress = await _db.getAllProgress();
     final themes = await _levels.loadThemes();
-    var total = 0;
-    for (final t in themes) {
-      total += t.levels.length;
-    }
+    final total = themes.isEmpty ? 0 : themes.first.levels.length;
     final unlockedRows = await _db.getAchievements();
     final unlockedIds = unlockedRows.where((r) => r.unlocked).map((r) => r.id).toSet();
     final achievements = kAchievements

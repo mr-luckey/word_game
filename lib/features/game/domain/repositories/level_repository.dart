@@ -1,7 +1,11 @@
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 
 abstract class LevelRepository {
   Future<List<ThemeCategoryEntity>> loadThemes();
+
+  /// Explore locations for a visual theme (same shared levels inside).
+  Future<List<ThemeCategoryEntity>> loadThemesForPreset(AppThemePreset preset);
   Future<LevelEntity?> getLevelById(int levelId);
   Future<LevelEntity?> getNextLevel(int currentLevelId);
 }

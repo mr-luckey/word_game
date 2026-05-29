@@ -7,9 +7,9 @@ import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/profile/domain/entities/achievement.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
-import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/core/utils/game_cell_utils.dart';
 import 'package:word_game/core/utils/grid_generator.dart';
@@ -35,6 +35,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required AchievementService achievements,
     required DailyChallengeService dailyChallenge,
     required AppThemeBloc themeBloc,
+    required GameContentRegistry content,
   })  : _loadLevel = loadLevel,
         _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
@@ -46,6 +47,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _achievements = achievements,
         _dailyChallenge = dailyChallenge,
         _themeBloc = themeBloc,
+        _content = content,
         super(const GameInitial()) {
     on<LoadLevel>(_onLoadLevel);
     on<LoadNextLevel>(_onLoadNextLevel);
@@ -73,6 +75,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final AchievementService _achievements;
   final DailyChallengeService _dailyChallenge;
   final AppThemeBloc _themeBloc;
+  final GameContentRegistry _content;
 
   Timer? _timer;
 
@@ -92,19 +95,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(const GameLoading());
     _timer?.cancel();
     LevelEntity? level = await _loadLevel(event.levelId);
-    if (level == null && event.levelId == 9999) {
-      final preset = _themeBloc.state.activePreset;
-      level = LevelEntity(
-        id: 9999,
-        themeId: 0,
-        themeName: 'Daily Bonus',
-        backgroundImage: '${preset.folder}/grid_full.webp',
-        difficultyIndex: 1,
-        gridSize: GameConfig.gridMedium,
-        timeLimit: 300,
-        hintsAllowed: 2,
+    final dailyId = _content.dailyChallenge.levelId;
+    if (level == null && event.levelId == dailyId) {
+      level = _content.buildDailyLevel(
+        preset: _themeBloc.state.activePreset,
         coinsReward: _dailyChallenge.todayRewardCoins,
-        words: DailyChallengeService.getDailyWords(),
+        words: _dailyChallenge.pickDailyWords(),
       );
     }
     if (level == null) {

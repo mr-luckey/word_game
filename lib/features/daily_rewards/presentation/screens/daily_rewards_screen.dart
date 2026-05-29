@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/treasure_chest_image.dart';
 import 'package:word_game/features/daily_rewards/presentation/cubit/daily_rewards_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -33,7 +34,8 @@ class _DailyRewardsView extends StatelessWidget {
     final state = cubit.state;
     if (!state.canClaim) return;
 
-    final won = await context.push<bool>('/game?levelId=9999');
+    final dailyId = getIt<GameContentRegistry>().dailyChallenge.levelId;
+    final won = await context.push<bool>('/game?levelId=$dailyId');
     if (won == true && context.mounted) {
       cubit.refresh();
       context.read<CoinCubit>().refresh();
@@ -70,17 +72,11 @@ class _DailyRewardsView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Icon(
-                      Icons.card_giftcard_rounded,
-                      size: 72,
-                      color: spec.dailyBonusAccent,
-                    )
-                        .animate(onPlay: (c) => c.repeat(reverse: true))
-                        .scale(
-                          begin: const Offset(1, 1),
-                          end: const Offset(1.06, 1.06),
-                          duration: 1200.ms,
-                        ),
+                    TreasureChestImage(
+                      size: 88,
+                      animate: state.canClaim,
+                      glowColor: spec.dailyBonusAccent,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       'Come back every day',
@@ -323,11 +319,14 @@ class _DaySevenCard extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          Icon(
-            collected ? Icons.check_circle_rounded : Icons.inventory_2_rounded,
-            size: 48,
-            color: collected ? colors.success : spec.dailyBonusAccent,
-          ),
+          collected
+              ? Icon(Icons.check_circle_rounded,
+                  size: 48, color: colors.success)
+              : TreasureChestImage(
+                  size: 56,
+                  animate: true,
+                  glowColor: spec.dailyBonusAccent,
+                ),
         ],
       ),
     );

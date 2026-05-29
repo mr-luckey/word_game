@@ -10,10 +10,12 @@ import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/shell_nav_metrics.dart';
 import 'package:word_game/features/level_select/presentation/cubit/banner_ad_cubit.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/level_select/presentation/cubit/level_select_cubit.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_view.dart';
+import 'package:word_game/features/level_select/presentation/widgets/level_map_sections.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_select_header.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_select_stats_panel.dart';
 import 'package:word_game/injection.dart';
@@ -143,24 +145,26 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
         final colors = context.appColors;
         final preset = context.themePreset;
         final themeId = context.read<LevelSelectCubit>().themeId;
-        final dest = DestinationCatalog.byId(themeId);
+        final dest = DestinationCatalog.byId(themeId, context.themePreset);
         final bgAsset = state.backgroundImage.isNotEmpty
             ? AssetPaths.themeImage(state.backgroundImage)
             : dest?.imageAsset ?? AssetPaths.themeSplash(preset);
-        final filtered = state.filteredLevels;
-        final displayLevels = filtered.take(20).toList();
+        final mapLevels = sortedMapLevels(state.levels);
+        final statsLevels = state.filteredLevels;
+        final mapSections = buildLevelMapSections(mapLevels);
         final activeId =
-            _activeLevelId(displayLevels, state.unlocked, state.stars);
-        final hasLevels = displayLevels.isNotEmpty;
+            _activeLevelId(mapLevels, state.unlocked, state.stars);
+        final hasMapLevels = mapLevels.isNotEmpty;
         final activeIndex =
-            hasLevels ? _activeIndex(displayLevels, activeId) : 0;
-        final lastCompleted = hasLevels
-            ? _progressThroughIndex(displayLevels, state.stars, activeIndex)
+            hasMapLevels ? _activeIndex(mapLevels, activeId) : 0;
+        final lastCompleted = hasMapLevels
+            ? _progressThroughIndex(mapLevels, state.stars, activeIndex)
             : 0;
-        final pathThrough = hasLevels
+        final pathThrough = hasMapLevels
             ? (lastCompleted > activeIndex ? lastCompleted : activeIndex)
             : 0;
-        final levelLabel = 'Level ${_activeLevelNumber(displayLevels, activeId, state.unlocked)}';
+        final levelLabel =
+            'Level ${_activeLevelNumber(mapLevels, activeId, state.unlocked)} of ${mapLevels.length}';
 
         return Scaffold(
           extendBodyBehindAppBar: true,
@@ -170,7 +174,11 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
             blurSigma: 0,
             child: SafeArea(
               bottom: false,
-              child: Column(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: ShellNavMetrics.contentBottomPadding(context),
+                ),
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   LevelSelectHeader(
@@ -188,48 +196,50 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                             ),
                           )
                         : _tab == LevelSelectTab.map
-                            ? !hasLevels
+                            ? !hasMapLevels
                                 ? Center(
                                     child: Text(
-                                      'No levels for this difficulty',
+                                      'No levels in this destination',
                                       style: AppTextStyles.bodyMuted(context),
                                     ),
                                   )
                                 : Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  8,
-                                  0,
-                                  8,
-                                  4,
-                                ),
-                                child: LevelMapView(
-                                  activeIndex: activeIndex,
-                                  progressThroughIndex: pathThrough,
-                                  levels: [
-                                    for (var i = 0; i < displayLevels.length; i++)
-                                      LevelMapEntry(
-                                        levelNumber: i + 1,
-                                        stars: state.stars[displayLevels[i].id] ?? 0,
-                                        locked: !state.unlocked
-                                            .contains(displayLevels[i].id),
-                                        isActive: !state.unlocked
-                                                .contains(displayLevels[i].id)
-                                            ? false
-                                            : displayLevels[i].id == activeId,
-                                        isCompleted: state.unlocked
-                                                .contains(displayLevels[i].id) &&
-                                            (state.stars[displayLevels[i].id] ?? 0) > 0,
-                                        onTap: state.unlocked
-                                                .contains(displayLevels[i].id)
-                                            ? () => _openLevel(
-                                                  context,
-                                                  displayLevels[i].id,
-                                                )
-                                            : null,
-                                      ),
-                                  ],
-                                ),
-                              )
+                                    padding: const EdgeInsets.fromLTRB(
+                                      8,
+                                      0,
+                                      8,
+                                      4,
+                                    ),
+                                    child: LevelMapView(
+                                      activeIndex: activeIndex,
+                                      progressThroughIndex: pathThrough,
+                                      sections: mapSections,
+                                      levels: [
+                                        for (var i = 0; i < mapLevels.length; i++)
+                                          LevelMapEntry(
+                                            levelNumber: i + 1,
+                                            stars: state.stars[mapLevels[i].id] ?? 0,
+                                            locked: !state.unlocked
+                                                .contains(mapLevels[i].id),
+                                            isActive: state.unlocked
+                                                    .contains(mapLevels[i].id) &&
+                                                mapLevels[i].id == activeId,
+                                            isCompleted: state.unlocked
+                                                    .contains(mapLevels[i].id) &&
+                                                (state.stars[mapLevels[i].id] ??
+                                                        0) >
+                                                    0,
+                                            onTap: state.unlocked
+                                                    .contains(mapLevels[i].id)
+                                                ? () => _openLevel(
+                                                      context,
+                                                      mapLevels[i].id,
+                                                    )
+                                                : null,
+                                          ),
+                                      ],
+                                    ),
+                                  )
                             : LevelSelectStatsPanel(
                                 difficultyIndex: state.difficultyIndex,
                                 onDifficultyChanged: context
@@ -237,13 +247,13 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                                     .selectDifficulty,
                                 completedCount: _completedCount(
                                   state.stars,
-                                  displayLevels,
+                                  statsLevels,
                                   state.unlocked,
                                 ),
-                                totalCount: displayLevels.length,
+                                totalCount: statsLevels.length,
                                 totalStars: _totalStars(
                                   state.stars,
-                                  displayLevels,
+                                  statsLevels,
                                 ),
                               ),
                   ),
@@ -300,6 +310,7 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                     },
                   ),
                 ],
+                ),
               ),
             ),
           ),
