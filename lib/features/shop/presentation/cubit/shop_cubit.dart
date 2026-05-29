@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
 abstract class ShopState extends Equatable {
@@ -54,12 +55,13 @@ class ShopPurchaseError extends ShopState {
 }
 
 class ShopCubit extends Cubit<ShopState> {
-  ShopCubit(this._wallet, this._adService) : super(const ShopInitial()) {
+  ShopCubit(this._wallet, this._adService, this._sync) : super(const ShopInitial()) {
     _init();
   }
 
   final WalletRepository _wallet;
   final AdService _adService;
+  final ProgressSyncService _sync;
   final InAppPurchase _iap = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _sub;
   List<ProductDetails> _products = [];
@@ -143,12 +145,13 @@ class ShopCubit extends Cubit<ShopState> {
   Future<void> _deliver(String productId) async {
     if (productId == ShopProducts.removeAds) {
       await _adService.setAdsRemoved(true);
-      return;
+    } else {
+      final coins = ShopProducts.coinRewards[productId];
+      if (coins != null && coins > 0) {
+        await _wallet.addCoins(coins);
+      }
     }
-    final coins = ShopProducts.coinRewards[productId];
-    if (coins != null && coins > 0) {
-      await _wallet.addCoins(coins);
-    }
+    await _sync.recordPurchaseAndSync(productId);
   }
 
   @override

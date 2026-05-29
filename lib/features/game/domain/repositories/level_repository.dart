@@ -19,6 +19,9 @@ abstract class ProgressRepository {
     required int timeSeconds,
   });
   Future<Map<int, int>> getAllStars();
+
+  /// Stars for one explore slot; keys are shared level ids (101, 102, …).
+  Future<Map<int, int>> getStarsForSlot(int slotId);
 }
 
 abstract class WalletRepository {

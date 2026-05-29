@@ -41,7 +41,7 @@ Future<void> configureDependencies() async {
   getIt.registerSingleton<AppDatabase>(db);
 
   getIt.registerLazySingleton(() => FirestoreUserService(FirebaseFirestore.instance));
-  getIt.registerLazySingleton(() => ProgressSyncService(db, getIt()));
+  getIt.registerLazySingleton(() => ProgressSyncService(db, getIt(), prefs));
   getIt.registerLazySingleton(
     () => AuthService(
       FirebaseAuth.instance,
@@ -97,7 +97,7 @@ Future<void> configureDependencies() async {
       content: getIt(),
     ),
   );
-  getIt.registerFactory(() => ShopCubit(getIt(), getIt()));
+  getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt()));
 
   final row = await (db.select(db.keyValueTable)
         ..where((t) => t.key.equals('coins')))

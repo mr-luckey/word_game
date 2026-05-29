@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:word_game/core/services/user_cloud_data.dart';
 
 /// Firestore paths: users/{uid} and users/{uid}/levelProgress/{levelId}
 class FirestoreUserService {
@@ -20,12 +21,14 @@ class FirestoreUserService {
     required String displayName,
     required String email,
     required int coins,
+    UserCloudData? extras,
   }) async {
     await _userDoc(uid).set(
       {
         'displayName': displayName,
         'email': email,
         'coins': coins,
+        if (extras != null) ...extras.toFirestoreFields(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
       SetOptions(merge: true),
@@ -52,6 +55,19 @@ class FirestoreUserService {
     );
   }
 
+  Future<void> syncUserMetadata({
+    required String uid,
+    required UserCloudData extras,
+  }) async {
+    await _userDoc(uid).set(
+      {
+        ...extras.toFirestoreFields(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
+  }
+
   Future<int?> fetchCoins(String uid) async {
     final snap = await _userDoc(uid).get();
     if (!snap.exists) return null;
@@ -61,6 +77,11 @@ class FirestoreUserService {
   Future<String?> fetchDisplayName(String uid) async {
     final snap = await _userDoc(uid).get();
     return snap.data()?['displayName'] as String?;
+  }
+
+  Future<UserCloudData> fetchUserCloudData(String uid) async {
+    final snap = await _userDoc(uid).get();
+    return UserCloudData.fromFirestore(snap.data());
   }
 
   Future<Map<int, LevelProgressRecord>> fetchLevelProgress(String uid) async {
@@ -96,7 +117,8 @@ class FirestoreUserService {
   }
 
   Future<List<LeaderboardRecord>> fetchLeaderboard({int limit = 50}) async {
-    final snap = await _users.orderBy('coins', descending: true).limit(limit).get();
+    final snap =
+        await _users.orderBy('coins', descending: true).limit(limit).get();
     return snap.docs.map((doc) {
       final data = doc.data();
       return LeaderboardRecord(

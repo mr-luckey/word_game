@@ -38,13 +38,33 @@ class DestinationsScreen extends StatelessWidget {
   }
 }
 
-class _DestinationsBody extends StatelessWidget {
+class _DestinationsBody extends StatefulWidget {
   const _DestinationsBody({required this.preset});
 
   final AppThemePreset preset;
 
   @override
+  State<_DestinationsBody> createState() => _DestinationsBodyState();
+}
+
+class _DestinationsBodyState extends State<_DestinationsBody> {
+  bool _isFirstActivate = true;
+
+  @override
+  void activate() {
+    super.activate();
+    if (_isFirstActivate) {
+      _isFirstActivate = false;
+      return;
+    }
+    if (!mounted) return;
+    final cubit = context.read<DestinationsCubit>();
+    if (!cubit.isClosed) cubit.refresh();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final preset = widget.preset;
     return Scaffold(
         extendBodyBehindAppBar: true,
         body: ScenicBackground(
@@ -110,9 +130,10 @@ class _DestinationsBody extends StatelessWidget {
                             final theme = state.themes[index];
                             final meta =
                                 DestinationCatalog.byId(theme.id, preset);
+                            final slotStars =
+                                state.starsBySlot[theme.id] ?? const {};
                             final completed = theme.levels
-                                .where((l) =>
-                                    state.completedLevelIds.contains(l.id))
+                                .where((l) => slotStars.containsKey(l.id))
                                 .length;
                             final total = theme.levels.length;
                             final imagePath = theme.backgroundImage.isNotEmpty

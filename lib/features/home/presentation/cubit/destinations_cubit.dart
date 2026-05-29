@@ -14,7 +14,7 @@ class DestinationsState extends Equatable {
     this.featuredTotal = 0,
     this.totalCompleted = 0,
     this.totalLevels = 0,
-    this.completedLevelIds = const {},
+    this.starsBySlot = const {},
   });
 
   final List<ThemeCategoryEntity> themes;
@@ -23,7 +23,10 @@ class DestinationsState extends Equatable {
   final int featuredTotal;
   final int totalCompleted;
   final int totalLevels;
-  final Set<int> completedLevelIds;
+  /// Per explore slot: shared level id → stars.
+  final Map<int, Map<int, int>> starsBySlot;
+
+  int completedCountForSlot(int slotId) => starsBySlot[slotId]?.length ?? 0;
 
   @override
   List<Object?> get props => [
@@ -33,7 +36,7 @@ class DestinationsState extends Equatable {
         featuredTotal,
         totalCompleted,
         totalLevels,
-        completedLevelIds,
+        starsBySlot,
       ];
 }
 
@@ -54,23 +57,19 @@ class DestinationsCubit extends Cubit<DestinationsState> {
     final themes = await _levels.loadThemesForPreset(preset);
     if (isClosed) return;
 
-    final stars = await _progress.getAllStars();
-    if (isClosed) return;
-
     final sharedTotal =
         themes.isEmpty ? 0 : themes.first.levels.length;
-    var totalCompleted = 0;
-    for (final level in themes.firstOrNull?.levels ?? const <LevelJson>[]) {
-      if (stars.containsKey(level.id)) totalCompleted++;
+
+    final starsBySlot = <int, Map<int, int>>{};
+    for (final theme in themes) {
+      starsBySlot[theme.id] = await _progress.getStarsForSlot(theme.id);
     }
 
     var featuredCompleted = 0;
     var featuredTotal = sharedTotal;
     if (themes.isNotEmpty) {
       featuredTotal = themes.first.levels.length;
-      featuredCompleted = themes.first.levels
-          .where((l) => stars.containsKey(l.id))
-          .length;
+      featuredCompleted = starsBySlot[themes.first.id]?.length ?? 0;
     }
 
     if (isClosed) return;
@@ -81,14 +80,10 @@ class DestinationsCubit extends Cubit<DestinationsState> {
         loading: false,
         featuredCompleted: featuredCompleted,
         featuredTotal: featuredTotal,
-        totalCompleted: totalCompleted,
+        totalCompleted: featuredCompleted,
         totalLevels: sharedTotal,
-        completedLevelIds: stars.keys.toSet(),
+        starsBySlot: starsBySlot,
       ),
     );
   }
-}
-
-extension _FirstTheme on List<ThemeCategoryEntity> {
-  ThemeCategoryEntity? get firstOrNull => isEmpty ? null : first;
 }

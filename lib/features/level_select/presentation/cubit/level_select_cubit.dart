@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
+import 'package:word_game/core/utils/level_progress_id.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
 class LevelSelectState extends Equatable {
@@ -51,15 +52,22 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
       (t) => t.id == themeId,
       orElse: () => themes.first,
     );
-    final stars = await _progress.getAllStars();
+    final stars = await _progress.getStarsForSlot(themeId);
     if (isClosed) return;
 
-    final ordered = theme.levels.map((l) => l.id).toList()..sort();
+    final orderedShared = theme.levels.map((l) => l.id).toList()..sort();
+    final orderedStorage = orderedShared
+        .map(
+          (id) => LevelProgressId.encode(slotId: themeId, sharedLevelId: id),
+        )
+        .toList();
     final unlocked = <int>{};
-    for (final id in ordered) {
+    for (var i = 0; i < orderedShared.length; i++) {
       if (isClosed) return;
-      if (await _progress.isLevelUnlocked(id, ordered)) {
-        unlocked.add(id);
+      final storageId = orderedStorage[i];
+      final sharedId = orderedShared[i];
+      if (await _progress.isLevelUnlocked(storageId, orderedStorage)) {
+        unlocked.add(sharedId);
       }
     }
     if (isClosed) return;

@@ -50,7 +50,6 @@ class _GameView extends StatelessWidget {
           listenWhen: (p, c) => c is GameCompleted && p is! GameCompleted,
           listener: (context, state) {
             if (state is! GameCompleted) return;
-            getIt<AdService>().onLevelComplete();
             context.read<CoinCubit>().refresh();
             final bloc = context.read<GameBloc>();
             final isDaily =
@@ -88,7 +87,9 @@ class _GameView extends StatelessWidget {
                   bloc.add(const LoadNextLevel());
                 },
               ),
-            );
+            ).then((_) {
+              getIt<AdService>().onLevelComplete();
+            });
           },
         ),
         BlocListener<GameBloc, GameState>(
@@ -145,7 +146,7 @@ class _GameView extends StatelessWidget {
                         else if (state is GameLoading || state is GameInitial)
                           const LoadingOverlay(message: 'Loading level...')
                         else if (state is GameCompleted)
-                          const SizedBox.shrink()
+                          const LoadingOverlay(message: 'Level complete!')
                         else if (state is GameError)
                           Center(
                             child: GlassPanel(
@@ -161,6 +162,8 @@ class _GameView extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (state is GameInProgress && state.isCompleting)
+                  const LoadingOverlay(message: 'Level complete...'),
                 if (state is GameInProgress && state.isPaused)
                   PauseMenuOverlay(
                     state: state,

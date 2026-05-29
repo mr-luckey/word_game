@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/achievement_service.dart';
@@ -15,6 +17,7 @@ import 'package:word_game/core/utils/game_cell_utils.dart';
 import 'package:word_game/core/utils/grid_generator.dart';
 import 'package:word_game/core/utils/grid_rotator.dart';
 import 'package:word_game/core/utils/word_placer.dart';
+import 'package:word_game/core/utils/level_progress_id.dart';
 import 'package:word_game/core/utils/word_validator.dart';
 import 'package:word_game/features/game/data/models/grid_cell_model.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
@@ -173,13 +176,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
-  void _onTick(GameTick event, Emitter<GameState> emit) {
+  Future<void> _onTick(GameTick event, Emitter<GameState> emit) async {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
     final next = s.elapsed + const Duration(seconds: 1);
     if (s.timeLimit > 0 && next.inSeconds >= s.timeLimit) {
-      emit(s.copyWith(elapsed: Duration(seconds: s.timeLimit)));
-      _completeGame(s.copyWith(elapsed: Duration(seconds: s.timeLimit)), emit);
+      final timedOut = s.copyWith(
+        elapsed: Duration(seconds: s.timeLimit),
+        isCompleting: true,
+      );
+      emit(timedOut);
+      await _finishLevel(timedOut, emit);
       return;
     }
     emit(s.copyWith(elapsed: next));
@@ -256,7 +263,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         selectionState: SelectionState.correct,
       );
       if (newState.allWordsFound) {
-        await _completeGame(newState, emit);
+        emit(newState.copyWith(isCompleting: true));
+        await _finishLevel(newState, emit);
       } else {
         final achievementMsg = await _achievementFeedback(_achievements.onWordFound());
         if (achievementMsg != null) {
@@ -269,6 +277,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       await _audio.playWrong();
       emit(s.copyWith(selectionState: SelectionState.wrong));
       await Future<void>.delayed(const Duration(milliseconds: 500));
+      if (emit.isDone) return;
       final current = state;
       if (current is GameInProgress) {
         emit(
@@ -468,6 +477,31 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(s.copyWith(isPaused: false));
   }
 
+  Future<void> _finishLevel(
+    GameInProgress s,
+    Emitter<GameState> emit,
+  ) async {
+    try {
+      await _completeGame(s, emit);
+    } catch (e, st) {
+      debugPrint('Level completion failed: $e\n$st');
+      if (emit.isDone || state is GameCompleted) return;
+      final ratio = s.timeLimit > 0
+          ? s.elapsed.inSeconds / s.timeLimit
+          : 0.5;
+      emit(
+        GameCompleted(
+          stars: GameConfig.starsForTimeRatio(ratio),
+          coinsEarned: s.coinsReward,
+          time: s.elapsed,
+          hintsUsed: s.hintsUsed,
+          levelId: s.levelId,
+          themeId: s.themeId,
+        ),
+      );
+    }
+  }
+
   Future<void> _completeGame(
     GameInProgress s,
     Emitter<GameState> emit,
@@ -477,22 +511,37 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         ? s.elapsed.inSeconds / s.timeLimit
         : 0.5;
     final stars = GameConfig.starsForTimeRatio(ratio);
+
     await _addCoins(s.coinsReward);
-    await _achievementFeedback(
-      _achievements.onLevelComplete(
-        stars: stars,
-        timeSeconds: s.elapsed.inSeconds,
-        hintsUsed: s.hintsUsed,
-        levelId: s.levelId,
+
+    unawaited(
+      _achievementFeedback(
+        _achievements.onLevelComplete(
+          stars: stars,
+          timeSeconds: s.elapsed.inSeconds,
+          hintsUsed: s.hintsUsed,
+          levelId: s.levelId,
+        ),
       ),
     );
-    await _saveProgress(
-      levelId: s.levelId,
-      stars: stars,
-      timeSeconds: s.elapsed.inSeconds,
-    );
-    await _analytics.logLevelComplete(levelId: s.levelId, stars: stars);
-    await _audio.playLevelComplete();
+
+    try {
+      await _saveProgress(
+        levelId: LevelProgressId.encode(
+          slotId: s.themeId,
+          sharedLevelId: s.levelId,
+        ),
+        stars: stars,
+        timeSeconds: s.elapsed.inSeconds,
+      );
+    } catch (e, st) {
+      debugPrint('Progress save failed (local may still be ok): $e\n$st');
+    }
+
+    unawaited(_analytics.logLevelComplete(levelId: s.levelId, stars: stars));
+    unawaited(_audio.playLevelComplete());
+
+    if (emit.isDone) return;
     emit(
       GameCompleted(
         stars: stars,

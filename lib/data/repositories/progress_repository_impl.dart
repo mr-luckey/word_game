@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
+import 'package:word_game/core/utils/level_progress_id.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
@@ -34,10 +38,16 @@ class ProgressRepositoryImpl implements ProgressRepository {
       stars: stars,
       timeSeconds: timeSeconds,
     );
-    await _sync.syncLevelProgress(
-      levelId: levelId,
-      stars: stars,
-      timeSeconds: timeSeconds,
+    unawaited(
+      _sync
+          .syncLevelProgress(
+            levelId: levelId,
+            stars: stars,
+            timeSeconds: timeSeconds,
+          )
+          .catchError((Object e, StackTrace st) {
+        debugPrint('Cloud level sync failed: $e\n$st');
+      }),
     );
   }
 
@@ -45,6 +55,18 @@ class ProgressRepositoryImpl implements ProgressRepository {
   Future<Map<int, int>> getAllStars() async {
     final rows = await _db.getAllProgress();
     return {for (final r in rows) r.levelId: r.stars};
+  }
+
+  @override
+  Future<Map<int, int>> getStarsForSlot(int slotId) async {
+    final rows = await _db.getAllProgress();
+    final stars = <int, int>{};
+    for (final row in rows) {
+      if (!LevelProgressId.matchesSlot(row.levelId, slotId)) continue;
+      final sharedId = LevelProgressId.sharedLevelIdFromStorageKey(row.levelId);
+      stars[sharedId] = row.stars;
+    }
+    return stars;
   }
 }
 
@@ -62,7 +84,9 @@ class WalletRepositoryImpl implements WalletRepository {
     final current = await getCoins();
     if (current < amount) return false;
     await _db.setCoins(current - amount);
-    await _sync.syncCoins();
+    unawaited(_sync.syncCoins().catchError((Object e, StackTrace st) {
+      debugPrint('Cloud coins sync failed: $e\n$st');
+    }));
     return true;
   }
 
@@ -70,6 +94,8 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<void> addCoins(int amount) async {
     final current = await getCoins();
     await _db.setCoins(current + amount);
-    await _sync.syncCoins();
+    unawaited(_sync.syncCoins().catchError((Object e, StackTrace st) {
+      debugPrint('Cloud coins sync failed: $e\n$st');
+    }));
   }
 }

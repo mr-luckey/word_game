@@ -93,6 +93,54 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<AchievementTableData>> getAchievements() =>
       select(achievementTable).get();
+
+  static const purchasedProductsKey = 'purchased_products';
+
+  static const gameplayStatKeys = [
+    'stat_words_found',
+    'stat_levels_completed',
+    'stat_no_hint_streak',
+    'stat_rotates',
+  ];
+
+  Future<List<String>> getPurchasedProducts() async {
+    final raw = await getString(purchasedProductsKey);
+    if (raw == null || raw.isEmpty) return [];
+    return raw.split(',').where((s) => s.isNotEmpty).toList();
+  }
+
+  Future<void> addPurchasedProduct(String productId) async {
+    final list = await getPurchasedProducts();
+    if (list.contains(productId)) return;
+    await setString(purchasedProductsKey, [...list, productId].join(','));
+  }
+
+  Future<Map<String, int>> getGameplayStats() async {
+    final map = <String, int>{};
+    for (final key in gameplayStatKeys) {
+      map[key] = int.tryParse(await getString(key) ?? '') ?? 0;
+    }
+    return map;
+  }
+
+  Future<void> applyGameplayStats(Map<String, int> stats) async {
+    for (final entry in stats.entries) {
+      await setString(entry.key, entry.value.toString());
+    }
+  }
+
+  Future<List<String>> getUnlockedAchievementIds() async {
+    final rows =
+        await (select(achievementTable)..where((t) => t.unlocked.equals(true)))
+            .get();
+    return rows.map((r) => r.id).toList();
+  }
+
+  Future<void> applyUnlockedAchievements(List<String> ids) async {
+    for (final id in ids) {
+      await unlockAchievement(id);
+    }
+  }
 }
 
 LazyDatabase _openConnection() {

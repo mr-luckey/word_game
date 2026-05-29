@@ -43,6 +43,7 @@ class GameInProgress extends GameState {
     required this.hintsUsed,
     this.foundCellColors = const {},
     this.feedback,
+    this.isCompleting = false,
   });
 
   final List<List<GridCellModel>> grid;
@@ -67,6 +68,7 @@ class GameInProgress extends GameState {
   final int hintsUsed;
   final Map<int, int> foundCellColors;
   final String? feedback;
+  final bool isCompleting;
 
   bool get allWordsFound =>
       foundWords.length == wordsToFind.length;
@@ -95,6 +97,7 @@ class GameInProgress extends GameState {
     int? themeId,
     String? feedback,
     bool clearFeedback = false,
+    bool? isCompleting,
   }) =>
       GameInProgress(
         grid: grid ?? this.grid,
@@ -119,6 +122,7 @@ class GameInProgress extends GameState {
         coinsReward: coinsReward,
         hintsUsed: hintsUsed ?? this.hintsUsed,
         feedback: clearFeedback ? null : (feedback ?? this.feedback),
+        isCompleting: isCompleting ?? this.isCompleting,
       );
 
   @override
@@ -140,6 +144,7 @@ class GameInProgress extends GameState {
         backgroundImage,
         themeId,
         feedback,
+        isCompleting,
       ];
 }
 
