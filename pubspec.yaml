@@ -51,6 +51,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/
+    - assets/data/level_packs/
     - assets/images/
     - assets/images/themes/classic_travel/
     - assets/images/themes/forest_quest/

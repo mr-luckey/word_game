@@ -7,6 +7,7 @@ class AudioService {
 
   final SharedPreferences _prefs;
   final AudioPlayer _sfxPlayer = AudioPlayer();
+  final AudioPlayer _tickPlayer = AudioPlayer();
   final AudioPlayer _bgPlayer = AudioPlayer();
 
   static const _soundKey = 'sound_enabled';
@@ -18,6 +19,8 @@ class AudioService {
   Future<void> playWordFound() => _play(AssetPaths.wordFoundSfx);
   Future<void> playLevelComplete() => _play(AssetPaths.levelCompleteSfx);
   Future<void> playWrong() => _play(AssetPaths.wrongSfx);
+  Future<void> playTimerTick() =>
+      _playOn(_tickPlayer, AssetPaths.timerTickSfx, volume: 0.55);
 
   Future<void> startBackgroundMusic() async {
     if (!musicEnabled) return;
@@ -28,10 +31,17 @@ class AudioService {
     );
   }
 
-  Future<void> _play(String asset) async {
+  Future<void> _play(String asset) => _playOn(_sfxPlayer, asset);
+
+  Future<void> _playOn(
+    AudioPlayer player,
+    String asset, {
+    double volume = 1,
+  }) async {
     if (!soundEnabled) return;
     try {
-      await _sfxPlayer.play(AssetSource(asset));
+      await player.setVolume(volume.clamp(0, 1));
+      await player.play(AssetSource(asset));
     } catch (_) {}
   }
 

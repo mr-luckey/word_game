@@ -18,6 +18,9 @@ class GameConfig {
 
   static const int defaultTimeLimitSeconds = 180;
 
+  /// Play clock tick each second when remaining time is at or below this.
+  static const int timerTickThresholdSeconds = 30;
+
   static int gridSizeForDifficultyIndex(int index) {
     switch (index) {
       case 0:

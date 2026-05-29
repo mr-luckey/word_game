@@ -1,3 +1,5 @@
+import 'package:word_game/core/data/models/daily_game_config.dart';
+
 class DailyChallengeConfig {
   const DailyChallengeConfig({
     required this.levelId,
@@ -8,6 +10,7 @@ class DailyChallengeConfig {
     required this.hintsAllowed,
     required this.backgroundImageTemplate,
     required this.coinSchedule,
+    required this.games,
     required this.wordPool,
     required this.wordsPerDay,
   });
@@ -20,11 +23,15 @@ class DailyChallengeConfig {
   final int hintsAllowed;
   final String backgroundImageTemplate;
   final List<int> coinSchedule;
+  final List<DailyGameConfig> games;
   final List<String> wordPool;
   final int wordsPerDay;
 
+  bool get hasGames => games.isNotEmpty;
+
   factory DailyChallengeConfig.fromJson(Map<String, dynamic> json) {
     final level = json['level'] as Map<String, dynamic>;
+    final gamesRaw = json['games'] as List<dynamic>? ?? [];
     return DailyChallengeConfig(
       levelId: level['id'] as int,
       name: level['name'] as String,
@@ -37,9 +44,13 @@ class DailyChallengeConfig {
       coinSchedule: (json['coinSchedule'] as List<dynamic>)
           .map((e) => e as int)
           .toList(),
-      wordPool: (json['wordPool'] as List<dynamic>)
-          .map((e) => e as String)
+      games: gamesRaw
+          .map((e) => DailyGameConfig.fromJson(e as Map<String, dynamic>))
           .toList(),
+      wordPool: (json['wordPool'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       wordsPerDay: json['wordsPerDay'] as int? ?? 6,
     );
   }

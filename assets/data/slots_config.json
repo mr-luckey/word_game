@@ -1,0 +1,7 @@
+{
+  "version": "2.0",
+  "slotCount": 10,
+  "howItWorks": "SLOT NUMBER = same game in every theme. Example: slotId 1 is always slot_1.json (Paris/London/Amazon names are only labels in explore_catalog.json per theme).",
+  "levelPackPathPattern": "assets/data/level_packs/slot_{id}.json",
+  "requiredSlots": "1..10 (all slot files must exist)"
+}

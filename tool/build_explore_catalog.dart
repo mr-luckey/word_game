@@ -171,7 +171,7 @@ void main() {
     const JsonEncoder.withIndent('  ').convert({
       'version': '3.0',
       'description':
-          'Explore list per visual theme — names/images only; levels from shared_levels.json.',
+          'Explore list per visual theme — names/images only; levels from slot_1.json ... slot_10.json.',
       'slotCount': 10,
       'themes': themes,
     }),

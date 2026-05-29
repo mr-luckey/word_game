@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:word_game/features/game/domain/entities/level_entity.dart';
+import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/utils/destination_unlock.dart';
 import 'package:word_game/core/utils/level_progress_id.dart';
+import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
+import 'package:word_game/injection.dart';
 
 class LevelSelectState extends Equatable {
   const LevelSelectState({
@@ -13,6 +16,8 @@ class LevelSelectState extends Equatable {
     this.stars = const {},
     this.unlocked = const {},
     this.difficultyIndex = 0,
+    this.destinationLocked = false,
+    this.unlockRequirement,
   });
 
   final bool loading;
@@ -22,13 +27,24 @@ class LevelSelectState extends Equatable {
   final Map<int, int> stars;
   final Set<int> unlocked;
   final int difficultyIndex;
+  final bool destinationLocked;
+  final String? unlockRequirement;
 
   List<LevelJson> get filteredLevels =>
       levels.where((l) => l.difficultyIndex == difficultyIndex).toList();
 
   @override
-  List<Object?> get props =>
-      [loading, themeName, backgroundImage, levels, stars, unlocked, difficultyIndex];
+  List<Object?> get props => [
+        loading,
+        themeName,
+        backgroundImage,
+        levels,
+        stars,
+        unlocked,
+        difficultyIndex,
+        destinationLocked,
+        unlockRequirement,
+      ];
 }
 
 class LevelSelectCubit extends Cubit<LevelSelectState> {
@@ -45,14 +61,45 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
   Future<void> load() async {
     if (isClosed) return;
 
-    final themes = await _levels.loadThemes();
+    final preset = getIt<AppThemeBloc>().state.activePreset;
+    final themes = await _levels.loadThemesForPreset(preset);
     if (isClosed) return;
 
-    final theme = themes.firstWhere(
+    final sorted = DestinationUnlock.sortByUnlockOrder(themes, preset);
+    final theme = sorted.firstWhere(
       (t) => t.id == themeId,
-      orElse: () => themes.first,
+      orElse: () => sorted.first,
     );
-    final stars = await _progress.getStarsForSlot(themeId);
+
+    final starsBySlot = <int, Map<int, int>>{};
+    for (final t in sorted) {
+      starsBySlot[t.id] = await _progress.getStarsForSlot(t.id);
+    }
+    if (isClosed) return;
+
+    if (!DestinationUnlock.isUnlocked(
+      slotId: themeId,
+      sortedThemes: sorted,
+      starsBySlot: starsBySlot,
+    )) {
+      final requirement = DestinationUnlock.requiredPreviousName(
+        slotId: themeId,
+        sortedThemes: sorted,
+        preset: preset,
+      );
+      emit(
+        LevelSelectState(
+          loading: false,
+          themeName: theme.name,
+          backgroundImage: theme.backgroundImage,
+          destinationLocked: true,
+          unlockRequirement: requirement,
+        ),
+      );
+      return;
+    }
+
+    final stars = starsBySlot[themeId] ?? {};
     if (isClosed) return;
 
     final orderedShared = theme.levels.map((l) => l.id).toList()..sort();
@@ -93,6 +140,8 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
       stars: state.stars,
       unlocked: state.unlocked,
       difficultyIndex: index,
+      destinationLocked: state.destinationLocked,
+      unlockRequirement: state.unlockRequirement,
     ));
   }
 }

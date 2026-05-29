@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/theme/app_theme.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
-import 'package:word_game/core/theme/destination_catalog.dart';
 
 // ---------------------------------------------------------------------------
 // Events
@@ -103,9 +102,7 @@ class AppThemeBloc extends Bloc<AppThemeEvent, AppThemeState> {
     int? destinationId,
   ) {
     if (mode == ThemeSelectionMode.fixed) return fixed;
-    if (destinationId != null) {
-      return DestinationCatalog.presetForDestinationId(destinationId);
-    }
+    // Explore slot ids are per visual preset; auto mode uses the saved preset.
     return fixed;
   }
 

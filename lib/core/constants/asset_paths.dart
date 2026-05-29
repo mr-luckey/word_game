@@ -13,6 +13,7 @@ class AssetPaths {
   static const wordFoundSfx = 'audio/word_found.wav';
   static const levelCompleteSfx = 'audio/level_complete.wav';
   static const wrongSfx = 'audio/wrong.wav';
+  static const timerTickSfx = 'audio/timer_tick.wav';
   static const bgMusic = 'audio/bg_music.wav';
 
   /// Legacy flat theme images (fallback).

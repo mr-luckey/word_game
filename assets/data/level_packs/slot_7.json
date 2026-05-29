@@ -1,0 +1,1206 @@
+{
+  "slotId": 7,
+  "note": "Clean gameplay pack for slot #7. Difficulty 0 uses only 3-4 letter real English words. All words are uppercase dictionary English words, and no word repeats anywhere across slots 1 to 10.",
+  "levels": [
+    {
+      "id": 1,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 180,
+      "hintsAllowed": 5,
+      "coinsReward": 30,
+      "words": [
+        "SEAL",
+        "WEEP",
+        "MUD",
+        "RAGE",
+        "FLED"
+      ]
+    },
+    {
+      "id": 2,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 185,
+      "hintsAllowed": 5,
+      "coinsReward": 35,
+      "words": [
+        "GREY",
+        "BOYS",
+        "DAMP",
+        "DUG",
+        "TOP"
+      ]
+    },
+    {
+      "id": 3,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 190,
+      "hintsAllowed": 5,
+      "coinsReward": 40,
+      "words": [
+        "OATS",
+        "DULY",
+        "FUR",
+        "KISS",
+        "RIBS"
+      ]
+    },
+    {
+      "id": 4,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 195,
+      "hintsAllowed": 5,
+      "coinsReward": 45,
+      "words": [
+        "SALT",
+        "WASH",
+        "PIN",
+        "WAVE",
+        "TASK"
+      ]
+    },
+    {
+      "id": 5,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 200,
+      "hintsAllowed": 5,
+      "coinsReward": 50,
+      "words": [
+        "RACE",
+        "HEED",
+        "WIN",
+        "FLY",
+        "HUNT"
+      ]
+    },
+    {
+      "id": 6,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 205,
+      "hintsAllowed": 5,
+      "coinsReward": 55,
+      "words": [
+        "BOW",
+        "RUNS",
+        "HANG",
+        "BEND",
+        "BOLD"
+      ]
+    },
+    {
+      "id": 7,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 210,
+      "hintsAllowed": 5,
+      "coinsReward": 60,
+      "words": [
+        "TENT",
+        "RENT",
+        "FLOW",
+        "ROWS",
+        "HUNG"
+      ]
+    },
+    {
+      "id": 8,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 215,
+      "hintsAllowed": 5,
+      "coinsReward": 65,
+      "words": [
+        "FLAT",
+        "SLIP",
+        "ATE",
+        "SEAS",
+        "FURY"
+      ]
+    },
+    {
+      "id": 9,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 220,
+      "hintsAllowed": 5,
+      "coinsReward": 70,
+      "words": [
+        "OAK",
+        "EAR",
+        "LAMP",
+        "PALM",
+        "SOBS"
+      ]
+    },
+    {
+      "id": 10,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 225,
+      "hintsAllowed": 5,
+      "coinsReward": 75,
+      "words": [
+        "SAFE",
+        "SLY",
+        "SIN",
+        "ROPE",
+        "RICE"
+      ]
+    },
+    {
+      "id": 11,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 230,
+      "hintsAllowed": 5,
+      "coinsReward": 80,
+      "words": [
+        "CARD",
+        "GAS",
+        "OIL",
+        "SODA",
+        "NAVY"
+      ]
+    },
+    {
+      "id": 12,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 235,
+      "hintsAllowed": 5,
+      "coinsReward": 85,
+      "words": [
+        "SEED",
+        "DAM",
+        "RUM",
+        "WIRE",
+        "BAG"
+      ]
+    },
+    {
+      "id": 13,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 240,
+      "hintsAllowed": 5,
+      "coinsReward": 90,
+      "words": [
+        "SUIT",
+        "BARN",
+        "PUSH",
+        "SEEK",
+        "FED"
+      ]
+    },
+    {
+      "id": 14,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 245,
+      "hintsAllowed": 5,
+      "coinsReward": 95,
+      "words": [
+        "RANG",
+        "FOE",
+        "SONS",
+        "PULL",
+        "MOB"
+      ]
+    },
+    {
+      "id": 15,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 250,
+      "hintsAllowed": 5,
+      "coinsReward": 100,
+      "words": [
+        "THY",
+        "TIED",
+        "WEB",
+        "KEEN",
+        "MIST"
+      ]
+    },
+    {
+      "id": 16,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 255,
+      "hintsAllowed": 5,
+      "coinsReward": 105,
+      "words": [
+        "DUEL",
+        "POSE",
+        "TIDE",
+        "ROOT",
+        "PACE"
+      ]
+    },
+    {
+      "id": 17,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 260,
+      "hintsAllowed": 5,
+      "coinsReward": 110,
+      "words": [
+        "PIT",
+        "SUNK",
+        "MAD",
+        "IDLE",
+        "FEE"
+      ]
+    },
+    {
+      "id": 18,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 265,
+      "hintsAllowed": 5,
+      "coinsReward": 115,
+      "words": [
+        "HOLE",
+        "GEMS",
+        "SHOP",
+        "SIGH",
+        "MAP"
+      ]
+    },
+    {
+      "id": 19,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 270,
+      "hintsAllowed": 5,
+      "coinsReward": 120,
+      "words": [
+        "LEST",
+        "BEES",
+        "WOKE",
+        "WAKE",
+        "BOND"
+      ]
+    },
+    {
+      "id": 20,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 275,
+      "hintsAllowed": 5,
+      "coinsReward": 125,
+      "words": [
+        "PLEA",
+        "FUN",
+        "BROW",
+        "HERD",
+        "MOLE"
+      ]
+    },
+    {
+      "id": 21,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 240,
+      "hintsAllowed": 4,
+      "coinsReward": 60,
+      "words": [
+        "SHOOT",
+        "HARSH",
+        "CHEEK",
+        "TALKS",
+        "TENSE"
+      ]
+    },
+    {
+      "id": 22,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 245,
+      "hintsAllowed": 4,
+      "coinsReward": 65,
+      "words": [
+        "VODKA",
+        "KNIFE",
+        "DRUGS",
+        "SPURS",
+        "COACH"
+      ]
+    },
+    {
+      "id": 23,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 250,
+      "hintsAllowed": 4,
+      "coinsReward": 70,
+      "words": [
+        "LINED",
+        "DRANK",
+        "DREAM",
+        "OWING",
+        "TYPES"
+      ]
+    },
+    {
+      "id": 24,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 255,
+      "hintsAllowed": 4,
+      "coinsReward": 75,
+      "words": [
+        "PIPES",
+        "PLAYS",
+        "WAGON",
+        "REIGN",
+        "TOTAL"
+      ]
+    },
+    {
+      "id": 25,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 260,
+      "hintsAllowed": 4,
+      "coinsReward": 80,
+      "words": [
+        "TRULY",
+        "ANKLE",
+        "GRAFT",
+        "BRUSH",
+        "GAILY"
+      ]
+    },
+    {
+      "id": 26,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 265,
+      "hintsAllowed": 4,
+      "coinsReward": 85,
+      "words": [
+        "TEACH",
+        "GUEST",
+        "NAVAL",
+        "QUEST",
+        "STUCK"
+      ]
+    },
+    {
+      "id": 27,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 270,
+      "hintsAllowed": 4,
+      "coinsReward": 90,
+      "words": [
+        "SADLY",
+        "WIVES",
+        "WASTE",
+        "HATED",
+        "FALLS"
+      ]
+    },
+    {
+      "id": 28,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 275,
+      "hintsAllowed": 4,
+      "coinsReward": 95,
+      "words": [
+        "WRATH",
+        "GRASP",
+        "BLOWS",
+        "BELLS",
+        "STEAM"
+      ]
+    },
+    {
+      "id": 29,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 280,
+      "hintsAllowed": 4,
+      "coinsReward": 100,
+      "words": [
+        "FAINT",
+        "ANGLE",
+        "BUILD",
+        "ERROR",
+        "PACED"
+      ]
+    },
+    {
+      "id": 30,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 285,
+      "hintsAllowed": 4,
+      "coinsReward": 105,
+      "words": [
+        "DAILY",
+        "CEASE",
+        "DENSE",
+        "WHEEL",
+        "FEARS"
+      ]
+    },
+    {
+      "id": 31,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 290,
+      "hintsAllowed": 4,
+      "coinsReward": 110,
+      "words": [
+        "SWEET",
+        "URINE",
+        "EVILS",
+        "THIGH",
+        "STRIP"
+      ]
+    },
+    {
+      "id": 32,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 295,
+      "hintsAllowed": 4,
+      "coinsReward": 115,
+      "words": [
+        "PANIC",
+        "MAIDS",
+        "FOLLY",
+        "SPLIT",
+        "SWEEP"
+      ]
+    },
+    {
+      "id": 33,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 300,
+      "hintsAllowed": 4,
+      "coinsReward": 120,
+      "words": [
+        "MOTOR",
+        "YARDS",
+        "SMART",
+        "HOTEL",
+        "SCENE"
+      ]
+    },
+    {
+      "id": 34,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 305,
+      "hintsAllowed": 4,
+      "coinsReward": 125,
+      "words": [
+        "MARKS",
+        "MERIT",
+        "UPSET",
+        "BANDS",
+        "GUESS"
+      ]
+    },
+    {
+      "id": 35,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 310,
+      "hintsAllowed": 4,
+      "coinsReward": 130,
+      "words": [
+        "SHEET",
+        "FETCH",
+        "SIXTY",
+        "BLIND",
+        "PULSE"
+      ]
+    },
+    {
+      "id": 36,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 315,
+      "hintsAllowed": 4,
+      "coinsReward": 135,
+      "words": [
+        "FRANK",
+        "HASTE",
+        "DUTCH",
+        "SPEND",
+        "FOLDS"
+      ]
+    },
+    {
+      "id": 37,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 320,
+      "hintsAllowed": 4,
+      "coinsReward": 140,
+      "words": [
+        "AREAS",
+        "AWOKE",
+        "PLUMP",
+        "LINEN",
+        "KNOLL"
+      ]
+    },
+    {
+      "id": 38,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 325,
+      "hintsAllowed": 4,
+      "coinsReward": 145,
+      "words": [
+        "JUDGE",
+        "LOUIS",
+        "BOXES",
+        "LOSES",
+        "AIDES"
+      ]
+    },
+    {
+      "id": 39,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 330,
+      "hintsAllowed": 4,
+      "coinsReward": 150,
+      "words": [
+        "STEEL",
+        "SPINE",
+        "TENDS",
+        "GEESE",
+        "UNITY"
+      ]
+    },
+    {
+      "id": 40,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 335,
+      "hintsAllowed": 4,
+      "coinsReward": 155,
+      "words": [
+        "BLEED",
+        "RANGE",
+        "AWAIT",
+        "TREAT",
+        "DIARY"
+      ]
+    },
+    {
+      "id": 41,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 300,
+      "hintsAllowed": 3,
+      "coinsReward": 100,
+      "words": [
+        "QUIETLY",
+        "USEFUL",
+        "PAUSED",
+        "KILLED",
+        "ACTIONS"
+      ]
+    },
+    {
+      "id": 42,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 305,
+      "hintsAllowed": 3,
+      "coinsReward": 105,
+      "words": [
+        "PAINFUL",
+        "AGREED",
+        "EXCITED",
+        "FORMING",
+        "LEANING"
+      ]
+    },
+    {
+      "id": 43,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 310,
+      "hintsAllowed": 3,
+      "coinsReward": 110,
+      "words": [
+        "RAISING",
+        "SHOWING",
+        "REGION",
+        "TRUNKS",
+        "MOTION"
+      ]
+    },
+    {
+      "id": 44,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 315,
+      "hintsAllowed": 3,
+      "coinsReward": 115,
+      "words": [
+        "FINGER",
+        "FARMERS",
+        "OBJECT",
+        "PLEASED",
+        "CENTRE"
+      ]
+    },
+    {
+      "id": 45,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 320,
+      "hintsAllowed": 3,
+      "coinsReward": 120,
+      "words": [
+        "CREDIT",
+        "CHANCE",
+        "ANIMAL",
+        "TELLING",
+        "CAVITY"
+      ]
+    },
+    {
+      "id": 46,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 325,
+      "hintsAllowed": 3,
+      "coinsReward": 125,
+      "words": [
+        "SHAPED",
+        "MANNER",
+        "PLAYED",
+        "POWERS",
+        "FOREVER"
+      ]
+    },
+    {
+      "id": 47,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 330,
+      "hintsAllowed": 3,
+      "coinsReward": 130,
+      "words": [
+        "TREATED",
+        "ADDRESS",
+        "SMALLER",
+        "HEAVEN",
+        "HEALTHY"
+      ]
+    },
+    {
+      "id": 48,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 335,
+      "hintsAllowed": 3,
+      "coinsReward": 135,
+      "words": [
+        "ABROAD",
+        "APPEARS",
+        "RETREAT",
+        "HURRAH",
+        "VARIES"
+      ]
+    },
+    {
+      "id": 49,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 340,
+      "hintsAllowed": 3,
+      "coinsReward": 140,
+      "words": [
+        "BREAST",
+        "MOMENTS",
+        "UNLESS",
+        "FOLLOW",
+        "RUBLES"
+      ]
+    },
+    {
+      "id": 50,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 345,
+      "hintsAllowed": 3,
+      "coinsReward": 145,
+      "words": [
+        "SHEATHS",
+        "SLAVES",
+        "SPOKEN",
+        "REMAINS",
+        "FEARED"
+      ]
+    },
+    {
+      "id": 51,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 350,
+      "hintsAllowed": 3,
+      "coinsReward": 150,
+      "words": [
+        "CHANGED",
+        "PASSAGE",
+        "BODIES",
+        "CONSENT",
+        "PERSONS"
+      ]
+    },
+    {
+      "id": 52,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 355,
+      "hintsAllowed": 3,
+      "coinsReward": 155,
+      "words": [
+        "REGULAR",
+        "MATTERS",
+        "SILVER",
+        "LEAVING",
+        "SECURE"
+      ]
+    },
+    {
+      "id": 53,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 360,
+      "hintsAllowed": 3,
+      "coinsReward": 160,
+      "words": [
+        "TRIUMPH",
+        "REMOVE",
+        "HURRIED",
+        "DETAILS",
+        "EQUALLY"
+      ]
+    },
+    {
+      "id": 54,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 365,
+      "hintsAllowed": 3,
+      "coinsReward": 165,
+      "words": [
+        "ARMIES",
+        "EXPECT",
+        "GREATER",
+        "ANCIENT",
+        "DIGNITY"
+      ]
+    },
+    {
+      "id": 55,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 370,
+      "hintsAllowed": 3,
+      "coinsReward": 170,
+      "words": [
+        "SENATE",
+        "INSTANT",
+        "NERVOUS",
+        "PREVENT",
+        "JOURNEY"
+      ]
+    },
+    {
+      "id": 56,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 375,
+      "hintsAllowed": 3,
+      "coinsReward": 175,
+      "words": [
+        "PEASANT",
+        "NOTICE",
+        "CREATED",
+        "HOLLOW",
+        "SUPPORT"
+      ]
+    },
+    {
+      "id": 57,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 380,
+      "hintsAllowed": 3,
+      "coinsReward": 180,
+      "words": [
+        "LIBERTY",
+        "CLEARED",
+        "FAMOUS",
+        "SOUGHT",
+        "GROUPS"
+      ]
+    },
+    {
+      "id": 58,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 385,
+      "hintsAllowed": 3,
+      "coinsReward": 185,
+      "words": [
+        "SPRING",
+        "PUTTING",
+        "HELPED",
+        "WEIGHT",
+        "LEADERS"
+      ]
+    },
+    {
+      "id": 59,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 390,
+      "hintsAllowed": 3,
+      "coinsReward": 190,
+      "words": [
+        "DESTROY",
+        "SIGHED",
+        "COLUMN",
+        "FINGERS",
+        "ELASTIC"
+      ]
+    },
+    {
+      "id": 60,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 395,
+      "hintsAllowed": 3,
+      "coinsReward": 195,
+      "words": [
+        "BESIDES",
+        "REFUSED",
+        "ASPECT",
+        "MACHINE",
+        "BONDAGE"
+      ]
+    },
+    {
+      "id": 61,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 360,
+      "hintsAllowed": 2,
+      "coinsReward": 150,
+      "words": [
+        "STATEMENT",
+        "BEGINNINGS",
+        "FAITHFUL",
+        "ADVANCING",
+        "MISFORTUNE"
+      ]
+    },
+    {
+      "id": 62,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 365,
+      "hintsAllowed": 2,
+      "coinsReward": 155,
+      "words": [
+        "STITCHES",
+        "CELEBRATED",
+        "WELCOMED",
+        "MONOPOLY",
+        "DISCOVERY"
+      ]
+    },
+    {
+      "id": 63,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 370,
+      "hintsAllowed": 2,
+      "coinsReward": 160,
+      "words": [
+        "ADVOCATED",
+        "ALLOWING",
+        "INTERVIEW",
+        "BLOCKADE",
+        "ENGAGEMENT"
+      ]
+    },
+    {
+      "id": 64,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 375,
+      "hintsAllowed": 2,
+      "coinsReward": 165,
+      "words": [
+        "LAUNCHED",
+        "FRICTION",
+        "PROXIMITY",
+        "ARBITRARY",
+        "PREVENTION"
+      ]
+    },
+    {
+      "id": 65,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 380,
+      "hintsAllowed": 2,
+      "coinsReward": 170,
+      "words": [
+        "DEPRIVED",
+        "PERSONALLY",
+        "RECENTLY",
+        "MEETINGS",
+        "YOUTHFUL"
+      ]
+    },
+    {
+      "id": 66,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 385,
+      "hintsAllowed": 2,
+      "coinsReward": 175,
+      "words": [
+        "HABITUAL",
+        "TROUBLED",
+        "INSPECTOR",
+        "WONDERED",
+        "EMPLOYEES"
+      ]
+    },
+    {
+      "id": 67,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 390,
+      "hintsAllowed": 2,
+      "coinsReward": 180,
+      "words": [
+        "ARMCHAIR",
+        "FORESEEN",
+        "PUCKERED",
+        "SUSPECTED",
+        "REALIZING"
+      ]
+    },
+    {
+      "id": 68,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 395,
+      "hintsAllowed": 2,
+      "coinsReward": 185,
+      "words": [
+        "STRUCTURES",
+        "HEARTILY",
+        "TRAINING",
+        "STATIONARY",
+        "GRANTING"
+      ]
+    },
+    {
+      "id": 69,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 400,
+      "hintsAllowed": 2,
+      "coinsReward": 190,
+      "words": [
+        "FEDERALIST",
+        "PRESIDENCY",
+        "DISORDER",
+        "PATRIOTS",
+        "LACERATED"
+      ]
+    },
+    {
+      "id": 70,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 405,
+      "hintsAllowed": 2,
+      "coinsReward": 195,
+      "words": [
+        "ABOLISHED",
+        "FRACTURES",
+        "BEWILDERED",
+        "METALLIC",
+        "CHESTNUT"
+      ]
+    },
+    {
+      "id": 71,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 410,
+      "hintsAllowed": 2,
+      "coinsReward": 200,
+      "words": [
+        "MESSENGER",
+        "ACTIVITIES",
+        "SUPERIOR",
+        "COMBINED",
+        "CORPORAL"
+      ]
+    },
+    {
+      "id": 72,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 415,
+      "hintsAllowed": 2,
+      "coinsReward": 205,
+      "words": [
+        "ACCOMPANY",
+        "ULTIMATE",
+        "DOMINION",
+        "NAVIGATION",
+        "ANIMATION"
+      ]
+    },
+    {
+      "id": 73,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 420,
+      "hintsAllowed": 2,
+      "coinsReward": 210,
+      "words": [
+        "PAINFULLY",
+        "DETACHED",
+        "ARCHITECT",
+        "SOFTENED",
+        "VARIATIONS"
+      ]
+    },
+    {
+      "id": 74,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 425,
+      "hintsAllowed": 2,
+      "coinsReward": 215,
+      "words": [
+        "PERITONEAL",
+        "OBLIGATION",
+        "DISMOUNTED",
+        "GREETING",
+        "PERSISTENT"
+      ]
+    },
+    {
+      "id": 75,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 430,
+      "hintsAllowed": 2,
+      "coinsReward": 220,
+      "words": [
+        "AFTERWARD",
+        "POSITIVE",
+        "SUCCESSIVE",
+        "SOLEMNLY",
+        "STRUCTURE"
+      ]
+    },
+    {
+      "id": 76,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 435,
+      "hintsAllowed": 2,
+      "coinsReward": 225,
+      "words": [
+        "INFLUENCES",
+        "PHENOMENA",
+        "EXPEDITION",
+        "COURTIERS",
+        "REGULATE"
+      ]
+    },
+    {
+      "id": 77,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 440,
+      "hintsAllowed": 2,
+      "coinsReward": 230,
+      "words": [
+        "SUFFERINGS",
+        "STRANGELY",
+        "INCREASES",
+        "PERMITTED",
+        "FIERCELY"
+      ]
+    },
+    {
+      "id": 78,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 445,
+      "hintsAllowed": 2,
+      "coinsReward": 235,
+      "words": [
+        "EMBEDDED",
+        "RESTORED",
+        "VERTEBRAL",
+        "CLEARING",
+        "INVOLVING"
+      ]
+    },
+    {
+      "id": 79,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 450,
+      "hintsAllowed": 2,
+      "coinsReward": 240,
+      "words": [
+        "OVERCOME",
+        "EXCEPTION",
+        "DIGNIFIED",
+        "EXISTING",
+        "PROBABLE"
+      ]
+    },
+    {
+      "id": 80,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 455,
+      "hintsAllowed": 2,
+      "coinsReward": 245,
+      "words": [
+        "ANNOUNCE",
+        "INDICATING",
+        "PARALLEL",
+        "APPARATUS",
+        "INSTRUCTED"
+      ]
+    }
+  ]
+}

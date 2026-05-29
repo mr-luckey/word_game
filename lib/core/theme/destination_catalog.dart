@@ -1,7 +1,5 @@
 import 'package:word_game/core/data/game_content_registry.dart';
-import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
-import 'package:word_game/injection.dart';
 
 /// Explore destinations — themed names from JSON, shared level content.
 class DestinationCatalog {
@@ -16,18 +14,12 @@ class DestinationCatalog {
     return _registry!;
   }
 
-  /// All explore slots for the active visual theme (default: current app theme).
+  /// All explore slots for the active visual theme.
   static List<DestinationSpec> forPreset(AppThemePreset preset) =>
       _r.destinationsForPreset(preset);
 
-  static DestinationSpec? byId(int slotId, [AppThemePreset? preset]) {
-    final p = preset ?? getIt<AppThemeBloc>().state.activePreset;
-    return _r.destinationForSlot(p, slotId);
-  }
-
-  static AppThemePreset presetForDestinationId(int id) {
-    return getIt<AppThemeBloc>().state.activePreset;
-  }
+  static DestinationSpec? byId(int slotId, AppThemePreset preset) =>
+      _r.destinationForSlot(preset, slotId);
 
   static void _ensureLoaded() {
     if (_registry == null) {

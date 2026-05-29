@@ -20,6 +20,7 @@ import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 import 'package:word_game/features/game/presentation/widgets/level_complete_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/pause_menu_overlay.dart';
+import 'package:word_game/features/game/presentation/widgets/game_timeout_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
@@ -52,8 +53,8 @@ class _GameView extends StatelessWidget {
             if (state is! GameCompleted) return;
             context.read<CoinCubit>().refresh();
             final bloc = context.read<GameBloc>();
-            final isDaily =
-                state.levelId == getIt<GameContentRegistry>().dailyChallenge.levelId;
+            final isDaily = state.levelId ==
+                getIt<GameContentRegistry>().dailyChallenge.levelId;
             showDialog<void>(
               context: context,
               barrierDismissible: false,
@@ -164,7 +165,17 @@ class _GameView extends StatelessWidget {
                 ),
                 if (state is GameInProgress && state.isCompleting)
                   const LoadingOverlay(message: 'Level complete...'),
-                if (state is GameInProgress && state.isPaused)
+                if (state is GameInProgress && state.isTimedOut)
+                  GameTimeoutOverlay(
+                    state: state,
+                    onRetry: () =>
+                        context.read<GameBloc>().add(LoadLevel(state.levelId)),
+                    onQuit: () => journeyPopFromGame(
+                      context,
+                      themeId: state.themeId,
+                    ),
+                  )
+                else if (state is GameInProgress && state.isPaused)
                   PauseMenuOverlay(
                     state: state,
                     onResume: () =>
@@ -205,10 +216,9 @@ class _GameBody extends StatelessWidget {
         const SizedBox(height: _sectionGap),
         WordListPanel(state: state),
         const SizedBox(height: _sectionGap),
-        Flexible(
-          fit: FlexFit.loose,
+        Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.paddingMd),
+            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
             child: LetterGrid(
               state: state,
               colors: colors,
@@ -218,7 +228,6 @@ class _GameBody extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: _sectionGap),
         _Toolbar(state: state),
       ],
     );
@@ -280,18 +289,28 @@ class _TopBar extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
+                    constraints: const BoxConstraints(minWidth: 76),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: state.timerDanger
-                          ? colors.timerDanger.withValues(alpha: 0.85)
-                          : colors.scrim.withValues(alpha: 0.55),
+                      color: colors.scrim.withValues(
+                        alpha: state.timerDanger ? 0.92 : 0.55,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: state.timerDanger
                             ? colors.timerDanger
                             : colors.glassBorder.withValues(alpha: 0.4),
+                        width: state.timerDanger ? 2 : 1,
                       ),
+                      boxShadow: state.timerDanger
+                          ? [
+                              BoxShadow(
+                                color: colors.timerDanger.withValues(alpha: 0.45),
+                                blurRadius: 8,
+                              ),
+                            ]
+                          : null,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -301,7 +320,7 @@ class _TopBar extends StatelessWidget {
                           size: 16,
                           color: state.timerDanger ? Colors.white : colors.gold,
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 6),
                         Text(
                           _formatTimer(state.remainingSeconds),
                           style: AppTextStyles.timer(
@@ -372,29 +391,32 @@ class _Toolbar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSizes.paddingMd,
-        0,
+        4,
         AppSizes.paddingMd,
-        AppSizes.paddingMd,
+        10,
       ),
       child: JourneyPanel(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        radius: 22,
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        radius: 16,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ToolCircleButton(
+              compact: true,
               label: 'Hint',
               subtitle: '${GameConfig.hintCost}',
               icon: Icons.lightbulb_outline_rounded,
               onPressed: () => bloc.add(const HintRequested()),
             ),
             ToolCircleButton(
+              compact: true,
               label: 'Reveal',
               subtitle: '${GameConfig.revealCost}',
               icon: Icons.visibility_rounded,
               onPressed: () => bloc.add(const RevealRequested()),
             ),
             ToolCircleButton(
+              compact: true,
               label: 'Shuffle',
               subtitle: '${GameConfig.shuffleCost}',
               icon: Icons.shuffle_rounded,

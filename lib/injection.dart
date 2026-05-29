@@ -18,6 +18,7 @@ import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/data/repositories/level_repository_impl.dart';
+import 'package:word_game/core/utils/level_progress_id.dart';
 import 'package:word_game/data/repositories/progress_repository_impl.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 import 'package:word_game/features/game/domain/usecases/load_level_usecase.dart';
@@ -39,6 +40,7 @@ Future<void> configureDependencies() async {
 
   final db = AppDatabase();
   getIt.registerSingleton<AppDatabase>(db);
+  await _migrateLegacyProgressKeys(db);
 
   getIt.registerLazySingleton(() => FirestoreUserService(FirebaseFirestore.instance));
   getIt.registerLazySingleton(() => ProgressSyncService(db, getIt(), prefs));
@@ -104,5 +106,30 @@ Future<void> configureDependencies() async {
       .getSingleOrNull();
   if (row == null) {
     await db.setCoins(250);
+  }
+}
+
+/// Old saves used raw ids (1–99 or 101+). Copy into per-slot keys for slot 1.
+Future<void> _migrateLegacyProgressKeys(AppDatabase db) async {
+  final rows = await db.getAllProgress();
+  for (final row in rows) {
+    final isLegacy = LevelProgressId.isLegacyStorageKey(row.levelId);
+    final isCompact = LevelProgressId.isCompactUnencodedKey(row.levelId);
+    if (!isLegacy && !isCompact) continue;
+
+    final encoded = LevelProgressId.encode(
+      slotId: 1,
+      sharedLevelId: row.levelId,
+    );
+    if (encoded == row.levelId) continue;
+
+    final existing = await db.getProgress(encoded);
+    if (existing == null || row.stars > existing.stars) {
+      await db.saveProgress(
+        levelId: encoded,
+        stars: row.stars,
+        timeSeconds: row.timeSeconds,
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 {
-  "version": "1.0",
+  "version": "2.0",
+  "description": "Add up to 50 entries in games[]. One game is chosen per day (stable random by date).",
   "level": {
     "id": 9999,
     "name": "Daily Bonus",
@@ -10,6 +11,73 @@
     "backgroundImage": "{themeFolder}/grid_full.webp"
   },
   "coinSchedule": [50, 100, 150, 250, 500, 750, 1000],
+  "wordsPerDay": 6,
+  "games": [
+    {
+      "id": 1,
+      "words": ["OCEAN", "BEACH", "CORAL", "WAVE", "SHELL", "FISH"],
+      "gridSize": 10,
+      "timeLimit": 300,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    },
+    {
+      "id": 2,
+      "words": ["SUN", "SAND", "TIDE", "REEF", "CRAB", "SAIL"],
+      "gridSize": 9,
+      "timeLimit": 280,
+      "hintsAllowed": 2,
+      "difficultyIndex": 0
+    },
+    {
+      "id": 3,
+      "words": ["PORT", "ISLAND", "PALM", "BOAT", "HARBOR", "LAGOON"],
+      "gridSize": 10,
+      "timeLimit": 300,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    },
+    {
+      "id": 4,
+      "words": ["TRAVEL", "MAP", "PASS", "TRIP", "ROUTE", "GUIDE"],
+      "gridSize": 8,
+      "timeLimit": 260,
+      "hintsAllowed": 3,
+      "difficultyIndex": 0
+    },
+    {
+      "id": 5,
+      "words": ["QUEST", "STAR", "GOLD", "COIN", "GEM", "KEY"],
+      "gridSize": 9,
+      "timeLimit": 270,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    },
+    {
+      "id": 6,
+      "words": ["FOREST", "TREE", "MOSS", "DEER", "OWL", "PATH"],
+      "gridSize": 10,
+      "timeLimit": 290,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    },
+    {
+      "id": 7,
+      "words": ["CITY", "NEON", "LIGHT", "METRO", "TAXI", "CAFE"],
+      "gridSize": 9,
+      "timeLimit": 275,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    },
+    {
+      "id": 8,
+      "words": ["SNOW", "ALPS", "SKI", "COLD", "PEAK", "FROST"],
+      "gridSize": 10,
+      "timeLimit": 300,
+      "hintsAllowed": 2,
+      "difficultyIndex": 1
+    }
+  ],
   "wordPool": [
     "OCEAN",
     "BEACH",
@@ -26,6 +94,5 @@
     "ISLAND",
     "PALM",
     "SUN"
-  ],
-  "wordsPerDay": 6
+  ]
 }

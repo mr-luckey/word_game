@@ -8,6 +8,7 @@ import 'package:word_game/core/services/auth_service.dart';
 
 class AuthState extends Equatable {
   const AuthState({
+    this.authReady = false,
     this.isSignedIn = false,
     this.displayName = 'Player',
     this.email,
@@ -18,6 +19,8 @@ class AuthState extends Equatable {
     this.errorMessage,
   });
 
+  /// False until Firebase restores the persisted session on cold start.
+  final bool authReady;
   final bool isSignedIn;
   final String displayName;
   final String? email;
@@ -28,6 +31,7 @@ class AuthState extends Equatable {
   final String? errorMessage;
 
   AuthState copyWith({
+    bool? authReady,
     bool? isSignedIn,
     String? displayName,
     String? email,
@@ -39,6 +43,7 @@ class AuthState extends Equatable {
     bool clearError = false,
   }) {
     return AuthState(
+      authReady: authReady ?? this.authReady,
       isSignedIn: isSignedIn ?? this.isSignedIn,
       displayName: displayName ?? this.displayName,
       email: email ?? this.email,
@@ -52,6 +57,7 @@ class AuthState extends Equatable {
 
   @override
   List<Object?> get props => [
+        authReady,
         isSignedIn,
         displayName,
         email,
@@ -66,16 +72,24 @@ class AuthState extends Equatable {
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._auth) : super(const AuthState()) {
     _subscription = _auth.authStateChanges.listen(_onAuthChanged);
-    _onAuthChanged(_auth.currentUser);
+    unawaited(_bootstrap());
   }
 
   final AuthService _auth;
   StreamSubscription<User?>? _subscription;
 
+  Future<void> _bootstrap() async {
+    await _auth.waitForPersistedSession();
+    if (isClosed) return;
+    _onAuthChanged(_auth.currentUser);
+  }
+
   void _onAuthChanged(User? user) {
     final wasSignedIn = state.isSignedIn;
+    final firstResolve = !state.authReady;
     emit(
       state.copyWith(
+        authReady: true,
         isSignedIn: user != null,
         userId: user?.uid,
         email: user?.email,
@@ -87,7 +101,7 @@ class AuthCubit extends Cubit<AuthState> {
       ),
     );
 
-    if (user != null && !wasSignedIn) {
+    if (user != null && (!wasSignedIn || firstResolve)) {
       unawaited(_syncUserData());
     }
   }

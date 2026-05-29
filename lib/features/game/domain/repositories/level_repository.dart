@@ -22,6 +22,12 @@ abstract class ProgressRepository {
 
   /// Stars for one explore slot; keys are shared level ids (101, 102, …).
   Future<Map<int, int>> getStarsForSlot(int slotId);
+
+  /// Next shared level id to play (first incomplete, or last completed).
+  Future<int> resolveResumeLevelId({
+    required int slotId,
+    required List<int> orderedSharedLevelIds,
+  });
 }
 
 abstract class WalletRepository {

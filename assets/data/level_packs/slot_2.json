@@ -1,0 +1,1206 @@
+{
+  "slotId": 2,
+  "note": "Clean gameplay pack for slot #2. Difficulty 0 uses only 3-4 letter real English words. All words are uppercase dictionary English words, and no word repeats anywhere across slots 1 to 10.",
+  "levels": [
+    {
+      "id": 1,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 180,
+      "hintsAllowed": 5,
+      "coinsReward": 30,
+      "words": [
+        "GIVE",
+        "TAKE",
+        "WHAT",
+        "WERE",
+        "LEFT"
+      ]
+    },
+    {
+      "id": 2,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 185,
+      "hintsAllowed": 5,
+      "coinsReward": 35,
+      "words": [
+        "HEAD",
+        "OLD",
+        "COME",
+        "SAW",
+        "OUR"
+      ]
+    },
+    {
+      "id": 3,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 190,
+      "hintsAllowed": 5,
+      "coinsReward": 40,
+      "words": [
+        "MAKE",
+        "SHE",
+        "BONE",
+        "PAIN",
+        "DONE"
+      ]
+    },
+    {
+      "id": 4,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 195,
+      "hintsAllowed": 5,
+      "coinsReward": 45,
+      "words": [
+        "HALF",
+        "HELP",
+        "SEAT",
+        "PASS",
+        "HOME"
+      ]
+    },
+    {
+      "id": 5,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 200,
+      "hintsAllowed": 5,
+      "coinsReward": 50,
+      "words": [
+        "LAWS",
+        "DEAD",
+        "SIZE",
+        "SENT",
+        "WORK"
+      ]
+    },
+    {
+      "id": 6,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 205,
+      "hintsAllowed": 5,
+      "coinsReward": 55,
+      "words": [
+        "LAW",
+        "MEET",
+        "HOUR",
+        "HARD",
+        "EACH"
+      ]
+    },
+    {
+      "id": 7,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 210,
+      "hintsAllowed": 5,
+      "coinsReward": 60,
+      "words": [
+        "ROSE",
+        "TOWN",
+        "LED",
+        "RED",
+        "CALL"
+      ]
+    },
+    {
+      "id": 8,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 215,
+      "hintsAllowed": 5,
+      "coinsReward": 65,
+      "words": [
+        "BED",
+        "PAST",
+        "LOST",
+        "LAY",
+        "NAME"
+      ]
+    },
+    {
+      "id": 9,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 220,
+      "hintsAllowed": 5,
+      "coinsReward": 70,
+      "words": [
+        "ASK",
+        "ARM",
+        "PUT",
+        "SIX",
+        "HEAR"
+      ]
+    },
+    {
+      "id": 10,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 225,
+      "hintsAllowed": 5,
+      "coinsReward": 75,
+      "words": [
+        "GET",
+        "ACT",
+        "DEAR",
+        "NOR",
+        "FEAR"
+      ]
+    },
+    {
+      "id": 11,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 230,
+      "hintsAllowed": 5,
+      "coinsReward": 80,
+      "words": [
+        "FAR",
+        "TOLD",
+        "BAD",
+        "GOD",
+        "WEST"
+      ]
+    },
+    {
+      "id": 12,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 235,
+      "hintsAllowed": 5,
+      "coinsReward": 85,
+      "words": [
+        "RODE",
+        "FACT",
+        "VIEW",
+        "SELF",
+        "CITY"
+      ]
+    },
+    {
+      "id": 13,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 240,
+      "hintsAllowed": 5,
+      "coinsReward": 90,
+      "words": [
+        "LESS",
+        "TURN",
+        "READ",
+        "TEN",
+        "FEEL"
+      ]
+    },
+    {
+      "id": 14,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 245,
+      "hintsAllowed": 5,
+      "coinsReward": 95,
+      "words": [
+        "TILL",
+        "BEST",
+        "SON",
+        "ELSE",
+        "NECK"
+      ]
+    },
+    {
+      "id": 15,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 250,
+      "hintsAllowed": 5,
+      "coinsReward": 100,
+      "words": [
+        "LADY",
+        "LAID",
+        "SOON",
+        "RISE",
+        "CASE"
+      ]
+    },
+    {
+      "id": 16,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 255,
+      "hintsAllowed": 5,
+      "coinsReward": 105,
+      "words": [
+        "DUE",
+        "FEET",
+        "WHOM",
+        "KEPT",
+        "OPEN"
+      ]
+    },
+    {
+      "id": 17,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 260,
+      "hintsAllowed": 5,
+      "coinsReward": 110,
+      "words": [
+        "SAT",
+        "SOUL",
+        "GLAD",
+        "YEAR",
+        "DREW"
+      ]
+    },
+    {
+      "id": 18,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 265,
+      "hintsAllowed": 5,
+      "coinsReward": 115,
+      "words": [
+        "COAT",
+        "AIR",
+        "REST",
+        "GREW",
+        "ARMS"
+      ]
+    },
+    {
+      "id": 19,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 270,
+      "hintsAllowed": 5,
+      "coinsReward": 120,
+      "words": [
+        "WORD",
+        "FIND",
+        "WANT",
+        "THUS",
+        "MIND"
+      ]
+    },
+    {
+      "id": 20,
+      "difficultyIndex": 0,
+      "gridSize": 10,
+      "timeLimit": 275,
+      "hintsAllowed": 5,
+      "coinsReward": 125,
+      "words": [
+        "WIFE",
+        "SEEN",
+        "USED",
+        "LINE",
+        "WALL"
+      ]
+    },
+    {
+      "id": 21,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 240,
+      "hintsAllowed": 4,
+      "coinsReward": 60,
+      "words": [
+        "ACUTE",
+        "HANDS",
+        "TEARS",
+        "ULCER",
+        "GOING"
+      ]
+    },
+    {
+      "id": 22,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 245,
+      "hintsAllowed": 4,
+      "coinsReward": 65,
+      "words": [
+        "REPLY",
+        "TRADE",
+        "LOWER",
+        "FIELD",
+        "CASES"
+      ]
+    },
+    {
+      "id": 23,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 250,
+      "hintsAllowed": 4,
+      "coinsReward": 70,
+      "words": [
+        "PAPER",
+        "MEANS",
+        "LEAST",
+        "COURT",
+        "BLACK"
+      ]
+    },
+    {
+      "id": 24,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 255,
+      "hintsAllowed": 4,
+      "coinsReward": 75,
+      "words": [
+        "TIMES",
+        "CIVIL",
+        "FACES",
+        "TRIED",
+        "LOCAL"
+      ]
+    },
+    {
+      "id": 25,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 260,
+      "hintsAllowed": 4,
+      "coinsReward": 80,
+      "words": [
+        "KNOWN",
+        "BRING",
+        "WOUND",
+        "UNION",
+        "SHORT"
+      ]
+    },
+    {
+      "id": 26,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 265,
+      "hintsAllowed": 4,
+      "coinsReward": 85,
+      "words": [
+        "HONOR",
+        "LIGHT",
+        "FORCE",
+        "SINCE",
+        "THIRD"
+      ]
+    },
+    {
+      "id": 27,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 270,
+      "hintsAllowed": 4,
+      "coinsReward": 90,
+      "words": [
+        "BONES",
+        "DEATH",
+        "ALONE",
+        "WATER",
+        "CROWD"
+      ]
+    },
+    {
+      "id": 28,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 275,
+      "hintsAllowed": 4,
+      "coinsReward": 95,
+      "words": [
+        "NORTH",
+        "GIVEN",
+        "CLOSE",
+        "ROOMS",
+        "SLEEP"
+      ]
+    },
+    {
+      "id": 29,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 280,
+      "hintsAllowed": 4,
+      "coinsReward": 100,
+      "words": [
+        "FLANK",
+        "LODGE",
+        "AWARE",
+        "CLEAN",
+        "SHARP"
+      ]
+    },
+    {
+      "id": 30,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 285,
+      "hintsAllowed": 4,
+      "coinsReward": 105,
+      "words": [
+        "MORAL",
+        "ANGER",
+        "START",
+        "CHEST",
+        "FANCY"
+      ]
+    },
+    {
+      "id": 31,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 290,
+      "hintsAllowed": 4,
+      "coinsReward": 110,
+      "words": [
+        "GRANT",
+        "MEANT",
+        "WORSE",
+        "BROWN",
+        "GUARD"
+      ]
+    },
+    {
+      "id": 32,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 295,
+      "hintsAllowed": 4,
+      "coinsReward": 115,
+      "words": [
+        "SPITE",
+        "HEADS",
+        "MIDST",
+        "HABIT",
+        "FACTS"
+      ]
+    },
+    {
+      "id": 33,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 300,
+      "hintsAllowed": 4,
+      "coinsReward": 120,
+      "words": [
+        "PORCH",
+        "EMPTY",
+        "ISSUE",
+        "SHARE",
+        "MONTH"
+      ]
+    },
+    {
+      "id": 34,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 305,
+      "hintsAllowed": 4,
+      "coinsReward": 125,
+      "words": [
+        "WRIST",
+        "SORRY",
+        "BURST",
+        "RULES",
+        "STUDY"
+      ]
+    },
+    {
+      "id": 35,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 310,
+      "hintsAllowed": 4,
+      "coinsReward": 130,
+      "words": [
+        "RAISE",
+        "LOOKS",
+        "GAZED",
+        "GROUP",
+        "TAXES"
+      ]
+    },
+    {
+      "id": 36,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 315,
+      "hintsAllowed": 4,
+      "coinsReward": 135,
+      "words": [
+        "BROAD",
+        "PLAIN",
+        "CRIME",
+        "LANDS",
+        "WEARY"
+      ]
+    },
+    {
+      "id": 37,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 320,
+      "hintsAllowed": 4,
+      "coinsReward": 140,
+      "words": [
+        "SIXTH",
+        "BREAK",
+        "PROVE",
+        "GREEN",
+        "WRONG"
+      ]
+    },
+    {
+      "id": 38,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 325,
+      "hintsAllowed": 4,
+      "coinsReward": 145,
+      "words": [
+        "EQUAL",
+        "ALARM",
+        "RAPID",
+        "LAYER",
+        "RIVER"
+      ]
+    },
+    {
+      "id": 39,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 330,
+      "hintsAllowed": 4,
+      "coinsReward": 150,
+      "words": [
+        "SHOCK",
+        "MIXED",
+        "VIEWS",
+        "THANK",
+        "FLUID"
+      ]
+    },
+    {
+      "id": 40,
+      "difficultyIndex": 1,
+      "gridSize": 11,
+      "timeLimit": 335,
+      "hintsAllowed": 4,
+      "coinsReward": 155,
+      "words": [
+        "SENSE",
+        "KNOWS",
+        "FORTY",
+        "TRUNK",
+        "FIFTH"
+      ]
+    },
+    {
+      "id": 41,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 300,
+      "hintsAllowed": 3,
+      "coinsReward": 100,
+      "words": [
+        "TISSUES",
+        "BECAME",
+        "VARIOUS",
+        "VILLAGE",
+        "BECOMES"
+      ]
+    },
+    {
+      "id": 42,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 305,
+      "hintsAllowed": 3,
+      "coinsReward": 105,
+      "words": [
+        "SLAVERY",
+        "RAISED",
+        "SERVICE",
+        "GLANCED",
+        "LOOKING"
+      ]
+    },
+    {
+      "id": 43,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 310,
+      "hintsAllowed": 3,
+      "coinsReward": 110,
+      "words": [
+        "ARTERY",
+        "SILENT",
+        "FORCES",
+        "QUICKLY",
+        "FORMED"
+      ]
+    },
+    {
+      "id": 44,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 315,
+      "hintsAllowed": 3,
+      "coinsReward": 115,
+      "words": [
+        "STREET",
+        "RAPIDLY",
+        "RETURN",
+        "BRIDGE",
+        "NATION"
+      ]
+    },
+    {
+      "id": 45,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 320,
+      "hintsAllowed": 3,
+      "coinsReward": 120,
+      "words": [
+        "NATURE",
+        "LETTER",
+        "SPIRIT",
+        "EITHER",
+        "MATTER"
+      ]
+    },
+    {
+      "id": 46,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 325,
+      "hintsAllowed": 3,
+      "coinsReward": 125,
+      "words": [
+        "OPINION",
+        "BEHIND",
+        "ALMOST",
+        "WANTED",
+        "BATTLE"
+      ]
+    },
+    {
+      "id": 47,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 330,
+      "hintsAllowed": 3,
+      "coinsReward": 130,
+      "words": [
+        "SEVERAL",
+        "ORDERS",
+        "FRIENDS",
+        "PRESENT",
+        "WHETHER"
+      ]
+    },
+    {
+      "id": 48,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 335,
+      "hintsAllowed": 3,
+      "coinsReward": 135,
+      "words": [
+        "WISHED",
+        "PASSED",
+        "SEEING",
+        "COMMON",
+        "CERTAIN"
+      ]
+    },
+    {
+      "id": 49,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 340,
+      "hintsAllowed": 3,
+      "coinsReward": 140,
+      "words": [
+        "VESSELS",
+        "BECOME",
+        "SEVERE",
+        "SMILING",
+        "CARRIED"
+      ]
+    },
+    {
+      "id": 50,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 345,
+      "hintsAllowed": 3,
+      "coinsReward": 145,
+      "words": [
+        "SINGLE",
+        "THINGS",
+        "LONGER",
+        "REPLIED",
+        "TOWARD"
+      ]
+    },
+    {
+      "id": 51,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 350,
+      "hintsAllowed": 3,
+      "coinsReward": 150,
+      "words": [
+        "REASON",
+        "WITHIN",
+        "HOWEVER",
+        "MIDDLE",
+        "CANNOT"
+      ]
+    },
+    {
+      "id": 52,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 355,
+      "hintsAllowed": 3,
+      "coinsReward": 155,
+      "words": [
+        "NEITHER",
+        "MOTHER",
+        "PUBLIC",
+        "NEARLY",
+        "REACHED"
+      ]
+    },
+    {
+      "id": 53,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 360,
+      "hintsAllowed": 3,
+      "coinsReward": 160,
+      "words": [
+        "COMMAND",
+        "EVENING",
+        "SPECIAL",
+        "PROJECT",
+        "SAYING"
+      ]
+    },
+    {
+      "id": 54,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 365,
+      "hintsAllowed": 3,
+      "coinsReward": 165,
+      "words": [
+        "ENOUGH",
+        "BROUGHT",
+        "NOTICED",
+        "DINNER",
+        "FEELING"
+      ]
+    },
+    {
+      "id": 55,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 370,
+      "hintsAllowed": 3,
+      "coinsReward": 170,
+      "words": [
+        "ATTACK",
+        "AFRAID",
+        "MAKING",
+        "DOCTOR",
+        "COVERED"
+      ]
+    },
+    {
+      "id": 56,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 375,
+      "hintsAllowed": 3,
+      "coinsReward": 175,
+      "words": [
+        "FOREIGN",
+        "ANYONE",
+        "TWENTY",
+        "CHANGES",
+        "MYSELF"
+      ]
+    },
+    {
+      "id": 57,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 380,
+      "hintsAllowed": 3,
+      "coinsReward": 180,
+      "words": [
+        "CHAPTER",
+        "EVENTS",
+        "BEYOND",
+        "ACCOUNT",
+        "TAKING"
+      ]
+    },
+    {
+      "id": 58,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 385,
+      "hintsAllowed": 3,
+      "coinsReward": 185,
+      "words": [
+        "COURSE",
+        "SHOUTED",
+        "ABSCESS",
+        "PERIOD",
+        "HARDLY"
+      ]
+    },
+    {
+      "id": 59,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 390,
+      "hintsAllowed": 3,
+      "coinsReward": 190,
+      "words": [
+        "OPENED",
+        "TALKING",
+        "ACROSS",
+        "SMILED",
+        "HUNDRED"
+      ]
+    },
+    {
+      "id": 60,
+      "difficultyIndex": 2,
+      "gridSize": 12,
+      "timeLimit": 395,
+      "hintsAllowed": 3,
+      "coinsReward": 195,
+      "words": [
+        "GIVING",
+        "STOPPED",
+        "SOLDIER",
+        "GROUND",
+        "DRAWING"
+      ]
+    },
+    {
+      "id": 61,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 360,
+      "hintsAllowed": 2,
+      "coinsReward": 150,
+      "words": [
+        "INCREASE",
+        "TENDENCY",
+        "SETTLEMENT",
+        "IRRITATION",
+        "RELIGIOUS"
+      ]
+    },
+    {
+      "id": 62,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 365,
+      "hintsAllowed": 2,
+      "coinsReward": 155,
+      "words": [
+        "ADDITION",
+        "ASSISTANCE",
+        "CANDIDATE",
+        "FEELINGS",
+        "CURIOSITY"
+      ]
+    },
+    {
+      "id": 63,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 370,
+      "hintsAllowed": 2,
+      "coinsReward": 160,
+      "words": [
+        "CONFUSION",
+        "DEFINITE",
+        "PERSONAL",
+        "RESEMBLING",
+        "FINISHED"
+      ]
+    },
+    {
+      "id": 64,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 375,
+      "hintsAllowed": 2,
+      "coinsReward": 165,
+      "words": [
+        "CONSISTS",
+        "VISITORS",
+        "IMPORTANCE",
+        "REACTION",
+        "IMMEDIATE"
+      ]
+    },
+    {
+      "id": 65,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 380,
+      "hintsAllowed": 2,
+      "coinsReward": 170,
+      "words": [
+        "SURFACES",
+        "INNOCENT",
+        "DEMOCRATIC",
+        "ELEMENTS",
+        "FRIGHTENED"
+      ]
+    },
+    {
+      "id": 66,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 385,
+      "hintsAllowed": 2,
+      "coinsReward": 175,
+      "words": [
+        "ENORMOUS",
+        "EVIDENCE",
+        "PERMISSION",
+        "HAPPINESS",
+        "ATTACHED"
+      ]
+    },
+    {
+      "id": 67,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 390,
+      "hintsAllowed": 2,
+      "coinsReward": 180,
+      "words": [
+        "PROBLEMS",
+        "SYMPATHY",
+        "ATTENDED",
+        "EXPERIENCE",
+        "UNPLEASANT"
+      ]
+    },
+    {
+      "id": 68,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 395,
+      "hintsAllowed": 2,
+      "coinsReward": 185,
+      "words": [
+        "TERRITORY",
+        "CONSCIOUS",
+        "PERFORMED",
+        "DEMOCRATS",
+        "REGARDED"
+      ]
+    },
+    {
+      "id": 69,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 400,
+      "hintsAllowed": 2,
+      "coinsReward": 190,
+      "words": [
+        "EXTENDED",
+        "EXCELLENT",
+        "APPARENTLY",
+        "FRIENDLY",
+        "DELICATE"
+      ]
+    },
+    {
+      "id": 70,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 405,
+      "hintsAllowed": 2,
+      "coinsReward": 195,
+      "words": [
+        "ELECTRONIC",
+        "RETURNING",
+        "OPERATIONS",
+        "PROTECTIVE",
+        "APPROVAL"
+      ]
+    },
+    {
+      "id": 71,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 410,
+      "hintsAllowed": 2,
+      "coinsReward": 200,
+      "words": [
+        "HOUSEHOLD",
+        "GRADUALLY",
+        "SERVANTS",
+        "CELLULAR",
+        "ATTITUDE"
+      ]
+    },
+    {
+      "id": 72,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 415,
+      "hintsAllowed": 2,
+      "coinsReward": 205,
+      "words": [
+        "PRISONERS",
+        "REPUBLIC",
+        "ARTERIES",
+        "MOREOVER",
+        "PLEASANT"
+      ]
+    },
+    {
+      "id": 73,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 420,
+      "hintsAllowed": 2,
+      "coinsReward": 210,
+      "words": [
+        "CAREFULLY",
+        "REACHING",
+        "INDUSTRIAL",
+        "RAILWAYS",
+        "PRACTICAL"
+      ]
+    },
+    {
+      "id": 74,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 425,
+      "hintsAllowed": 2,
+      "coinsReward": 215,
+      "words": [
+        "BROTHERS",
+        "INJECTION",
+        "ARTHRITIS",
+        "GREATEST",
+        "STARTING"
+      ]
+    },
+    {
+      "id": 75,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 430,
+      "hintsAllowed": 2,
+      "coinsReward": 220,
+      "words": [
+        "ECONOMIC",
+        "BRILLIANT",
+        "INTERNAL",
+        "ORDINARY",
+        "COACHMAN"
+      ]
+    },
+    {
+      "id": 76,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 435,
+      "hintsAllowed": 2,
+      "coinsReward": 225,
+      "words": [
+        "POSSESSION",
+        "ADDRESSED",
+        "SUFFRAGE",
+        "CONFIDENCE",
+        "BUILDING"
+      ]
+    },
+    {
+      "id": 77,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 440,
+      "hintsAllowed": 2,
+      "coinsReward": 230,
+      "words": [
+        "INFLAMED",
+        "AGITATED",
+        "COMMITTED",
+        "PLATFORM",
+        "TENDERNESS"
+      ]
+    },
+    {
+      "id": 78,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 445,
+      "hintsAllowed": 2,
+      "coinsReward": 235,
+      "words": [
+        "ELECTION",
+        "PORTIONS",
+        "MISTAKEN",
+        "NECESSITY",
+        "CONFUSED"
+      ]
+    },
+    {
+      "id": 79,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 450,
+      "hintsAllowed": 2,
+      "coinsReward": 240,
+      "words": [
+        "DEPARTURE",
+        "RESULTING",
+        "ACTIVITY",
+        "DIVISION",
+        "HURRIEDLY"
+      ]
+    },
+    {
+      "id": 80,
+      "difficultyIndex": 3,
+      "gridSize": 13,
+      "timeLimit": 455,
+      "hintsAllowed": 2,
+      "coinsReward": 245,
+      "words": [
+        "POLITICS",
+        "ADJACENT",
+        "POPULATION",
+        "PECULIAR",
+        "INVOLVED"
+      ]
+    }
+  ]
+}

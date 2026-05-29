@@ -195,7 +195,37 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                               color: colors.gold,
                             ),
                           )
-                        : _tab == LevelSelectTab.map
+                        : state.destinationLocked
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.lock_rounded,
+                                        size: 56,
+                                        color: colors.locked,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        'Destination locked',
+                                        style: AppTextStyles.levelName(context),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        state.unlockRequirement == null
+                                            ? 'Complete the previous destination to unlock.'
+                                            : 'Finish ${state.unlockRequirement} first.',
+                                        style: AppTextStyles.bodyMuted(context),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : _tab == LevelSelectTab.map
                             ? !hasMapLevels
                                 ? Center(
                                     child: Text(

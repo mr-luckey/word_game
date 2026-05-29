@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
+import 'package:word_game/core/data/models/daily_game_config.dart';
 
 enum DailyDayStatus { collected, available, locked }
 
@@ -36,6 +37,11 @@ class DailyChallengeService {
   static int getDailySeed() {
     final now = DateTime.now();
     return now.year * 10000 + now.month * 100 + now.day;
+  }
+
+  /// Same calendar day = same puzzle (random pick from games[] in JSON).
+  DailyGameConfig pickTodaysGame() {
+    return _content.pickDailyGame(getDailySeed());
   }
 
   bool canClaimNow() {
@@ -119,8 +125,21 @@ class DailyChallengeService {
     );
   }
 
+  /// Legacy fallback when games[] is empty — random words from wordPool.
   List<String> pickDailyWords() {
     final config = _content.dailyChallenge;
+    if (config.hasGames) {
+      final game = pickTodaysGame();
+      final r = Random(getDailySeed());
+      final pool = game.words;
+      final picked = <String>{};
+      final count = config.wordsPerDay.clamp(1, pool.length);
+      while (picked.length < count) {
+        picked.add(pool[r.nextInt(pool.length)]);
+      }
+      return picked.toList();
+    }
+
     final r = Random(getDailySeed());
     final pool = config.wordPool;
     final picked = <String>{};

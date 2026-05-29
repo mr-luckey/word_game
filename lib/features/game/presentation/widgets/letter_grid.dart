@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
@@ -25,23 +27,29 @@ class LetterGrid extends StatelessWidget {
     final n = state.grid.length;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final gap = AppSizes.gridGap;
-        final available = constraints.maxHeight.isFinite
-            ? constraints.maxWidth.clamp(0, constraints.maxHeight).toDouble()
-            : constraints.maxWidth;
-        final cellSize = (available - gap * (n + 1)) / n;
-        final totalSize = cellSize * n + gap * (n + 1);
+        const gap = AppSizes.gridGap;
+        const borderWidth = 2.0;
+        final innerRadius = AppSizes.radiusLg - borderWidth;
+        final maxW = constraints.maxWidth;
+        final maxH = constraints.maxHeight;
+        final cellFromWidth = (maxW - gap * 2) / n;
+        final cellFromHeight =
+            maxH.isFinite ? (maxH - gap * 2) / n : cellFromWidth;
+        final cellSize = math.min(cellFromWidth, cellFromHeight);
+        final gridExtent = cellSize * n;
+        final totalSize = gridExtent + gap * 2;
 
         return Center(
           child: Container(
             width: totalSize,
             height: totalSize,
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: colors.boardWhite,
               borderRadius: BorderRadius.circular(AppSizes.radiusLg),
               border: Border.all(
                 color: colors.glassBorder.withValues(alpha: 0.45),
-                width: 2,
+                width: borderWidth,
               ),
               boxShadow: [
                 BoxShadow(
@@ -51,26 +59,34 @@ class LetterGrid extends StatelessWidget {
                 ),
               ],
             ),
-            padding: EdgeInsets.all(gap),
-            child: GestureDetector(
-              onPanStart: (d) {
-                final cell = _cellFromOffset(d.localPosition, cellSize, gap, n);
-                if (cell != null) onDragStart(cell.$1, cell.$2);
-              },
-              onPanUpdate: (d) {
-                final cell = _cellFromOffset(d.localPosition, cellSize, gap, n);
-                if (cell != null) onDragUpdate(cell.$1, cell.$2);
-              },
-              onPanEnd: (_) => onDragEnd(),
-              child: CustomPaint(
-                painter: GridPainter(
-                  state: state,
-                  colors: colors,
-                  cellSize: cellSize,
-                  gap: gap,
-                  letterStyle: AppTextStyles.gridLetter(context, n.toDouble()),
+            padding: const EdgeInsets.all(gap),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(innerRadius),
+              child: SizedBox(
+                width: gridExtent,
+                height: gridExtent,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanStart: (d) {
+                    final cell = _cellFromOffset(d.localPosition, cellSize, n);
+                    if (cell != null) onDragStart(cell.$1, cell.$2);
+                  },
+                  onPanUpdate: (d) {
+                    final cell = _cellFromOffset(d.localPosition, cellSize, n);
+                    if (cell != null) onDragUpdate(cell.$1, cell.$2);
+                  },
+                  onPanEnd: (_) => onDragEnd(),
+                  child: CustomPaint(
+                    painter: GridPainter(
+                      state: state,
+                      colors: colors,
+                      cellSize: cellSize,
+                      letterStyle:
+                          AppTextStyles.gridLetter(context, n.toDouble()),
+                    ),
+                    size: Size.square(gridExtent),
+                  ),
                 ),
-                size: Size.square(cellSize * n + gap * (n - 1)),
               ),
             ),
           ),
@@ -79,20 +95,29 @@ class LetterGrid extends StatelessWidget {
     );
   }
 
-  (int, int)? _cellFromOffset(
-    Offset local,
-    double cellSize,
-    double gap,
-    int n,
-  ) {
-    final stride = cellSize + gap;
-    final col = (local.dx / stride).floor();
-    final row = (local.dy / stride).floor();
-    if (row < 0 || row >= n || col < 0 || col >= n) return null;
-    final cx = local.dx - col * stride;
-    final cy = local.dy - row * stride;
-    if (cx > cellSize || cy > cellSize) return null;
-    return (row, col);
+  /// Nearest cell center — reliable for diagonal drags across tile corners.
+  (int, int)? _cellFromOffset(Offset local, double cellSize, int n) {
+    if (local.dx < 0 || local.dy < 0) return null;
+    final extent = cellSize * n;
+    if (local.dx > extent || local.dy > extent) return null;
+
+    var bestRow = 0;
+    var bestCol = 0;
+    var bestDist = double.infinity;
+
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        final cx = c * cellSize + cellSize / 2;
+        final cy = r * cellSize + cellSize / 2;
+        final d = (local - Offset(cx, cy)).distanceSquared;
+        if (d < bestDist) {
+          bestDist = d;
+          bestRow = r;
+          bestCol = c;
+        }
+      }
+    }
+    return (bestRow, bestCol);
   }
 }
 
@@ -101,17 +126,16 @@ class GridPainter extends CustomPainter {
     required this.state,
     required this.colors,
     required this.cellSize,
-    required this.gap,
     required this.letterStyle,
   });
 
   final GameInProgress state;
   final AppThemeColors colors;
   final double cellSize;
-  final double gap;
   final TextStyle letterStyle;
 
-  /// Readable letter on any tile — avoids white-on-white (Winter Alps, Ocean).
+  static const _borderInset = 0.5;
+
   Color _contrastLetterColor(Color cellBackground) {
     final lightTile = cellBackground.computeLuminance() > 0.45;
     if (lightTile) {
@@ -127,18 +151,24 @@ class GridPainter extends CustomPainter {
   }
 
   Offset _cellCenter(int row, int col) {
-    final stride = cellSize + gap;
     return Offset(
-      col * stride + cellSize / 2,
-      row * stride + cellSize / 2,
+      col * cellSize + cellSize / 2,
+      row * cellSize + cellSize / 2,
+    );
+  }
+
+  Rect _cellRect(int row, int col) {
+    return Rect.fromLTWH(
+      col * cellSize + _borderInset,
+      row * cellSize + _borderInset,
+      cellSize - _borderInset * 2,
+      cellSize - _borderInset * 2,
     );
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     final n = state.grid.length;
-    final stride = cellSize + gap;
-    final radius = Radius.circular(AppSizes.radiusSm);
 
     if (state.selectedCells.length >= 2 &&
         state.selectionState != SelectionState.wrong) {
@@ -154,7 +184,7 @@ class GridPainter extends CustomPainter {
         path,
         Paint()
           ..color = colors.selectionLine.withValues(alpha: 0.85)
-          ..strokeWidth = cellSize * 0.42
+          ..strokeWidth = cellSize * 0.38
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round
           ..strokeJoin = StrokeJoin.round,
@@ -164,10 +194,7 @@ class GridPainter extends CustomPainter {
     for (var r = 0; r < n; r++) {
       for (var c = 0; c < n; c++) {
         final idx = r * n + c;
-        final rect = RRect.fromRectAndRadius(
-          Rect.fromLTWH(c * stride, r * stride, cellSize, cellSize),
-          radius,
-        );
+        final rect = _cellRect(r, c);
 
         Color bg = (r + c) % 2 == 0 ? colors.cellDefault : colors.cellAlt;
         if (state.foundCellColors.containsKey(idx)) {
@@ -183,8 +210,8 @@ class GridPainter extends CustomPainter {
               : colors.cellSelected;
         }
 
-        canvas.drawRRect(rect, Paint()..color = bg);
-        canvas.drawRRect(
+        canvas.drawRect(rect, Paint()..color = bg);
+        canvas.drawRect(
           rect,
           Paint()
             ..color = colors.cellBorder.withValues(alpha: 0.55)
@@ -195,12 +222,12 @@ class GridPainter extends CustomPainter {
         final isSelected =
             state.selectedCells.any((cell) => cell.row == r && cell.col == c);
         if (isSelected && state.selectionState != SelectionState.wrong) {
-          canvas.drawRRect(
+          canvas.drawRect(
             rect,
             Paint()
               ..color = colors.gold.withValues(alpha: 0.35)
               ..style = PaintingStyle.stroke
-              ..strokeWidth = 2.5,
+              ..strokeWidth = 2,
           );
         }
 
@@ -219,8 +246,8 @@ class GridPainter extends CustomPainter {
         tp.paint(
           canvas,
           Offset(
-            rect.left + (cellSize - tp.width) / 2,
-            rect.top + (cellSize - tp.height) / 2,
+            rect.left + (rect.width - tp.width) / 2,
+            rect.top + (rect.height - tp.height) / 2,
           ),
         );
       }

@@ -15,4 +15,13 @@ void main() {
     expect(LevelProgressId.matchesSlot(101, 1), isTrue);
     expect(LevelProgressId.matchesSlot(101, 2), isFalse);
   });
+
+  test('compact slot_1 ids encode and match slot 1', () {
+    expect(LevelProgressId.encode(slotId: 1, sharedLevelId: 1), 10001);
+    expect(LevelProgressId.encode(slotId: 1, sharedLevelId: 2), 10002);
+    expect(LevelProgressId.matchesSlot(1, 1), isTrue);
+    expect(LevelProgressId.matchesSlot(1, 2), isFalse);
+    expect(LevelProgressId.matchesSlot(10001, 1), isTrue);
+    expect(LevelProgressId.sharedLevelIdFromStorageKey(10001), 1);
+  });
 }

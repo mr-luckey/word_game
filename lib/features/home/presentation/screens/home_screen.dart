@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 import 'package:word_game/features/home/presentation/cubit/destinations_cubit.dart';
 import 'package:word_game/features/home/presentation/widgets/home_background.dart';
 import 'package:word_game/features/home/presentation/widgets/home_brand_title.dart';
@@ -48,6 +49,50 @@ class _HomeViewState extends State<_HomeView> {
   void _goLevels(BuildContext context, int themeId) {
     getIt<AppThemeBloc>().setDestinationContext(themeId);
     context.go('/levels?themeId=$themeId');
+  }
+
+  Future<void> _continuePlay(
+    BuildContext context,
+    int fallbackDestinationId,
+  ) async {
+    final themeBloc = getIt<AppThemeBloc>();
+    var destinationId =
+        themeBloc.state.activeDestinationId ?? fallbackDestinationId;
+
+    final destState = context.read<DestinationsCubit>().state;
+    if (!destState.loading &&
+        destState.unlockedSlots.isNotEmpty &&
+        !destState.isSlotUnlocked(destinationId)) {
+      destinationId = destState.unlockedSlots.first;
+    }
+
+    themeBloc.setDestinationContext(destinationId);
+
+    final themes = await getIt<LevelRepository>()
+        .loadThemesForPreset(themeBloc.state.activePreset);
+    if (!context.mounted) return;
+
+    final theme = themes.where((t) => t.id == destinationId).firstOrNull ??
+        themes.firstOrNull;
+    if (theme == null) {
+      if (!context.mounted) return;
+      _goLevels(context, destinationId);
+      return;
+    }
+
+    final ordered = theme.levels.map((l) => l.id).toList()..sort();
+    final levelId = await getIt<ProgressRepository>().resolveResumeLevelId(
+      slotId: destinationId,
+      orderedSharedLevelIds: ordered,
+    );
+    if (!context.mounted) return;
+
+    final progressUpdated =
+        await context.push<bool>('/game?levelId=$levelId');
+    if (!context.mounted) return;
+    if (progressUpdated == true) {
+      context.read<DestinationsCubit>().refresh();
+    }
   }
 
   @override
@@ -117,7 +162,7 @@ class _HomeViewState extends State<_HomeView> {
                           HomePlayButton(
                             height: metrics.playButtonHeight,
                             onPressed: () =>
-                                _goLevels(context, destinationId),
+                                _continuePlay(context, destinationId),
                           ),
                           SizedBox(height: metrics.sectionGap),
                           Padding(

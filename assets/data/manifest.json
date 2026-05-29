@@ -1,7 +1,7 @@
 {
   "version": "3.0",
-  "sharedLevelsAsset": "assets/data/shared_levels.json",
   "exploreCatalogAsset": "assets/data/explore_catalog.json",
+  "slotsConfigAsset": "assets/data/slots_config.json",
   "dailyChallengeAsset": "assets/data/daily_challenge.json",
   "achievementsAsset": "assets/data/achievements.json"
 }

@@ -66,9 +66,19 @@ class AppTextStyles {
 
   static TextStyle timer(BuildContext context, {required bool danger}) =>
       GoogleFonts.orbitron(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: danger ? context.appColors.timerDanger : context.appColors.onScenic,
+        fontSize: danger ? 16 : 14,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.5,
+        color: danger ? Colors.white : context.appColors.onScenic,
+        shadows: danger
+            ? const [
+                Shadow(
+                  color: Color(0x99000000),
+                  blurRadius: 4,
+                  offset: Offset(0, 1),
+                ),
+              ]
+            : null,
       );
 
   static TextStyle wordChip(BuildContext context) => GoogleFonts.montserrat(

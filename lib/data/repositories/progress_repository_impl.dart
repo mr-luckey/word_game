@@ -23,8 +23,49 @@ class ProgressRepositoryImpl implements ProgressRepository {
     final index = orderedLevelIds.indexOf(levelId);
     if (index <= 0) return true;
     final prevId = orderedLevelIds[index - 1];
-    final prev = await _db.getProgress(prevId);
-    return prev != null;
+    return _hasCompletedStorageLevel(prevId);
+  }
+
+  Future<bool> _hasCompletedStorageLevel(int storageLevelId) async {
+    if ((await _db.getProgress(storageLevelId)) != null) return true;
+
+    if (storageLevelId >= LevelProgressId.slotMultiplier) {
+      final slotId = storageLevelId ~/ LevelProgressId.slotMultiplier;
+      final sharedId = storageLevelId % LevelProgressId.slotMultiplier;
+      if (slotId == 1 &&
+          (LevelProgressId.isLegacyStorageKey(sharedId) ||
+              LevelProgressId.isCompactUnencodedKey(sharedId))) {
+        return (await _db.getProgress(sharedId)) != null;
+      }
+    }
+    return false;
+  }
+
+  @override
+  Future<int> resolveResumeLevelId({
+    required int slotId,
+    required List<int> orderedSharedLevelIds,
+  }) async {
+    if (orderedSharedLevelIds.isEmpty) return 101;
+
+    final stars = await getStarsForSlot(slotId);
+    final orderedStorage = orderedSharedLevelIds
+        .map((id) => LevelProgressId.encode(slotId: slotId, sharedLevelId: id))
+        .toList();
+
+    for (var i = 0; i < orderedSharedLevelIds.length; i++) {
+      final sharedId = orderedSharedLevelIds[i];
+      final storageId = orderedStorage[i];
+      if (!await isLevelUnlocked(storageId, orderedStorage)) break;
+      if ((stars[sharedId] ?? 0) == 0) return sharedId;
+    }
+
+    for (var i = orderedSharedLevelIds.length - 1; i >= 0; i--) {
+      final sharedId = orderedSharedLevelIds[i];
+      if ((stars[sharedId] ?? 0) > 0) return sharedId;
+    }
+
+    return orderedSharedLevelIds.first;
   }
 
   @override

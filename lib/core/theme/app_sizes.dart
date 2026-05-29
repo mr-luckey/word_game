@@ -16,5 +16,5 @@ class AppSizes {
   static const double toolbarHeight = 72;
   static const double levelCardSize = 96;
   static const double coinIconSize = 24;
-  static const double gridGap = 2;
+  static const double gridGap = 0;
 }

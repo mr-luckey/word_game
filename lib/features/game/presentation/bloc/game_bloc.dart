@@ -103,7 +103,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       level = _content.buildDailyLevel(
         preset: _themeBloc.state.activePreset,
         coinsReward: _dailyChallenge.todayRewardCoins,
-        words: _dailyChallenge.pickDailyWords(),
+        game: _dailyChallenge.pickTodaysGame(),
       );
     }
     if (level == null) {
@@ -181,14 +181,27 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (s is! GameInProgress || s.isPaused) return;
     final next = s.elapsed + const Duration(seconds: 1);
     if (s.timeLimit > 0 && next.inSeconds >= s.timeLimit) {
-      final timedOut = s.copyWith(
-        elapsed: Duration(seconds: s.timeLimit),
-        isCompleting: true,
+      _timer?.cancel();
+      emit(
+        s.copyWith(
+          elapsed: Duration(seconds: s.timeLimit),
+          isTimedOut: true,
+          isPaused: true,
+          selectedCells: [],
+          selectionState: SelectionState.idle,
+          clearFeedback: true,
+        ),
       );
-      emit(timedOut);
-      await _finishLevel(timedOut, emit);
       return;
     }
+
+    final remaining = s.timeLimit - next.inSeconds;
+    if (s.timeLimit > 0 &&
+        remaining > 0 &&
+        remaining <= GameConfig.timerTickThresholdSeconds) {
+      unawaited(_audio.playTimerTick());
+    }
+
     emit(s.copyWith(elapsed: next));
   }
 
@@ -200,7 +213,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onDragStart(CellDragStarted event, Emitter<GameState> emit) {
     final s = state;
-    if (s is! GameInProgress || s.isPaused) return;
+    if (s is! GameInProgress || s.isPaused || s.isTimedOut) return;
     _dragStart = GridCellCoord(row: event.row, col: event.col);
     final cell = s.grid[event.row][event.col];
     emit(
@@ -214,9 +227,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onDragUpdate(CellDragUpdated event, Emitter<GameState> emit) {
     final s = state;
-    if (s is! GameInProgress || _dragStart == null) return;
+    if (s is! GameInProgress || s.isTimedOut || _dragStart == null) return;
     final end = GridCellCoord(row: event.row, col: event.col);
-    final line = WordValidator.buildLine(
+    final line = WordValidator.buildSelectionLine(
       _dragStart!,
       end,
       s.grid.length,
@@ -230,7 +243,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onDragEnd(CellDragEnded event, Emitter<GameState> emit) async {
     final s = state;
-    if (s is! GameInProgress) return;
+    if (s is! GameInProgress || s.isTimedOut) return;
     _dragStart = null;
     final word = s.selectedCells.map((c) => c.letter).join();
     if (word.length < 2) {

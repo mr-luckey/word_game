@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "description": "Explore list per visual theme — names/images only; levels from shared_levels.json.",
+  "description": "ONLY names + images per theme. Game levels: level_packs/slot_1.json … slot_10.json (same slot number = same game in every theme).",
   "slotCount": 10,
   "themes": {
     "classic_travel": [

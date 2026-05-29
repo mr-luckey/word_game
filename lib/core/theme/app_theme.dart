@@ -49,7 +49,19 @@ class AppTheme {
         ),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(color: c.gold),
-      snackBarTheme: SnackBarThemeData(backgroundColor: c.tertiary),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: const Color(0xFF1A2438),
+        contentTextStyle: GoogleFonts.montserrat(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+        actionTextColor: c.gold,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: c.navSurface,
         selectedItemColor: c.gold,

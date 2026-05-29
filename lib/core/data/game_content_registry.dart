@@ -1,23 +1,27 @@
 import 'package:word_game/core/data/models/achievement_badge_config.dart';
 import 'package:word_game/core/data/models/daily_challenge_config.dart';
+import 'package:word_game/core/data/models/daily_game_config.dart';
 import 'package:word_game/core/data/models/explore_slot_display.dart';
+import 'package:word_game/core/data/models/slots_config.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 
-/// Shared levels + per-theme explore names (same gameplay everywhere).
+/// Explore card = slot number (1–10). Same levels in every theme for that slot.
 class GameContentRegistry {
   GameContentRegistry({
-    required this.sharedLevels,
     required this.exploreByPreset,
     required this.dailyChallenge,
     required this.achievements,
+    required this.slotsConfig,
+    required this.levelPacksBySlot,
   });
 
-  final List<LevelJson> sharedLevels;
   final Map<AppThemePreset, List<ExploreSlotDisplay>> exploreByPreset;
   final DailyChallengeConfig dailyChallenge;
   final AchievementsConfig achievements;
+  final SlotsConfig slotsConfig;
+  final Map<int, List<LevelJson>> levelPacksBySlot;
 
   List<ExploreSlotDisplay> exploreForPreset(AppThemePreset preset) =>
       exploreByPreset[preset] ?? const [];
@@ -29,17 +33,22 @@ class GameContentRegistry {
     return null;
   }
 
-  /// Playable location: themed shell around [sharedLevels].
+  /// Game data for destination card [slotId] — same in classic_travel, forest_quest, etc.
+  List<LevelJson> levelsForSlot(int slotId) {
+    return levelPacksBySlot[slotId] ?? const [];
+  }
+
   ThemeCategoryEntity themeForSlot(AppThemePreset preset, int slotId) {
     final display = exploreSlot(preset, slotId) ??
         exploreForPreset(preset).firstOrNull;
+    final levels = levelsForSlot(slotId);
     if (display == null) {
       return ThemeCategoryEntity(
         id: slotId,
         name: 'Adventure',
         theme: preset.folder,
         backgroundImage: '${preset.folder}/grid_full.webp',
-        levels: sharedLevels,
+        levels: levels,
       );
     }
     return ThemeCategoryEntity(
@@ -47,7 +56,7 @@ class GameContentRegistry {
       name: display.name,
       theme: preset.folder,
       backgroundImage: display.backgroundImage,
-      levels: sharedLevels,
+      levels: levels,
     );
   }
 
@@ -85,13 +94,12 @@ class GameContentRegistry {
     );
   }
 
-  AppThemePreset presetForDestinationId(int id) => AppThemePreset.classicTravel;
-
   LevelEntity? levelById(int levelId, {AppThemePreset? preset, int? slotId}) {
-    for (final level in sharedLevels) {
+    final p = preset ?? AppThemePreset.classicTravel;
+    final slot = slotId ?? 1;
+    final levels = levelsForSlot(slot);
+    for (final level in levels) {
       if (level.id == levelId) {
-        final p = preset ?? AppThemePreset.classicTravel;
-        final slot = slotId ?? 1;
         final theme = themeForSlot(p, slot);
         return LevelEntity(
           id: level.id,
@@ -110,23 +118,39 @@ class GameContentRegistry {
     return null;
   }
 
+  DailyGameConfig pickDailyGame(int daySeed) {
+    final config = dailyChallenge;
+    if (config.hasGames) {
+      final index = daySeed.abs() % config.games.length;
+      return config.games[index];
+    }
+    return DailyGameConfig(
+      id: 0,
+      words: config.wordPool,
+    );
+  }
+
   LevelEntity buildDailyLevel({
     required AppThemePreset preset,
     required int coinsReward,
-    required List<String> words,
+    required DailyGameConfig game,
   }) {
     final folder = preset.folder;
     final bg = dailyChallenge.backgroundImageTemplate
         .replaceAll('{themeFolder}', folder);
+    final words = game.words.length > dailyChallenge.wordsPerDay
+        ? game.words.take(dailyChallenge.wordsPerDay).toList()
+        : game.words;
+
     return LevelEntity(
       id: dailyChallenge.levelId,
       themeId: 0,
       themeName: dailyChallenge.name,
       backgroundImage: bg,
-      difficultyIndex: dailyChallenge.difficultyIndex,
-      gridSize: dailyChallenge.gridSize,
-      timeLimit: dailyChallenge.timeLimit,
-      hintsAllowed: dailyChallenge.hintsAllowed,
+      difficultyIndex: game.difficultyIndex ?? dailyChallenge.difficultyIndex,
+      gridSize: game.gridSize ?? dailyChallenge.gridSize,
+      timeLimit: game.timeLimit ?? dailyChallenge.timeLimit,
+      hintsAllowed: game.hintsAllowed ?? dailyChallenge.hintsAllowed,
       coinsReward: coinsReward,
       words: words,
     );

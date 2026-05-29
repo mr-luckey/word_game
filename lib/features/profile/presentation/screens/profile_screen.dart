@@ -118,6 +118,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     BlocBuilder<AuthCubit, AuthState>(
                       builder: (context, auth) {
+                        if (!auth.authReady) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: context.appColors.gold,
+                            ),
+                          );
+                        }
                         if (auth.isSignedIn) return const SizedBox.shrink();
                         return const SignInGateOverlay();
                       },

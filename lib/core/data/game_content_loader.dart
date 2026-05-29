@@ -5,6 +5,7 @@ import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/data/models/achievement_badge_config.dart';
 import 'package:word_game/core/data/models/daily_challenge_config.dart';
 import 'package:word_game/core/data/models/explore_slot_display.dart';
+import 'package:word_game/core/data/models/slots_config.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 
@@ -30,13 +31,12 @@ class GameContentLoader {
       jsonDecode(achievementsRaw) as Map<String, dynamic>,
     );
 
-    final levelsRaw = await rootBundle.loadString(
-      manifest['sharedLevelsAsset'] as String,
+    final slotsRaw = await rootBundle.loadString(
+      manifest['slotsConfigAsset'] as String,
     );
-    final levelsData = jsonDecode(levelsRaw) as Map<String, dynamic>;
-    final sharedLevels = (levelsData['levels'] as List<dynamic>)
-        .map((l) => LevelJson.fromJson(l as Map<String, dynamic>))
-        .toList();
+    final slotsConfig = SlotsConfig.fromJson(
+      jsonDecode(slotsRaw) as Map<String, dynamic>,
+    );
 
     final exploreRaw = await rootBundle.loadString(
       manifest['exploreCatalogAsset'] as String,
@@ -59,11 +59,24 @@ class GameContentLoader {
         ..sort((a, b) => a.unlockOrder.compareTo(b.unlockOrder));
     }
 
+    final levelPacks = <int, List<LevelJson>>{};
+    for (var slotId = 1; slotId <= slotsConfig.slotCount; slotId++) {
+      final fileName = SlotsConfig.packFileName(slotId);
+      final packRaw = await rootBundle.loadString(
+        'assets/data/level_packs/$fileName.json',
+      );
+      final packData = jsonDecode(packRaw) as Map<String, dynamic>;
+      levelPacks[slotId] = (packData['levels'] as List<dynamic>)
+          .map((l) => LevelJson.fromJson(l as Map<String, dynamic>))
+          .toList();
+    }
+
     return GameContentRegistry(
-      sharedLevels: sharedLevels,
       exploreByPreset: exploreByPreset,
       dailyChallenge: dailyChallenge,
       achievements: achievements,
+      slotsConfig: slotsConfig,
+      levelPacksBySlot: levelPacks,
     );
   }
 }
