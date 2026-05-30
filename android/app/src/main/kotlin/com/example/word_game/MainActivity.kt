@@ -1,4 +1,4 @@
-package com.example.word_game
+package com.appwaretech.wordhunt
 
 import io.flutter.embedding.android.FlutterActivity
 
