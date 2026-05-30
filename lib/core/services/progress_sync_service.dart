@@ -1,16 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/services/firestore_user_service.dart';
+import 'package:word_game/core/constants/product_ids.dart';
 import 'package:word_game/core/services/user_cloud_data.dart';
+import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/data/local/database.dart';
 
 /// Guest progress stays local; on login merges local + cloud then syncs to Firestore.
 class ProgressSyncService {
-  ProgressSyncService(this._db, this._firestore, this._prefs);
+  ProgressSyncService(this._db, this._firestore, this._prefs, this._vip);
 
   final AppDatabase _db;
   final FirestoreUserService _firestore;
   final SharedPreferences _prefs;
+  final VipService _vip;
 
   static const _removeAdsKey = 'remove_ads';
 
@@ -133,8 +136,11 @@ class ProgressSyncService {
 
   Future<void> recordPurchaseAndSync(String productId) async {
     await _db.addPurchasedProduct(productId);
-    if (productId == 'remove_ads') {
+    if (productId == ProductIds.removeAds) {
       await _prefs.setBool(_removeAdsKey, true);
+    }
+    if (VipService.productGrantsVip(productId)) {
+      await _vip.setVipActive(true);
     }
     if (!isLoggedIn) return;
     try {
@@ -171,6 +177,9 @@ class ProgressSyncService {
     }
     for (final id in data.purchasedProducts) {
       await _db.addPurchasedProduct(id);
+      if (VipService.productGrantsVip(id)) {
+        await _vip.setVipActive(true);
+      }
     }
     await _db.applyGameplayStats(data.stats);
     await _db.applyUnlockedAchievements(data.achievementIds);

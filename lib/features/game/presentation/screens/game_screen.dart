@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
+import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
@@ -45,7 +46,17 @@ class _GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
+    return RouteBackHandler(
+      onPop: () {
+        final state = context.read<GameBloc>().state;
+        final themeId = switch (state) {
+          GameInProgress(:final themeId) => themeId,
+          GameCompleted(:final themeId) => themeId,
+          _ => null,
+        };
+        journeyPopFromGame(context, themeId: themeId);
+      },
+      child: MultiBlocListener(
       listeners: [
         BlocListener<GameBloc, GameState>(
           listenWhen: (p, c) => c is GameCompleted && p is! GameCompleted,
@@ -195,6 +206,7 @@ class _GameView extends StatelessWidget {
           );
         },
       ),
+    ),
     );
   }
 }

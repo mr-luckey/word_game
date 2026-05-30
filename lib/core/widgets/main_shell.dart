@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/navigation/shell_back_handler.dart';
 import 'package:word_game/core/widgets/journey_bottom_nav.dart';
 import 'package:word_game/core/widgets/shell_nav_metrics.dart';
 
@@ -27,7 +28,8 @@ class MainShell extends StatelessWidget {
       bottom: ShellNavMetrics.contentBottomPadding(context),
     );
 
-    return Scaffold(
+    return ShellBackHandler(
+      child: Scaffold(
       backgroundColor: Colors.transparent,
       extendBody: true,
       body: MediaQuery(
@@ -49,6 +51,7 @@ class MainShell extends StatelessWidget {
           }
         },
       ),
+    ),
     );
   }
 }

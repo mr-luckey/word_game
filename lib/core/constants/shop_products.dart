@@ -1,26 +1,21 @@
-/// Replace these IDs with your Google Play / App Store product IDs.
+import 'package:word_game/core/constants/product_ids.dart';
+
+/// Shop display metadata and IAP helpers (IDs live in [ProductIds]).
 class ShopProducts {
   ShopProducts._();
 
-  static const coins500 = 'coins_500';
-  static const coins1500 = 'coins_1500';
-  static const coins5000 = 'coins_5000';
-  static const removeAds = 'remove_ads';
-  static const vipMonthly = 'vip_monthly';
-  static const starterPack = 'starter_pack';
+  static const coins500 = ProductIds.coins500;
+  static const coins1500 = ProductIds.coins1500;
+  static const coins5000 = ProductIds.coins5000;
+  static const removeAds = ProductIds.removeAds;
+  static const vipMonthly = ProductIds.vipMonthly;
+  static const starterPack = ProductIds.starterPack;
 
-  static const allIds = {
-    coins500,
-    coins1500,
-    coins5000,
-    removeAds,
-    vipMonthly,
-    starterPack,
-  };
+  static final allIds = ProductIds.all;
 
-  static const consumableIds = {coins500, coins1500, coins5000, starterPack};
+  static final consumableIds = ProductIds.consumables.toSet();
 
-  static const nonConsumableIds = {removeAds, vipMonthly};
+  static final nonConsumableIds = ProductIds.nonConsumables.toSet();
 
   static const coinRewards = {
     coins500: 500,
@@ -43,8 +38,20 @@ class ShopProducts {
   ];
 
   static const fallbackExtras = [
-    ShopPackFallback(id: removeAds, title: 'Remove Ads', coins: 0, price: '\$1.99'),
-    ShopPackFallback(id: vipMonthly, title: 'VIP Pass', coins: 0, price: '\$0.99/mo'),
+    ShopPackFallback(
+      id: removeAds,
+      title: 'Remove Ads',
+      coins: 0,
+      price: '\$1.99',
+      subtitle: 'No banners or interstitials',
+    ),
+    ShopPackFallback(
+      id: vipMonthly,
+      title: 'VIP Pass',
+      coins: 0,
+      price: '\$0.99/mo',
+      subtitle: '+50% level coins, +1 hint/level, no ads',
+    ),
     ShopPackFallback(id: starterPack, title: 'Starter Pack', coins: 200, price: '\$0.49'),
   ];
 }
@@ -56,6 +63,7 @@ class ShopPackFallback {
     required this.coins,
     required this.price,
     this.bestValue = false,
+    this.subtitle,
   });
 
   final String id;
@@ -63,4 +71,5 @@ class ShopPackFallback {
   final int coins;
   final String price;
   final bool bestValue;
+  final String? subtitle;
 }

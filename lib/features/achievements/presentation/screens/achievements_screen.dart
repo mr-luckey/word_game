@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
@@ -18,7 +19,8 @@ class AchievementsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return RouteBackHandler(
+      child: BlocProvider(
       create: (_) => ProfileCubit(getIt(), getIt()),
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -123,6 +125,7 @@ class AchievementsScreen extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

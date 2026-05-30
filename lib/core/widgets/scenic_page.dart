@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
@@ -54,13 +54,7 @@ class ScenicPage extends StatelessWidget {
                     if (showBack)
                       IconButton(
                         icon: Icon(Icons.arrow_back_rounded, color: colors.onScenic),
-                        onPressed: () {
-                          if (context.canPop()) {
-                            context.pop();
-                          } else {
-                            context.go('/home');
-                          }
-                        },
+                        onPressed: () => journeyPop(context),
                       )
                     else
                       const SizedBox(width: 48),

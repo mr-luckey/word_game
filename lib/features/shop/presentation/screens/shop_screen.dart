@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/shop_products.dart';
+import 'package:word_game/core/utils/shop_purchase_gate.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
@@ -151,7 +152,7 @@ class _ShopList extends StatelessWidget {
                 title: p.title,
                 subtitle: coins != null ? '$coins Coins' : p.description,
                 price: p.price,
-                onBuy: () => context.read<ShopCubit>().buy(p),
+                onBuy: () => _purchase(context, () => context.read<ShopCubit>().buy(p)),
               ),
             );
           }).toList()
@@ -164,7 +165,10 @@ class _ShopList extends StatelessWidget {
                 subtitle: p.title,
                 price: p.price,
                 bestValue: p.bestValue,
-                onBuy: () => context.read<ShopCubit>().buyFallback(p),
+                onBuy: () => _purchase(
+                  context,
+                  () => context.read<ShopCubit>().buyFallback(p),
+                ),
               ),
             );
           }).toList();
@@ -175,10 +179,14 @@ class _ShopList extends StatelessWidget {
         packWidgets.length + e.key,
         _ShopPackTile(
           title: p.title,
-          subtitle: p.coins > 0 ? '${p.coins} bonus coins' : null,
+          subtitle: p.subtitle ??
+              (p.coins > 0 ? '${p.coins} bonus coins' : null),
           price: p.price,
           icon: _extraIcon(p.id),
-          onBuy: () => context.read<ShopCubit>().buyFallback(p),
+          onBuy: () => _purchase(
+            context,
+            () => context.read<ShopCubit>().buyFallback(p),
+          ),
         ),
       );
     }).toList();
@@ -206,6 +214,12 @@ class _ShopList extends StatelessWidget {
         ...extraWidgets,
       ],
     );
+  }
+
+  Future<void> _purchase(BuildContext context, Future<void> Function() buy) async {
+    if (!await ensureSignedInForPurchase(context)) return;
+    if (!context.mounted) return;
+    await buy();
   }
 
   Widget _animatedTile(int index, Widget tile) {

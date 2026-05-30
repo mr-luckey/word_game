@@ -11,6 +11,7 @@ import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/profile/domain/entities/achievement.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
+import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/core/utils/game_cell_utils.dart';
@@ -39,6 +40,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required DailyChallengeService dailyChallenge,
     required AppThemeBloc themeBloc,
     required GameContentRegistry content,
+    required VipService vip,
   })  : _loadLevel = loadLevel,
         _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
@@ -51,6 +53,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _dailyChallenge = dailyChallenge,
         _themeBloc = themeBloc,
         _content = content,
+        _vip = vip,
         super(const GameInitial()) {
     on<LoadLevel>(_onLoadLevel);
     on<LoadNextLevel>(_onLoadNextLevel);
@@ -79,6 +82,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final DailyChallengeService _dailyChallenge;
   final AppThemeBloc _themeBloc;
   final GameContentRegistry _content;
+  final VipService _vip;
 
   Timer? _timer;
 
@@ -102,7 +106,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (level == null && event.levelId == dailyId) {
       level = _content.buildDailyLevel(
         preset: _themeBloc.state.activePreset,
-        coinsReward: _dailyChallenge.todayRewardCoins,
+        coinsReward: _vip.applyDailyCoinBonus(_dailyChallenge.todayRewardCoins),
         game: _dailyChallenge.pickTodaysGame(),
       );
     }
@@ -127,7 +131,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         hintCells: {},
         revealedCells: {},
         coins: coins,
-        hintsLeft: level.hintsAllowed,
+        hintsLeft: level.hintsAllowed + _vip.bonusHintsForLevel(),
         timeLimit: level.timeLimit,
         levelId: level.id,
         elapsed: Duration.zero,
@@ -137,7 +141,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         levelTheme: level.themeName,
         backgroundImage: level.backgroundImage,
         themeId: level.themeId,
-        coinsReward: level.coinsReward,
+        coinsReward: _vip.applyLevelCoinBonus(level.coinsReward),
         hintsUsed: 0,
       ),
     );

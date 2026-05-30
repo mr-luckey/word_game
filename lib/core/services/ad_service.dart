@@ -3,20 +3,23 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:word_game/core/constants/ad_unit_ids.dart';
+import 'package:word_game/core/constants/admob_ids.dart';
 import 'package:word_game/core/constants/game_config.dart';
+import 'package:word_game/core/services/vip_service.dart';
 
 class AdService {
-  AdService(this._prefs);
+  AdService(this._prefs, this._vip);
 
   final SharedPreferences _prefs;
+  final VipService _vip;
   static const _removeAdsKey = 'remove_ads';
 
   InterstitialAd? _interstitial;
   RewardedAd? _rewarded;
   int _levelCount = 0;
 
-  bool get adsRemoved => _prefs.getBool(_removeAdsKey) ?? false;
+  bool get adsRemoved =>
+      (_prefs.getBool(_removeAdsKey) ?? false) || _vip.suppressesAds;
 
   Future<void> setAdsRemoved(bool value) async {
     await _prefs.setBool(_removeAdsKey, value);
@@ -29,10 +32,13 @@ class AdService {
     loadRewarded();
   }
 
-  void loadInterstitial() {
+  void loadInterstitial({int index = 0}) {
     if (adsRemoved || kIsWeb) return;
+    final ids = AdMobIds.interstitial;
+    if (index >= ids.length) return;
+
     InterstitialAd.load(
-      adUnitId: AdUnitIds.interstitial,
+      adUnitId: ids[index],
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -45,19 +51,34 @@ class AdService {
             },
           );
         },
-        onAdFailedToLoad: (_) => _interstitial = null,
+        onAdFailedToLoad: (_) {
+          if (index + 1 < ids.length) {
+            loadInterstitial(index: index + 1);
+          } else {
+            _interstitial = null;
+          }
+        },
       ),
     );
   }
 
-  void loadRewarded() {
+  void loadRewarded({int index = 0}) {
     if (kIsWeb) return;
+    final ids = AdMobIds.rewarded;
+    if (index >= ids.length) return;
+
     RewardedAd.load(
-      adUnitId: AdUnitIds.rewarded,
+      adUnitId: ids[index],
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) => _rewarded = ad,
-        onAdFailedToLoad: (_) => _rewarded = null,
+        onAdFailedToLoad: (_) {
+          if (index + 1 < ids.length) {
+            loadRewarded(index: index + 1);
+          } else {
+            _rewarded = null;
+          }
+        },
       ),
     );
   }
@@ -122,21 +143,34 @@ class AdService {
     required void Function(int coins) onReward,
     required void Function() onFail,
   }) async {
-    return showDoubleCoinsAd(
+    final ok = await showDoubleCoinsAd(
       levelCoins: GameConfig.rewardedBonusCoins,
       onGranted: () => onReward(GameConfig.rewardedBonusCoins),
     );
+    if (!ok) onFail();
+    return ok;
   }
 
-  BannerAd? createBannerAd({required void Function(BannerAd) onLoaded}) {
+  BannerAd? createBannerAd({
+    required void Function(BannerAd) onLoaded,
+    int index = 0,
+  }) {
     if (adsRemoved || kIsWeb) return null;
+    final ids = AdMobIds.banner;
+    if (index >= ids.length) return null;
+
     final banner = BannerAd(
-      adUnitId: AdUnitIds.banner,
+      adUnitId: ids[index],
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) => onLoaded(ad as BannerAd),
-        onAdFailedToLoad: (ad, _) => ad.dispose(),
+        onAdFailedToLoad: (ad, _) {
+          ad.dispose();
+          if (index + 1 < ids.length) {
+            createBannerAd(onLoaded: onLoaded, index: index + 1);
+          }
+        },
       ),
     );
     banner.load();

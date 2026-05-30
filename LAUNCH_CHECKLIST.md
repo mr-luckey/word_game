@@ -2,7 +2,7 @@
 
 ## AdMob (production)
 
-Replace test unit IDs in [`lib/core/constants/ad_unit_ids.dart`](lib/core/constants/ad_unit_ids.dart):
+Replace test unit IDs in [`lib/core/constants/admob_ids.dart`](lib/core/constants/admob_ids.dart) (arrays per ad format — first successful load wins). Product IDs: [`lib/core/constants/product_ids.dart`](lib/core/constants/product_ids.dart):
 
 - Interstitial, rewarded, banner ad units
 - Android `APPLICATION_ID` in [`android/app/src/main/AndroidManifest.xml`](android/app/src/main/AndroidManifest.xml)

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/navigation/journey_nav.dart';
+import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
@@ -47,7 +49,9 @@ class _DailyRewardsView extends StatelessWidget {
     final colors = context.appColors;
     final spec = context.themePreset.homeSpec;
 
-    return Scaffold(
+    return RouteBackHandler(
+      onPop: () => journeyPop(context),
+      child: Scaffold(
       extendBodyBehindAppBar: true,
       body: ScenicBackground(
         imageAsset: context.themePreset.homeBackgroundAsset,
@@ -62,7 +66,7 @@ class _DailyRewardsView extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
                       child: Row(
                         children: [
-                          _CircleBack(onTap: () => context.pop()),
+                          _CircleBack(onTap: () => journeyPop(context)),
                           const Spacer(),
                           BlocBuilder<CoinCubit, CoinState>(
                             builder: (context, coinState) =>
@@ -155,6 +159,7 @@ class _DailyRewardsView extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

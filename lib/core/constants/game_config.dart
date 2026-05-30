@@ -16,6 +16,10 @@ class GameConfig {
   static const int interstitialEveryNLevels = 3;
   static const int rewardedBonusCoins = 50;
 
+  /// VIP Pass: multiply level & daily coin rewards by this factor.
+  static const double vipCoinMultiplier = 1.5;
+  static const int vipExtraHintsPerLevel = 1;
+
   static const int defaultTimeLimitSeconds = 180;
 
   /// Play clock tick each second when remaining time is at or below this.

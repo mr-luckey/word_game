@@ -4,9 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:word_game/core/constants/product_ids.dart';
 import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
+import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
 abstract class ShopState extends Equatable {
@@ -55,12 +57,14 @@ class ShopPurchaseError extends ShopState {
 }
 
 class ShopCubit extends Cubit<ShopState> {
-  ShopCubit(this._wallet, this._adService, this._sync) : super(const ShopInitial()) {
+  ShopCubit(this._wallet, this._adService, this._vip, this._sync)
+      : super(const ShopInitial()) {
     _init();
   }
 
   final WalletRepository _wallet;
   final AdService _adService;
+  final VipService _vip;
   final ProgressSyncService _sync;
   final InAppPurchase _iap = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _sub;
@@ -77,7 +81,7 @@ class ShopCubit extends Cubit<ShopState> {
       emit(const ShopUnavailable());
       return;
     }
-    final response = await _iap.queryProductDetails(ShopProducts.allIds);
+    final response = await _iap.queryProductDetails(ProductIds.all);
     _products = response.productDetails;
     emit(
       ShopLoaded(
@@ -145,6 +149,8 @@ class ShopCubit extends Cubit<ShopState> {
   Future<void> _deliver(String productId) async {
     if (productId == ShopProducts.removeAds) {
       await _adService.setAdsRemoved(true);
+    } else if (VipService.productGrantsVip(productId)) {
+      await _vip.setVipActive(true);
     } else {
       final coins = ShopProducts.coinRewards[productId];
       if (coins != null && coins > 0) {

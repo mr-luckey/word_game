@@ -13,6 +13,7 @@ import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
@@ -43,7 +44,10 @@ Future<void> configureDependencies() async {
   await _migrateLegacyProgressKeys(db);
 
   getIt.registerLazySingleton(() => FirestoreUserService(FirebaseFirestore.instance));
-  getIt.registerLazySingleton(() => ProgressSyncService(db, getIt(), prefs));
+  getIt.registerLazySingleton(() => VipService(prefs));
+  getIt.registerLazySingleton(
+    () => ProgressSyncService(db, getIt(), prefs, getIt()),
+  );
   getIt.registerLazySingleton(
     () => AuthService(
       FirebaseAuth.instance,
@@ -72,7 +76,7 @@ Future<void> configureDependencies() async {
 
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
-  getIt.registerLazySingleton(() => AdService(prefs));
+  getIt.registerLazySingleton(() => AdService(prefs, getIt()));
   getIt.registerLazySingleton(
     () => AchievementService(db, getIt(), content.dailyChallenge.levelId),
   );
@@ -97,9 +101,10 @@ Future<void> configureDependencies() async {
       dailyChallenge: getIt(),
       themeBloc: getIt(),
       content: getIt(),
+      vip: getIt(),
     ),
   );
-  getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt()));
+  getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt(), getIt()));
 
   final row = await (db.select(db.keyValueTable)
         ..where((t) => t.key.equals('coins')))
