@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/app_logo.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -65,7 +66,7 @@ class SplashScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const Spacer(flex: 2),
-                        CompassBadge(size: 92)
+                        AppLogo(size: 156, borderRadius: 28, elevation: 12)
                             .animate()
                             .fadeIn(duration: 700.ms)
                             .scale(

@@ -9,6 +9,7 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
+import 'package:word_game/core/widgets/app_logo.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/core/widgets/shell_nav_metrics.dart';
@@ -60,8 +61,7 @@ class ShopScreen extends StatelessWidget {
                         radius: 20,
                         child: Row(
                           children: [
-                            const CompassBadge(
-                                size: 42, icon: Icons.store_rounded),
+                            AppLogo(size: 52, borderRadius: 14, elevation: 4),
                             const SizedBox(width: 12),
                             const Expanded(
                               child: JourneySectionTitle(

@@ -46,6 +46,18 @@ dev_dependencies:
   injectable_generator: ^2.6.1
   bloc_test: ^9.1.7
   mocktail: ^1.0.4
+  flutter_native_splash: ^2.4.6
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/ui/splash_native.png
+  android_gravity: center
+  android_12:
+    image: assets/images/ui/splash_native.png
+    color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"
+  ios: false
+  web: false
 
 flutter:
   uses-material-design: true
