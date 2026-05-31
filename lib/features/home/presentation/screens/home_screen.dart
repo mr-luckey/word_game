@@ -16,6 +16,8 @@ import 'package:word_game/features/home/presentation/widgets/home_play_button.da
 import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
+import 'package:word_game/core/widgets/engagement_prompt_scope.dart';
+import 'package:word_game/core/widgets/exit_app_dialog.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -46,6 +48,8 @@ class _HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<_HomeView> {
   bool _isFirstActivate = true;
+  bool _afterGameplay = false;
+  int _engagementTick = 0;
 
   void _goLevels(BuildContext context, int themeId) {
     getIt<AppThemeBloc>().setDestinationContext(themeId);
@@ -88,9 +92,13 @@ class _HomeViewState extends State<_HomeView> {
     );
     if (!context.mounted) return;
 
-    final progressUpdated =
-        await context.push<bool>('/game?levelId=$levelId');
-    if (!context.mounted) return;
+    final progressUpdated = await context.push<bool>('/game?levelId=$levelId');
+    if (!mounted) return;
+    setState(() {
+      _afterGameplay = true;
+      _engagementTick++;
+    });
+    if (!mounted) return;
     context.read<CoinCubit>().refresh();
     if (progressUpdated == true) {
       context.read<DestinationsCubit>().refresh();
@@ -116,98 +124,111 @@ class _HomeViewState extends State<_HomeView> {
     final preset = context.themePreset;
     final metrics = HomeLayoutMetrics.of(context);
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: HomeBackground(
-        child: SafeArea(
-          child: JourneyContentWidth(
-            child: BlocBuilder<DestinationsCubit, DestinationsState>(
-              builder: (context, state) {
-                if (state.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await exitAppIfConfirmed(context);
+      },
+      child: EngagementPromptScope(
+        key: ValueKey('engagement-$_engagementTick'),
+        afterGameplay: _afterGameplay,
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          body: HomeBackground(
+            child: SafeArea(
+              child: JourneyContentWidth(
+                child: BlocBuilder<DestinationsCubit, DestinationsState>(
+                  builder: (context, state) {
+                    if (state.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                final presetDestinations = DestinationCatalog.forPreset(preset);
-                if (presetDestinations.isEmpty) {
-                  return const Center(
-                    child: Text('Destinations could not be loaded'),
-                  );
-                }
-                final featured = presetDestinations
-                        .where((d) => d.unlockOrder == 1)
-                        .firstOrNull ??
-                    presetDestinations.first;
-                final completed = state.featuredCompleted;
-                final total =
-                    state.featuredTotal > 0 ? state.featuredTotal : 20;
-                final destinationId = featured.id;
+                    final presetDestinations =
+                        DestinationCatalog.forPreset(preset);
+                    if (presetDestinations.isEmpty) {
+                      return const Center(
+                        child: Text('Destinations could not be loaded'),
+                      );
+                    }
+                    final featured = presetDestinations
+                            .where((d) => d.unlockOrder == 1)
+                            .firstOrNull ??
+                        presetDestinations.first;
+                    final completed = state.featuredCompleted;
+                    final total =
+                        state.featuredTotal > 0 ? state.featuredTotal : 20;
+                    final destinationId = featured.id;
 
-                return CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          const HomeTopBar(),
-                          const HomeBrandTitle(),
-                          HomeFeaturedCard(
-                            key: ValueKey('featured-${preset.name}-$destinationId'),
-                            title: featured.name,
-                            country: featured.country,
-                            completed: completed,
-                            total: total,
-                            imageAsset: featured.imageAsset,
-                            height: metrics.featuredHeight,
-                            compact: metrics.compact,
-                            dense: metrics.dense,
-                            onTap: () => _goLevels(context, destinationId),
-                          ),
-                          SizedBox(height: metrics.sectionGap),
-                          HomePlayButton(
-                            height: metrics.playButtonHeight,
-                            onPressed: () =>
-                                _continuePlay(context, destinationId),
-                          ),
-                          SizedBox(height: metrics.sectionGap),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16),
-                            child: SizedBox(
-                              height: metrics.sideCardHeight,
-                              child: Row(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.stretch,
-                                children: [
-                                  Expanded(
-                                    child: HomeTreasureBox(
-                                      height: metrics.sideCardHeight,
-                                      compact: metrics.compact,
-                                      dense: metrics.dense,
-                                      onTap: () =>
-                                          context.push('/daily-rewards'),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: HomeAchievementsCard(
-                                      height: metrics.sideCardHeight,
-                                      compact: metrics.compact,
-                                      dense: metrics.dense,
-                                      onTap: () =>
-                                          context.push('/achievements'),
-                                    ),
-                                  ),
-                                ],
+                    return CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const HomeTopBar(),
+                              const HomeBrandTitle(),
+                              HomeFeaturedCard(
+                                key: ValueKey(
+                                    'featured-${preset.name}-$destinationId'),
+                                title: featured.name,
+                                country: featured.country,
+                                completed: completed,
+                                total: total,
+                                imageAsset: featured.imageAsset,
+                                height: metrics.featuredHeight,
+                                compact: metrics.compact,
+                                dense: metrics.dense,
+                                onTap: () => _goLevels(context, destinationId),
                               ),
-                            ),
+                              SizedBox(height: metrics.sectionGap),
+                              HomePlayButton(
+                                height: metrics.playButtonHeight,
+                                onPressed: () =>
+                                    _continuePlay(context, destinationId),
+                              ),
+                              SizedBox(height: metrics.sectionGap),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: SizedBox(
+                                  height: metrics.sideCardHeight,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: HomeTreasureBox(
+                                          height: metrics.sideCardHeight,
+                                          compact: metrics.compact,
+                                          dense: metrics.dense,
+                                          onTap: () =>
+                                              context.push('/daily-rewards'),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: HomeAchievementsCard(
+                                          height: metrics.sideCardHeight,
+                                          compact: metrics.compact,
+                                          dense: metrics.dense,
+                                          onTap: () =>
+                                              context.push('/achievements'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: metrics.sectionGap),
+                            ],
                           ),
-                          SizedBox(height: metrics.sectionGap),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ),

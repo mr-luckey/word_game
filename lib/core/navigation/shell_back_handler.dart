@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:word_game/core/widgets/exit_app_dialog.dart';
 
 /// Handles Android/iOS system back inside [MainShell] tab routes.
 class ShellBackHandler extends StatelessWidget {
@@ -33,10 +32,6 @@ class ShellBackHandler extends StatelessWidget {
     }
     if (path.startsWith('/shop') || path.startsWith('/profile')) {
       if (context.mounted) context.go('/home');
-      return;
-    }
-    if (path.startsWith('/home')) {
-      await exitAppIfConfirmed(context);
       return;
     }
     if (context.mounted) context.go('/home');

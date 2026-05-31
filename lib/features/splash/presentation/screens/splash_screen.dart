@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/services/app_update_service.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/app_logo.dart';
+import 'package:word_game/core/widgets/journey_prompt_dialog.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -23,7 +25,7 @@ class SplashScreen extends StatelessWidget {
       create: (_) => getIt<SplashCubit>(),
       child: BlocListener<SplashCubit, SplashState>(
         listenWhen: (p, c) => c.status == SplashStatus.complete,
-        listener: (context, state) => context.go('/home'),
+        listener: (context, state) => _onSplashComplete(context),
         child: Scaffold(
           body: Stack(
             fit: StackFit.expand,
@@ -181,6 +183,21 @@ class SplashScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _onSplashComplete(BuildContext context) async {
+  final updateService = getIt<AppUpdateService>();
+  final hasUpdate = await updateService.checkForUpdate();
+  if (hasUpdate && context.mounted) {
+    final shouldUpdate = await showJourneyPromptDialog(
+      context,
+      kind: JourneyPromptKind.update,
+    );
+    if (shouldUpdate == true) {
+      await updateService.startUpdate();
+    }
+  }
+  if (context.mounted) context.go('/home');
 }
 
 class _HeadphonesTip extends StatelessWidget {

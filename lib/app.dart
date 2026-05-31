@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/widgets/app_lifecycle_audio_scope.dart';
+import 'package:word_game/core/widgets/exit_app_dialog.dart';
 import 'package:word_game/core/widgets/main_shell.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
@@ -111,6 +113,13 @@ final _router = GoRouter(
       routes: [
         GoRoute(
           path: '/home',
+          onExit: (context, state) async {
+            final exit = await showExitAppDialog(context);
+            if (exit) {
+              await SystemNavigator.pop();
+            }
+            return false;
+          },
           pageBuilder: (context, state) => _fadePage(
             state,
             child: const HomeScreen(),

@@ -13,6 +13,8 @@ import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/app_rating_service.dart';
+import 'package:word_game/core/services/app_update_service.dart';
 import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
@@ -77,6 +79,8 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
   getIt.registerLazySingleton(() => AdService(prefs, getIt()));
+  getIt.registerLazySingleton(() => AppRatingService(prefs));
+  getIt.registerLazySingleton(() => AppUpdateService());
   getIt.registerLazySingleton(
     () => AchievementService(db, getIt(), content.dailyChallenge.levelId),
   );
