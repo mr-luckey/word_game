@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class ShopExtraPackData {
   const ShopExtraPackData({
@@ -73,6 +74,14 @@ class _ExtraPackCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final spec = context.themePreset.homeSpec;
+    final cardFill = spec.cardFill.withValues(alpha: 0.94);
+    final onCard = JourneyThemeKit.readableOn(
+      cardFill,
+      colors.onScenic,
+      colors.onSurface,
+    );
+    final onCardMuted = onCard.withValues(alpha: 0.72);
     final accent = pack.id == ShopProducts.starterPack
         ? colors.primary
         : colors.shopPriceButton;
@@ -84,7 +93,7 @@ class _ExtraPackCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
-            color: colors.glassSurface.withValues(alpha: 0.94),
+            color: cardFill,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: accent.withValues(alpha: 0.45)),
           ),
@@ -112,7 +121,7 @@ class _ExtraPackCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.levelName(context).copyWith(
                           fontSize: 13,
-                          color: colors.onScenic,
+                          color: onCard,
                           height: 1.1,
                         ),
                       ),
@@ -128,7 +137,7 @@ class _ExtraPackCard extends StatelessWidget {
                     style: AppTextStyles.bodyMuted(context).copyWith(
                       fontSize: 10,
                       height: 1.2,
-                      color: colors.onScenicMuted,
+                      color: onCardMuted,
                     ),
                   ),
                 ),
@@ -144,7 +153,11 @@ class _ExtraPackCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: AppTextStyles.button(context).copyWith(
                       fontSize: 12,
-                      color: Colors.white,
+                      color: JourneyThemeKit.readableOn(
+                        colors.shopPriceButton,
+                        Colors.white,
+                        colors.onSurface,
+                      ),
                       fontWeight: FontWeight.w700,
                     ),
                   ),

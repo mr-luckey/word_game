@@ -99,7 +99,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                 Text(
                                   'Power up your journey',
                                   style: AppTextStyles.bodyMuted(context)
-                                      .copyWith(fontSize: 12),
+                                      .copyWith(
+                                    fontSize: 12,
+                                    color: context.appColors.onScenicMuted,
+                                  ),
                                 ),
                               ],
                             ),

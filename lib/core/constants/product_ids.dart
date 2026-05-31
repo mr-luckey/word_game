@@ -23,6 +23,9 @@ class ProductIds {
 
   static const List<String> nonConsumables = [
     removeAds,
+  ];
+
+  static const List<String> subscriptions = [
     vipMonthly,
   ];
 
@@ -36,5 +39,6 @@ class ProductIds {
         ...coinPacks,
         ...consumables,
         ...nonConsumables,
+        ...subscriptions,
       };
 }

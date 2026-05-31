@@ -21,7 +21,14 @@ class VipPassBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final glow = context.themePreset.homeSpec.playButtonGlow;
+    final spec = context.themePreset.homeSpec;
+    final glow = spec.playButtonGlow;
+    final cardFill = spec.cardFill;
+    final onCard = JourneyThemeKit.readableOn(
+      cardFill,
+      colors.onScenic,
+      colors.onSurface,
+    );
     final width = MediaQuery.sizeOf(context).width;
     final compact = width < 380;
 
@@ -33,8 +40,8 @@ class VipPassBanner extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF5D4037).withValues(alpha: 0.92),
-            colors.scrim.withValues(alpha: 0.95),
+            cardFill.withValues(alpha: 0.98),
+            colors.scrim.withValues(alpha: 0.92),
           ],
         ),
         border: Border.all(color: colors.gold.withValues(alpha: 0.7), width: 1.5),
@@ -107,15 +114,15 @@ class VipPassBanner extends StatelessWidget {
                               style: AppTextStyles.gameTitle(context).copyWith(
                                 fontSize: compact ? 22 : 24,
                                 height: 1,
-                                color: colors.onScenic,
+                                color: onCard,
                                 shadows: JourneyThemeKit.textGlow(context),
                               ),
                             ),
                             Text(
-                              'Unlock the full journey',
+                              'Monthly subscription · Unlock the full journey',
                               style: AppTextStyles.bodyMuted(context).copyWith(
                                 fontSize: 11,
-                                color: colors.onScenic.withValues(alpha: 0.85),
+                                color: onCard.withValues(alpha: 0.85),
                               ),
                             ),
                           ],
@@ -136,7 +143,7 @@ class VipPassBanner extends StatelessWidget {
                           crossAxisSpacing: 8,
                           childAspectRatio: compact ? 3.8 : 3.4,
                           children: ShopProducts.vipFeatureLines
-                              .map((line) => _FeatureRow(line: line))
+                              .map((line) => _FeatureRow(line: line, onCard: onCard))
                               .toList(),
                         );
                       }
@@ -145,7 +152,7 @@ class VipPassBanner extends StatelessWidget {
                             .map(
                               (line) => Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
-                                child: _FeatureRow(line: line),
+                                child: _FeatureRow(line: line, onCard: onCard),
                               ),
                             )
                             .toList(),
@@ -252,9 +259,10 @@ class _Badge extends StatelessWidget {
 }
 
 class _FeatureRow extends StatelessWidget {
-  const _FeatureRow({required this.line});
+  const _FeatureRow({required this.line, required this.onCard});
 
   final String line;
+  final Color onCard;
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +278,7 @@ class _FeatureRow extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.subtitle(context).copyWith(
-              color: colors.onScenic,
+              color: onCard,
               fontSize: 11,
               height: 1.25,
               fontWeight: FontWeight.w500,

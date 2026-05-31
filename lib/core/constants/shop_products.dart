@@ -17,6 +17,8 @@ class ShopProducts {
 
   static final nonConsumableIds = ProductIds.nonConsumables.toSet();
 
+  static final subscriptionIds = ProductIds.subscriptions.toSet();
+
   static const coinRewards = {
     coins500: 500,
     coins1500: 1500,
@@ -42,8 +44,8 @@ class ShopProducts {
     id: vipMonthly,
     title: 'VIP Pass',
     coins: 0,
-    price: '\$3.99',
-    subtitle: 'Best value for explorers',
+    price: '\$3.99/mo',
+    subtitle: 'Monthly subscription',
   );
 
   static const List<String> vipFeatureLines = [

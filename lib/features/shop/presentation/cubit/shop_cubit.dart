@@ -93,11 +93,11 @@ class ShopCubit extends Cubit<ShopState> {
   }
 
   Future<void> buy(ProductDetails product) async {
-    final consumable = ShopProducts.consumableIds.contains(product.id);
     final param = PurchaseParam(productDetails: product);
-    if (consumable) {
+    if (ShopProducts.consumableIds.contains(product.id)) {
       await _iap.buyConsumable(purchaseParam: param);
     } else {
+      // Subscriptions and one-time unlocks both use buyNonConsumable.
       await _iap.buyNonConsumable(purchaseParam: param);
     }
   }

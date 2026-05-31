@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class CoinDisplay extends StatelessWidget {
   const CoinDisplay({
@@ -17,6 +18,14 @@ class CoinDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final spec = context.themePreset.homeSpec;
+    final cardFill = light
+        ? spec.cardFill.withValues(alpha: 0.92)
+        : colors.gold.withValues(alpha: 0.14);
+    final onCard = JourneyThemeKit.readableOn(
+      cardFill,
+      colors.onScenic,
+      colors.onSurface,
+    );
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.paddingSm + 2,
@@ -61,7 +70,7 @@ class CoinDisplay extends StatelessWidget {
           Text(
             '$coins',
             style: AppTextStyles.coinsScore(context).copyWith(
-              color: light ? colors.onScenic : colors.goldDark,
+              color: light ? onCard : colors.goldDark,
               fontSize: 15,
             ),
           ),

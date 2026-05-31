@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:word_game/core/theme/app_theme_extension.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class ShopCoinPackData {
   const ShopCoinPackData({
@@ -75,6 +76,14 @@ class _CoinPackCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final spec = context.themePreset.homeSpec;
+    final cardFill = spec.cardFill.withValues(alpha: 0.94);
+    final onCard = JourneyThemeKit.readableOn(
+      cardFill,
+      colors.onScenic,
+      colors.onSurface,
+    );
+    final onCardMuted = onCard.withValues(alpha: 0.72);
     final iconSize = (cardHeight * 0.26).clamp(24.0, 30.0);
     final topInset = pack.bestValue ? 18.0 : 8.0;
 
@@ -85,7 +94,7 @@ class _CoinPackCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: Ink(
           decoration: BoxDecoration(
-            color: colors.glassSurface.withValues(alpha: 0.94),
+            color: cardFill,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: pack.bestValue
@@ -143,7 +152,7 @@ class _CoinPackCard extends StatelessWidget {
                               '${pack.coins}',
                               style: AppTextStyles.levelName(context).copyWith(
                                 fontSize: 15,
-                                color: colors.onScenic,
+                                color: onCard,
                                 height: 1,
                               ),
                             ),
@@ -152,7 +161,7 @@ class _CoinPackCard extends StatelessWidget {
                             'Coins',
                             style: AppTextStyles.bodyMuted(context).copyWith(
                               fontSize: 9,
-                              color: colors.onScenicMuted,
+                              color: onCardMuted,
                               height: 1.1,
                             ),
                           ),
@@ -201,7 +210,11 @@ class _PriceChip extends StatelessWidget {
             price,
             style: AppTextStyles.button(context).copyWith(
               fontSize: 11,
-              color: Colors.white,
+              color: JourneyThemeKit.readableOn(
+                colors.shopPriceButton,
+                Colors.white,
+                colors.onSurface,
+              ),
               fontWeight: FontWeight.w700,
             ),
           ),

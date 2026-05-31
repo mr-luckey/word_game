@@ -35,14 +35,14 @@ class HomeTopBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.monetization_on_rounded,
-                        color: spec.dailyBonusAccent, size: 22),
+                        color: colors.gold, size: 22),
                     const SizedBox(width: 6),
                     Text(
                       '${state.coins}',
                       style: GoogleFonts.montserrat(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: colors.onScenic,
+                        color: colors.gold,
                       ),
                     ),
                     const SizedBox(width: 6),
