@@ -131,7 +131,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         hintCells: {},
         revealedCells: {},
         coins: coins,
-        hintsLeft: level.hintsAllowed + _vip.bonusHintsForLevel(),
+        hintsLeft: _vip.bonusHintsForLevel(),
         timeLimit: level.timeLimit,
         levelId: level.id,
         elapsed: Duration.zero,

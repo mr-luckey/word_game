@@ -38,9 +38,10 @@ class _DailyRewardsView extends StatelessWidget {
 
     final dailyId = getIt<GameContentRegistry>().dailyChallenge.levelId;
     final won = await context.push<bool>('/game?levelId=$dailyId');
-    if (won == true && context.mounted) {
+    if (!context.mounted) return;
+    context.read<CoinCubit>().refresh();
+    if (won == true) {
       cubit.refresh();
-      context.read<CoinCubit>().refresh();
     }
   }
 

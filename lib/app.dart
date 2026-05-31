@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
+import 'package:word_game/core/widgets/app_lifecycle_audio_scope.dart';
 import 'package:word_game/core/widgets/main_shell.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
@@ -36,7 +37,9 @@ class WordSearchApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: themeState.themeData,
           routerConfig: _router,
-          builder: (context, child) => child ?? const SizedBox.shrink(),
+          builder: (context, child) => AppLifecycleAudioScope(
+            child: child ?? const SizedBox.shrink(),
+          ),
         ),
       ),
     );

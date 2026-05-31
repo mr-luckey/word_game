@@ -18,6 +18,7 @@ import 'package:word_game/features/level_select/presentation/widgets/level_map_v
 import 'package:word_game/features/level_select/presentation/widgets/level_map_sections.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_select_header.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_select_stats_panel.dart';
+import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 
 class LevelSelectScreen extends StatelessWidget {
@@ -42,6 +43,8 @@ class LevelSelectScreen extends StatelessWidget {
 
 Future<void> _openLevel(BuildContext context, int levelId) async {
   final progressUpdated = await context.push<bool>('/game?levelId=$levelId');
+  if (!context.mounted) return;
+  context.read<CoinCubit>().refresh();
   if (progressUpdated == true && context.mounted) {
     await context.read<LevelSelectCubit>().load();
   }

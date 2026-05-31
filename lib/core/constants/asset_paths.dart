@@ -3,14 +3,9 @@ import 'package:word_game/core/theme/app_theme_preset.dart';
 class AssetPaths {
   AssetPaths._();
 
-  static const wordLogoLottie = 'assets/animations/word_logo.json';
-  static const confettiLottie = 'assets/animations/confetti.json';
   static const starBurstLottie = 'assets/animations/star_burst.json';
-  static const wordFoundLottie = 'assets/animations/word_found.json';
-  static const treasureChestLottie = 'assets/animations/treasure_chest.json';
   static const treasureChestImage = 'assets/images/ui/treasure_chest.png';
   static const appLogo = 'assets/images/ui/app_logo.png';
-  static const splashNative = 'assets/images/ui/splash_native.png';
 
   static const wordFoundSfx = 'audio/word_found.wav';
   static const levelCompleteSfx = 'audio/level_complete.wav';

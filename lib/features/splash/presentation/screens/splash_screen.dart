@@ -118,6 +118,12 @@ class SplashScreen extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ).animate(delay: 450.ms).fadeIn(),
+                        const SizedBox(height: 18),
+                        _HeadphonesTip(
+                          iconColor: spec.taglineColor,
+                          textColor: colors.onScenic,
+                          mutedColor: colors.onScenicMuted,
+                        ).animate(delay: 520.ms).fadeIn(),
                         const Spacer(flex: 3),
                         BlocBuilder<SplashCubit, SplashState>(
                           builder: (context, state) {
@@ -173,6 +179,54 @@ class SplashScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _HeadphonesTip extends StatelessWidget {
+  const _HeadphonesTip({
+    required this.iconColor,
+    required this.textColor,
+    required this.mutedColor,
+  });
+
+  final Color iconColor;
+  final Color textColor;
+  final Color mutedColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(
+          Icons.headphones_rounded,
+          size: 36,
+          color: iconColor,
+          shadows: JourneyThemeKit.textGlow(context),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Use headphones',
+          style: AppTextStyles.gameSubtitle(context).copyWith(
+            color: textColor,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.3,
+            shadows: JourneyThemeKit.textGlow(context),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'for the best audio experience',
+          style: AppTextStyles.subtitle(context).copyWith(
+            color: mutedColor.withValues(alpha: 0.92),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

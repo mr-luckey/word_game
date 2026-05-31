@@ -14,6 +14,7 @@ import 'package:word_game/features/home/presentation/widgets/home_featured_card.
 import 'package:word_game/features/home/presentation/widgets/home_layout_metrics.dart';
 import 'package:word_game/features/home/presentation/widgets/home_play_button.dart';
 import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
+import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
@@ -90,6 +91,7 @@ class _HomeViewState extends State<_HomeView> {
     final progressUpdated =
         await context.push<bool>('/game?levelId=$levelId');
     if (!context.mounted) return;
+    context.read<CoinCubit>().refresh();
     if (progressUpdated == true) {
       context.read<DestinationsCubit>().refresh();
     }
@@ -102,9 +104,11 @@ class _HomeViewState extends State<_HomeView> {
       _isFirstActivate = false;
       return;
     }
-    if (!mounted) return;
+    if (!context.mounted) return;
     final cubit = context.read<DestinationsCubit>();
     if (!cubit.isClosed) cubit.refresh();
+    if (!context.mounted) return;
+    context.read<CoinCubit>().refresh();
   }
 
   @override

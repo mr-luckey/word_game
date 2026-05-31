@@ -1,4 +1,5 @@
 import 'package:word_game/core/data/models/daily_game_config.dart';
+import 'package:word_game/core/utils/level_progress_id.dart';
 
 class DailyChallengeConfig {
   const DailyChallengeConfig({
@@ -33,7 +34,7 @@ class DailyChallengeConfig {
     final level = json['level'] as Map<String, dynamic>;
     final gamesRaw = json['games'] as List<dynamic>? ?? [];
     return DailyChallengeConfig(
-      levelId: level['id'] as int,
+      levelId: level['id'] as int? ?? LevelProgressId.dailyChallengeLevelId,
       name: level['name'] as String,
       difficultyIndex: level['difficultyIndex'] as int? ?? 1,
       gridSize: level['gridSize'] as int? ?? 10,

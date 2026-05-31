@@ -2,7 +2,7 @@
   "version": "2.0",
   "description": "Add up to 50 entries in games[]. One game is chosen per day (stable random by date).",
   "level": {
-    "id": 1,
+    "id": 9999,
     "name": "Daily Bonus",
     "difficultyIndex": 1,
     "gridSize": 10,

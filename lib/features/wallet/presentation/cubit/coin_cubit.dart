@@ -28,6 +28,12 @@ class CoinCubit extends Cubit<CoinState> {
     emit(CoinState(coins: coins, loading: false));
   }
 
+  /// Keeps shell UI in sync when coins change inside the game screen.
+  void syncCoins(int coins) {
+    if (state.coins == coins) return;
+    emit(state.copyWith(coins: coins, loading: false));
+  }
+
   Future<bool> spend(int amount) async {
     final ok = await _wallet.spendCoins(amount);
     if (ok) await refresh();

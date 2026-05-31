@@ -7,12 +7,49 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:19263470958:android:f48f702bcd2ddf116f957f",
+        "mobilesdk_app_id": "1:19263470958:android:16825f9b994c0e406f957f",
         "android_client_info": {
           "package_name": "com.appwaretech.WordGlow"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "19263470958-t8vs4aj32dv5tlq0cn79850qahivrt1j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6xMe8tBUfyxz3BAE3uRfezQmm4rN-NDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19263470958-t8vs4aj32dv5tlq0cn79850qahivrt1j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19263470958:android:f48f702bcd2ddf116f957f",
+        "android_client_info": {
+          "package_name": "com.example.word_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19263470958-123sj48g35tn30815b2lqf5743u033tm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.word_game",
+            "certificate_hash": "73804ff6ba64d21a312eb0edac0412781ceaf2b2"
+          }
+        },
         {
           "client_id": "19263470958-t8vs4aj32dv5tlq0cn79850qahivrt1j.apps.googleusercontent.com",
           "client_type": 3

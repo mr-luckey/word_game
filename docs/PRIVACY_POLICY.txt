@@ -1,0 +1,402 @@
+================================================================================
+                         PRIVACY POLICY — WORD GLOW
+================================================================================
+
+App Name:          Word Glow (Word Search Journey)
+Developer:         Appwaretech
+Package Name:      com.appwaretech.WordGlow
+Platform:          Android
+Last Updated:      May 30, 2026
+Effective Date:    May 30, 2026
+
+Contact Email:     contact@apptechware.com
+                   (Replace with your official support email before publishing)
+
+--------------------------------------------------------------------------------
+1. INTRODUCTION
+--------------------------------------------------------------------------------
+
+This Privacy Policy explains how Appwaretech ("we," "us," or "our") collects,
+uses, stores, shares, and protects information when you use the mobile game
+Word Glow ("the App," "the Game").
+
+By downloading, installing, or using Word Glow, you agree to the practices
+described in this Privacy Policy. If you do not agree, please do not use the App.
+
+Word Glow is a word-search puzzle game with optional account features, in-app
+purchases, advertisements, cloud save, achievements, daily rewards, and a
+global leaderboard.
+
+--------------------------------------------------------------------------------
+2. INFORMATION WE COLLECT
+--------------------------------------------------------------------------------
+
+2.1 Information You Provide Directly
+------------------------------------
+When you create an account or use account-related features, we may collect:
+
+  • Display name (player name)
+  • Email address
+  • Password (stored and processed securely by Firebase Authentication; we do
+    not store your plain-text password on our servers)
+  • Profile photo URL (if you sign in with Google and your Google account
+    includes a profile picture)
+
+Account creation and sign-in methods supported:
+  • Email and password registration
+  • Google Sign-In
+
+Shop purchases require you to be signed in before completing a transaction.
+
+
+2.2 Gameplay and App Usage Data
+-------------------------------
+Whether you play as a guest or a signed-in user, the App processes gameplay
+data to provide the game experience. This may include:
+
+  • Level progress (levels completed, stars earned, completion times)
+  • Virtual coins balance
+  • Hints used and in-game tool usage
+  • Achievement unlock status and gameplay statistics (e.g., streaks,
+    hint-free completions)
+  • Daily challenge status (streak, last claim time, reward eligibility)
+  • Destination/theme progress across game worlds
+  • Selected app theme and visual preferences
+  • Sound effects and background music on/off settings
+
+Guest players: The above data is stored locally on your device only, unless
+you later sign in and choose to sync progress to the cloud.
+
+
+2.3 Automatically Collected / Device Data
+-------------------------------------------
+When you use the App, certain information may be collected automatically by
+us or by third-party services integrated into the App:
+
+  • Device type, operating system version, and app version
+  • General network/connectivity status (Internet access is required for ads,
+    sign-in, cloud sync, shop, and leaderboard features)
+  • Advertising identifiers and ad interaction data (via Google AdMob)
+  • Purchase transaction records (via Google Play Billing; we receive product
+    IDs and purchase confirmation, not your full payment card details)
+  • Firebase authentication tokens and user IDs
+  • Crash or performance data that may be collected by underlying platform
+    or SDK providers
+
+We do NOT intentionally collect:
+  • Precise GPS/location data
+  • Contacts, SMS, call logs, or microphone/camera recordings
+  • Health, financial account numbers, or government ID numbers
+
+The App requests INTERNET permission on Android. No location, camera,
+microphone, contacts, or storage (external) permissions are required for core
+gameplay.
+
+
+2.4 Local Storage on Your Device
+--------------------------------
+The App stores data locally using:
+
+  • SQLite database (game progress, coins, achievements, stats)
+  • SharedPreferences / local key-value storage (settings, VIP status,
+    remove-ads flag, daily challenge timestamps, auth cache)
+
+This local data remains on your device until you clear app data, uninstall the
+App, or overwrite it through gameplay or account sync.
+
+
+2.5 Cloud Storage (Signed-In Users Only)
+----------------------------------------
+If you sign in, we sync certain data to Google Firebase Cloud Firestore under
+your unique user ID (UID), including:
+
+  • Display name and email address
+  • Coin balance
+  • Level progress records (level IDs, stars, completion times)
+  • Unlocked achievements and gameplay statistics
+  • Purchased product IDs (e.g., coin packs, Remove Ads, VIP Pass)
+  • Remove Ads and VIP entitlement flags
+  • Profile update timestamps
+
+Leaderboard: If you are signed in, your display name and coin total may appear
+on the in-app global leaderboard (top players by coins). Other players can see
+your display name and coin count on the leaderboard; your email address is NOT
+shown publicly on the leaderboard.
+
+
+--------------------------------------------------------------------------------
+3. HOW WE USE YOUR INFORMATION
+--------------------------------------------------------------------------------
+
+We use collected information to:
+
+  • Provide, operate, and maintain the Game
+  • Save and restore your progress (locally and, if signed in, in the cloud)
+  • Authenticate your account and keep you signed in across sessions
+  • Process in-app purchases and deliver purchased items (coins, Remove Ads,
+    VIP Pass benefits)
+  • Show personalized game state (profile, achievements, destinations, levels)
+  • Display leaderboard rankings for signed-in users
+  • Show advertisements (unless you have purchased Remove Ads or have an
+    active VIP Pass that suppresses ads)
+  • Improve stability, security, and user experience
+  • Respond to support requests and enforce our terms
+  • Comply with legal obligations
+
+VIP Pass benefits (when active) may include: bonus coins on level completion,
+extra hints per level, enhanced daily rewards, and ad-free experience.
+
+Analytics: The App includes an analytics service layer that is currently
+minimal/disabled in production builds. If we enable analytics in a future
+update, this policy will be updated accordingly.
+
+
+--------------------------------------------------------------------------------
+4. THIRD-PARTY SERVICES
+--------------------------------------------------------------------------------
+
+Word Glow uses third-party services that may collect information according to
+their own privacy policies:
+
+4.1 Google Firebase (Google LLC)
+  • Firebase Authentication — account sign-in
+  • Cloud Firestore — cloud save and leaderboard data
+  • Firebase Core — app initialization
+  Privacy: https://firebase.google.com/support/privacy
+
+4.2 Google Sign-In (Google LLC)
+  Used when you choose to log in with your Google account.
+  Privacy: https://policies.google.com/privacy
+
+4.3 Google AdMob (Google LLC)
+  Used to display banner, interstitial, and rewarded video advertisements.
+  AdMob may use advertising IDs and device information to serve and measure
+  ads. You can limit ad personalization through your device settings.
+  Privacy: https://policies.google.com/privacy
+  AdMob policies: https://support.google.com/admob/answer/6128543
+
+4.4 Google Play Billing (Google LLC)
+  Used for in-app purchases (coin packs, Remove Ads, VIP Pass, Starter Pack).
+  Payment processing is handled by Google Play; we do not receive your full
+  payment card details.
+  Privacy: https://policies.google.com/privacy
+
+4.5 Google Fonts (Google LLC)
+  Typography may be loaded via the google_fonts package; font files may be
+  fetched from Google servers when needed.
+  Privacy: https://developers.google.com/fonts/faq#what_does_using_the_google_fonts_api_mean_for_the_privacy_of_my_users
+
+We are not responsible for the privacy practices of third parties. We
+encourage you to review their policies.
+
+
+--------------------------------------------------------------------------------
+5. ADVERTISING
+--------------------------------------------------------------------------------
+
+Word Glow displays ads through Google AdMob, including:
+
+  • Banner ads (e.g., on level selection screens)
+  • Interstitial ads (shown periodically after level completion)
+  • Rewarded video ads (optional; e.g., to earn bonus coins)
+
+You can reduce ad tracking through your Android device settings:
+  Settings → Google → Ads → Opt out of Ads Personalization (wording may vary
+  by device and Android version).
+
+Purchasing "Remove Ads" or activating "VIP Pass" disables most or all
+advertising within the App, subject to product terms.
+
+
+--------------------------------------------------------------------------------
+6. IN-APP PURCHASES
+--------------------------------------------------------------------------------
+
+The Shop offers digital goods including:
+
+  • Coin packs (consumable)
+  • Remove Ads (non-consumable)
+  • VIP Pass (non-consumable / subscription-style product depending on Play
+    Console configuration)
+  • Starter Pack (consumable)
+
+Purchases are processed by Google Play. We store purchase records locally and,
+if you are signed in, in your cloud profile to restore entitlements and sync
+across devices.
+
+Refunds are handled according to Google Play refund policies. Contact Google
+Play support for billing disputes.
+
+
+--------------------------------------------------------------------------------
+7. ACCOUNT TYPES: GUEST VS. SIGNED-IN
+--------------------------------------------------------------------------------
+
+Guest Play:
+  • You can play without creating an account.
+  • Progress is saved on your device only.
+  • Cloud backup, leaderboard, and shop purchases requiring login are limited
+    until you sign in.
+
+Signed-In Play:
+  • Your local progress may be merged with existing cloud data upon login.
+  • Progress, coins, achievements, and purchases can sync to Firestore.
+  • You can appear on the global leaderboard.
+  • Shop purchases are tied to your account for sync and support.
+
+
+--------------------------------------------------------------------------------
+8. DATA SHARING AND DISCLOSURE
+--------------------------------------------------------------------------------
+
+We do NOT sell your personal information.
+
+We may share information only in these situations:
+
+  • With service providers (Firebase, Google Play, AdMob) to operate the App
+  • When required by law, regulation, legal process, or government request
+  • To protect the rights, safety, and security of Appwaretech, our users,
+    or the public
+  • In connection with a merger, acquisition, or sale of assets (with notice
+    where required by law)
+
+Leaderboard data (display name + coins) is visible to other players inside
+the App.
+
+
+--------------------------------------------------------------------------------
+9. DATA RETENTION
+--------------------------------------------------------------------------------
+
+  • Local data: Retained on your device until you clear app data or uninstall.
+  • Cloud data: Retained while your account is active and as needed to provide
+    the service.
+  • Purchase records: Retained as required for entitlement verification,
+    fraud prevention, accounting, and legal compliance.
+
+If you sign out, local data generally remains on your device. Cloud data
+remains associated with your account until deletion is requested.
+
+
+--------------------------------------------------------------------------------
+10. DATA SECURITY
+--------------------------------------------------------------------------------
+
+We use reasonable technical and organizational measures to protect your
+information, including:
+
+  • Firebase Authentication for secure sign-in
+  • Firestore security rules restricting user data access
+  • Local encrypted storage mechanisms provided by the Android platform
+
+No method of transmission or storage is 100% secure. We cannot guarantee
+absolute security.
+
+
+--------------------------------------------------------------------------------
+11. CHILDREN'S PRIVACY
+--------------------------------------------------------------------------------
+
+Word Glow is intended for a general audience and is not specifically directed
+at children under 13 (or the applicable age of digital consent in your
+country).
+
+We do not knowingly collect personal information from children under 13. If
+you believe a child has provided us with personal information, please contact
+us at support@appwaretech.com and we will take steps to delete such
+information.
+
+Parents and guardians should supervise children's use of the App, especially
+regarding sign-in, purchases, and advertisements.
+
+
+--------------------------------------------------------------------------------
+12. YOUR CHOICES AND RIGHTS
+--------------------------------------------------------------------------------
+
+Depending on your location, you may have rights to:
+
+  • Access the personal data we hold about you
+  • Correct inaccurate profile information (e.g., display name in Profile)
+  • Request deletion of your account and associated cloud data
+  • Withdraw consent where processing is consent-based
+  • Opt out of personalized advertising via device settings
+  • Sign out of your account at any time from the Profile screen
+
+To exercise privacy rights, email: support@appwaretech.com
+
+Sign Out:
+  You may sign out from the Profile screen. Signing out stops cloud sync but
+  does not automatically delete cloud-stored data.
+
+Account Deletion:
+  To request permanent deletion of your account and cloud data, contact
+  support@appwaretech.com from the email associated with your account. We
+  will verify your request and delete data within a reasonable timeframe,
+  except where retention is required by law.
+
+
+--------------------------------------------------------------------------------
+13. INTERNATIONAL DATA TRANSFERS
+--------------------------------------------------------------------------------
+
+Your information may be processed and stored on servers operated by Google
+(Firebase, AdMob, Play services) in countries other than your own. By using
+the App, you consent to such transfers subject to applicable safeguards and
+Google's data protection terms.
+
+
+--------------------------------------------------------------------------------
+14. CHANGES TO THIS PRIVACY POLICY
+--------------------------------------------------------------------------------
+
+We may update this Privacy Policy from time to time. When we do, we will revise
+the "Last Updated" date at the top of this document. Material changes may also
+be communicated through the App or on our store listing.
+
+Continued use of the App after changes become effective constitutes acceptance
+of the updated policy.
+
+
+--------------------------------------------------------------------------------
+15. GOOGLE PLAY DATA SAFETY SUMMARY (DEVELOPER DISCLOSURE AID)
+--------------------------------------------------------------------------------
+
+For Google Play Console "Data safety" form, the App generally involves:
+
+Data collected:
+  • Email address (account)
+  • Name (display name)
+  • User IDs (Firebase UID)
+  • App activity (game progress, achievements, purchases)
+  • App info and performance (may be collected by SDKs)
+  • Device or other IDs (advertising ID via AdMob)
+
+Data shared with third parties:
+  • Firebase/Google services for auth, storage, ads, and billing
+
+Data encrypted in transit: Yes (HTTPS/TLS for cloud services)
+
+Data deletion: Available upon request via support email
+
+Optional features requiring account: Cloud save, leaderboard, shop purchase
+
+
+--------------------------------------------------------------------------------
+16. CONTACT US
+--------------------------------------------------------------------------------
+
+If you have questions, concerns, or requests regarding this Privacy Policy or
+your data, contact:
+
+  Appwaretech
+  Email: contact@apptechware.com
+  App: Word Glow
+  Package: com.appwaretech.WordGlow
+
+We aim to respond to privacy inquiries within 30 days.
+
+
+================================================================================
+                              END OF PRIVACY POLICY
+================================================================================

@@ -59,6 +59,16 @@ class _GameView extends StatelessWidget {
       child: MultiBlocListener(
       listeners: [
         BlocListener<GameBloc, GameState>(
+          listenWhen: (p, c) =>
+              c is GameInProgress &&
+              (p is! GameInProgress || p.coins != c.coins),
+          listener: (context, state) {
+            if (state is GameInProgress) {
+              context.read<CoinCubit>().syncCoins(state.coins);
+            }
+          },
+        ),
+        BlocListener<GameBloc, GameState>(
           listenWhen: (p, c) => c is GameCompleted && p is! GameCompleted,
           listener: (context, state) {
             if (state is! GameCompleted) return;

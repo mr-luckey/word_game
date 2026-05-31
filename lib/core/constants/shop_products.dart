@@ -37,7 +37,30 @@ class ShopProducts {
     ShopPackFallback(id: coins5000, title: '5000 Coins', coins: 5000, price: '\$7.99'),
   ];
 
+  /// VIP Pass — featured at top of shop (not in extras row).
+  static const vipFallback = ShopPackFallback(
+    id: vipMonthly,
+    title: 'VIP Pass',
+    coins: 0,
+    price: '\$3.99',
+    subtitle: 'Best value for explorers',
+  );
+
+  static const List<String> vipFeatureLines = [
+    '+50% level coins',
+    '+50% daily coins',
+    '+1 hint per level',
+    'No ads',
+  ];
+
   static const fallbackExtras = [
+    ShopPackFallback(
+      id: starterPack,
+      title: 'Starter Pack',
+      coins: 200,
+      price: '\$0.49',
+      subtitle: '200 bonus coins',
+    ),
     ShopPackFallback(
       id: removeAds,
       title: 'Remove Ads',
@@ -45,15 +68,9 @@ class ShopProducts {
       price: '\$1.99',
       subtitle: 'No banners or interstitials',
     ),
-    ShopPackFallback(
-      id: vipMonthly,
-      title: 'VIP Pass',
-      coins: 0,
-      price: '\$0.99/mo',
-      subtitle: '+50% level coins, +1 hint/level, no ads',
-    ),
-    ShopPackFallback(id: starterPack, title: 'Starter Pack', coins: 200, price: '\$0.49'),
   ];
+
+  static const extraPackIds = [starterPack, removeAds];
 }
 
 class ShopPackFallback {
