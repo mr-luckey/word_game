@@ -4,6 +4,9 @@ import 'package:word_game/features/game/domain/entities/level_entity.dart';
 
 enum SelectionState { idle, selecting, correct, wrong }
 
+/// Marker emitted via [GameInProgress.feedback] to trigger coin dialog.
+const kInsufficientCoinsFeedback = '__insufficient_coins__';
+
 abstract class GameState extends Equatable {
   const GameState();
 
@@ -29,9 +32,9 @@ class GameInProgress extends GameState {
     required this.hintCells,
     required this.revealedCells,
     required this.coins,
-    required this.hintsLeft,
     required this.timeLimit,
     required this.levelId,
+    required this.displayNumber,
     required this.elapsed,
     required this.isPaused,
     required this.difficulty,
@@ -40,11 +43,16 @@ class GameInProgress extends GameState {
     required this.backgroundImage,
     required this.themeId,
     required this.coinsReward,
+    required this.xpReward,
     required this.hintsUsed,
+    required this.revealsUsed,
+    required this.maxReveals,
     this.foundCellColors = const {},
     this.feedback,
     this.isCompleting = false,
     this.isTimedOut = false,
+    this.showTutorial = false,
+    this.tutorialHighlightIndices = const {},
   });
 
   final List<List<GridCellModel>> grid;
@@ -55,9 +63,9 @@ class GameInProgress extends GameState {
   final Set<int> hintCells;
   final Set<int> revealedCells;
   final int coins;
-  final int hintsLeft;
   final int timeLimit;
   final int levelId;
+  final int displayNumber;
   final Duration elapsed;
   final bool isPaused;
   final DifficultyLevel difficulty;
@@ -66,14 +74,20 @@ class GameInProgress extends GameState {
   final String backgroundImage;
   final int themeId;
   final int coinsReward;
+  final int xpReward;
   final int hintsUsed;
+  final int revealsUsed;
+  final int maxReveals;
   final Map<int, int> foundCellColors;
   final String? feedback;
   final bool isCompleting;
   final bool isTimedOut;
+  final bool showTutorial;
+  final Set<int> tutorialHighlightIndices;
 
-  bool get allWordsFound =>
-      foundWords.length == wordsToFind.length;
+  int get revealsLeft => (maxReveals - revealsUsed).clamp(0, maxReveals);
+
+  bool get allWordsFound => foundWords.length == wordsToFind.length;
 
   int get remainingSeconds => timeLimit > 0
       ? (timeLimit - elapsed.inSeconds).clamp(0, 9999)
@@ -91,16 +105,17 @@ class GameInProgress extends GameState {
     Set<int>? revealedCells,
     Map<int, int>? foundCellColors,
     int? coins,
-    int? hintsLeft,
     Duration? elapsed,
     bool? isPaused,
     SelectionState? selectionState,
     int? hintsUsed,
+    int? revealsUsed,
     int? themeId,
     String? feedback,
     bool clearFeedback = false,
     bool? isCompleting,
     bool? isTimedOut,
+    bool? showTutorial,
   }) =>
       GameInProgress(
         grid: grid ?? this.grid,
@@ -112,9 +127,9 @@ class GameInProgress extends GameState {
         revealedCells: revealedCells ?? this.revealedCells,
         foundCellColors: foundCellColors ?? this.foundCellColors,
         coins: coins ?? this.coins,
-        hintsLeft: hintsLeft ?? this.hintsLeft,
         timeLimit: timeLimit,
         levelId: levelId,
+        displayNumber: displayNumber,
         elapsed: elapsed ?? this.elapsed,
         isPaused: isPaused ?? this.isPaused,
         difficulty: difficulty,
@@ -123,10 +138,14 @@ class GameInProgress extends GameState {
         backgroundImage: backgroundImage,
         themeId: themeId ?? this.themeId,
         coinsReward: coinsReward,
+        xpReward: xpReward,
         hintsUsed: hintsUsed ?? this.hintsUsed,
+        revealsUsed: revealsUsed ?? this.revealsUsed,
+        maxReveals: maxReveals,
         feedback: clearFeedback ? null : (feedback ?? this.feedback),
         isCompleting: isCompleting ?? this.isCompleting,
         isTimedOut: isTimedOut ?? this.isTimedOut,
+        showTutorial: showTutorial ?? this.showTutorial,
       );
 
   @override
@@ -139,17 +158,20 @@ class GameInProgress extends GameState {
         hintCells,
         revealedCells,
         coins,
-        hintsLeft,
         elapsed,
         isPaused,
         selectionState,
         hintsUsed,
+        revealsUsed,
+        displayNumber,
         foundCellColors,
         backgroundImage,
         themeId,
         feedback,
         isCompleting,
         isTimedOut,
+        showTutorial,
+        tutorialHighlightIndices,
       ];
 }
 
@@ -157,22 +179,37 @@ class GameCompleted extends GameState {
   const GameCompleted({
     required this.stars,
     required this.coinsEarned,
+    required this.xpEarned,
     required this.time,
     required this.hintsUsed,
+    required this.revealsUsed,
     required this.levelId,
+    required this.displayNumber,
     required this.themeId,
   });
 
   final int stars;
   final int coinsEarned;
+  final int xpEarned;
   final Duration time;
   final int hintsUsed;
+  final int revealsUsed;
   final int levelId;
+  final int displayNumber;
   final int themeId;
 
   @override
-  List<Object?> get props =>
-      [stars, coinsEarned, time, hintsUsed, levelId, themeId];
+  List<Object?> get props => [
+        stars,
+        coinsEarned,
+        xpEarned,
+        time,
+        hintsUsed,
+        revealsUsed,
+        levelId,
+        displayNumber,
+        themeId,
+      ];
 }
 
 class GameError extends GameState {

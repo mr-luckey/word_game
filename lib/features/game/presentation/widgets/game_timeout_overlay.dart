@@ -55,7 +55,7 @@ class GameTimeoutOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Level ${state.levelId}',
+                    'Level ${state.displayNumber}',
                     style: GoogleFonts.montserrat(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

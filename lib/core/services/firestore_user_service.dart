@@ -16,11 +16,17 @@ class FirestoreUserService {
   CollectionReference<Map<String, dynamic>> _progressCol(String uid) =>
       _userDoc(uid).collection('levelProgress');
 
+  Future<bool> userDocExists(String uid) async {
+    final snap = await _userDoc(uid).get();
+    return snap.exists;
+  }
+
   Future<void> upsertUserProfile({
     required String uid,
     required String displayName,
     required String email,
     required int coins,
+    int? xp,
     UserCloudData? extras,
   }) async {
     await _userDoc(uid).set(
@@ -28,6 +34,7 @@ class FirestoreUserService {
         'displayName': displayName,
         'email': email,
         'coins': coins,
+        if (xp != null) 'xp': xp,
         if (extras != null) ...extras.toFirestoreFields(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -39,6 +46,16 @@ class FirestoreUserService {
     await _userDoc(uid).set(
       {
         'coins': coins,
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
+  }
+
+  Future<void> updateXp(String uid, int xp) async {
+    await _userDoc(uid).set(
+      {
+        'xp': xp,
         'updatedAt': FieldValue.serverTimestamp(),
       },
       SetOptions(merge: true),
@@ -72,6 +89,12 @@ class FirestoreUserService {
     final snap = await _userDoc(uid).get();
     if (!snap.exists) return null;
     return (snap.data()?['coins'] as num?)?.toInt();
+  }
+
+  Future<int?> fetchXp(String uid) async {
+    final snap = await _userDoc(uid).get();
+    if (!snap.exists) return null;
+    return (snap.data()?['xp'] as num?)?.toInt();
   }
 
   Future<String?> fetchDisplayName(String uid) async {
@@ -118,7 +141,7 @@ class FirestoreUserService {
 
   Future<List<LeaderboardRecord>> fetchLeaderboard({int limit = 50}) async {
     final snap =
-        await _users.orderBy('coins', descending: true).limit(limit).get();
+        await _users.orderBy('xp', descending: true).limit(limit).get();
     return snap.docs.map((doc) {
       final data = doc.data();
       return LeaderboardRecord(
@@ -126,7 +149,9 @@ class FirestoreUserService {
         displayName: (data['displayName'] as String?)?.trim().isNotEmpty == true
             ? data['displayName'] as String
             : 'Player',
-        coins: (data['coins'] as num?)?.toInt() ?? 0,
+        xp: (data['xp'] as num?)?.toInt() ?? 0,
+        photoUrl: data['photoUrl'] as String? ?? '',
+        completedLevels: (data['completedLevels'] as num?)?.toInt() ?? 0,
       );
     }).toList();
   }
@@ -148,10 +173,14 @@ class LeaderboardRecord {
   const LeaderboardRecord({
     required this.uid,
     required this.displayName,
-    required this.coins,
+    required this.xp,
+    this.photoUrl = '',
+    this.completedLevels = 0,
   });
 
   final String uid;
   final String displayName;
-  final int coins;
+  final int xp;
+  final String photoUrl;
+  final int completedLevels;
 }

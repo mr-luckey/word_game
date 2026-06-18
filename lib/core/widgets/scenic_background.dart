@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/theme/app_theme_extension.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/hd_asset_image.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class ScenicBackground extends StatelessWidget {
@@ -11,31 +13,56 @@ class ScenicBackground extends StatelessWidget {
     super.key,
     this.imageAsset,
     this.child,
-    this.blurSigma = 0,
-    this.darken = 0.35,
+    this.blurSigma = ScenicBackgroundStyle.hdBlur,
+    this.darken = ScenicBackgroundStyle.hdDarken,
     this.colors,
     this.showBackgroundImage = true,
+    this.useHdDefaults = true,
   });
+
+  /// Full-screen scenic background with HD defaults (treasure screen quality).
+  factory ScenicBackground.hd({
+    Key? key,
+    String? imageAsset,
+    Widget? child,
+    double darken = ScenicBackgroundStyle.hdDarken,
+    AppThemeColors? colors,
+  }) {
+    return ScenicBackground(
+      key: key,
+      imageAsset: imageAsset,
+      blurSigma: ScenicBackgroundStyle.hdBlur,
+      darken: darken,
+      colors: colors,
+      useHdDefaults: true,
+      child: child,
+    );
+  }
 
   final String? imageAsset;
   final Widget? child;
   final double blurSigma;
   final double darken;
   final AppThemeColors? colors;
-
-  /// When false, only the theme gradient is shown (no photo wallpaper).
   final bool showBackgroundImage;
+  final bool useHdDefaults;
 
   @override
   Widget build(BuildContext context) {
     final c = colors ?? context.appColors;
-    final spec = context.themePreset.homeSpec;
+    final preset = context.themePreset;
+    final spec = preset.homeSpec;
+    final asset = imageAsset ??
+        (useHdDefaults
+            ? ScenicBackgroundStyle.hdAssetFor(preset)
+            : AssetPaths.themeSplash(preset));
+
     return Stack(
       fit: StackFit.expand,
       children: [
         if (showBackgroundImage && c.useScenicImages)
           _BackgroundImage(
-            asset: imageAsset ?? AssetPaths.themeSplash(context.themePreset),
+            asset: asset,
             blurSigma: blurSigma,
             fallbackGradient: c.primaryGradient,
           )
@@ -103,10 +130,9 @@ class _BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Image.asset(
-      asset,
-      fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => DecoratedBox(
+    Widget image = HdAssetImage(
+      asset: asset,
+      fallback: DecoratedBox(
         decoration: BoxDecoration(gradient: fallbackGradient),
       ),
     );

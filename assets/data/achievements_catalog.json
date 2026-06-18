@@ -1,0 +1,5112 @@
+[
+  {
+    "id": "level_5",
+    "category": "levels",
+    "title": "Level 5",
+    "description": "Complete level 5",
+    "target": 5,
+    "rewardCoins": 25,
+    "rewardXp": 50,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_10",
+    "category": "levels",
+    "title": "Level 10",
+    "description": "Complete level 10",
+    "target": 10,
+    "rewardCoins": 25,
+    "rewardXp": 100,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_25",
+    "category": "levels",
+    "title": "Level 25",
+    "description": "Complete level 25",
+    "target": 25,
+    "rewardCoins": 25,
+    "rewardXp": 250,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_50",
+    "category": "levels",
+    "title": "Level 50",
+    "description": "Complete level 50",
+    "target": 50,
+    "rewardCoins": 25,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_75",
+    "category": "levels",
+    "title": "Level 75",
+    "description": "Complete level 75",
+    "target": 75,
+    "rewardCoins": 25,
+    "rewardXp": 750,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_100",
+    "category": "levels",
+    "title": "Level 100",
+    "description": "Complete level 100",
+    "target": 100,
+    "rewardCoins": 50,
+    "rewardXp": 1000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_150",
+    "category": "levels",
+    "title": "Level 150",
+    "description": "Complete level 150",
+    "target": 150,
+    "rewardCoins": 50,
+    "rewardXp": 1500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_200",
+    "category": "levels",
+    "title": "Level 200",
+    "description": "Complete level 200",
+    "target": 200,
+    "rewardCoins": 50,
+    "rewardXp": 2000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_250",
+    "category": "levels",
+    "title": "Level 250",
+    "description": "Complete level 250",
+    "target": 250,
+    "rewardCoins": 50,
+    "rewardXp": 2500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_300",
+    "category": "levels",
+    "title": "Level 300",
+    "description": "Complete level 300",
+    "target": 300,
+    "rewardCoins": 50,
+    "rewardXp": 3000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_400",
+    "category": "levels",
+    "title": "Level 400",
+    "description": "Complete level 400",
+    "target": 400,
+    "rewardCoins": 50,
+    "rewardXp": 4000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_500",
+    "category": "levels",
+    "title": "Level 500",
+    "description": "Complete level 500",
+    "target": 500,
+    "rewardCoins": 50,
+    "rewardXp": 5000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_750",
+    "category": "levels",
+    "title": "Level 750",
+    "description": "Complete level 750",
+    "target": 750,
+    "rewardCoins": 50,
+    "rewardXp": 7500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "level_1000",
+    "category": "levels",
+    "title": "Level 1000",
+    "description": "Complete level 1000",
+    "target": 1000,
+    "rewardCoins": 50,
+    "rewardXp": 10000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_10",
+    "category": "words",
+    "title": "Word Hunter 10",
+    "description": "Find 10 words",
+    "target": 10,
+    "rewardCoins": 0,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_25",
+    "category": "words",
+    "title": "Word Hunter 25",
+    "description": "Find 25 words",
+    "target": 25,
+    "rewardCoins": 1,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_50",
+    "category": "words",
+    "title": "Word Hunter 50",
+    "description": "Find 50 words",
+    "target": 50,
+    "rewardCoins": 2,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_100",
+    "category": "words",
+    "title": "Word Hunter 100",
+    "description": "Find 100 words",
+    "target": 100,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_250",
+    "category": "words",
+    "title": "Word Hunter 250",
+    "description": "Find 250 words",
+    "target": 250,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_500",
+    "category": "words",
+    "title": "Word Hunter 500",
+    "description": "Find 500 words",
+    "target": 500,
+    "rewardCoins": 25,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_1000",
+    "category": "words",
+    "title": "Word Hunter 1000",
+    "description": "Find 1000 words",
+    "target": 1000,
+    "rewardCoins": 50,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_2500",
+    "category": "words",
+    "title": "Word Hunter 2500",
+    "description": "Find 2500 words",
+    "target": 2500,
+    "rewardCoins": 125,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_5000",
+    "category": "words",
+    "title": "Word Hunter 5000",
+    "description": "Find 5000 words",
+    "target": 5000,
+    "rewardCoins": 250,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "words_10000",
+    "category": "words",
+    "title": "Word Hunter 10000",
+    "description": "Find 10000 words",
+    "target": 10000,
+    "rewardCoins": 500,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_3",
+    "category": "streak",
+    "title": "3-Day Streak",
+    "description": "Play 3 days in a row",
+    "target": 3,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_7",
+    "category": "streak",
+    "title": "7-Day Streak",
+    "description": "Play 7 days in a row",
+    "target": 7,
+    "rewardCoins": 35,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_15",
+    "category": "streak",
+    "title": "15-Day Streak",
+    "description": "Play 15 days in a row",
+    "target": 15,
+    "rewardCoins": 75,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_30",
+    "category": "streak",
+    "title": "30-Day Streak",
+    "description": "Play 30 days in a row",
+    "target": 30,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_60",
+    "category": "streak",
+    "title": "60-Day Streak",
+    "description": "Play 60 days in a row",
+    "target": 60,
+    "rewardCoins": 300,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "streak_100",
+    "category": "streak",
+    "title": "100-Day Streak",
+    "description": "Play 100 days in a row",
+    "target": 100,
+    "rewardCoins": 500,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_1",
+    "category": "no_hint",
+    "title": "Pure Mind 1",
+    "description": "Complete 1 levels without hints",
+    "target": 1,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_2",
+    "category": "no_hint",
+    "title": "Pure Mind 2",
+    "description": "Complete 2 levels without hints",
+    "target": 2,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_3",
+    "category": "no_hint",
+    "title": "Pure Mind 3",
+    "description": "Complete 3 levels without hints",
+    "target": 3,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_4",
+    "category": "no_hint",
+    "title": "Pure Mind 4",
+    "description": "Complete 4 levels without hints",
+    "target": 4,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_5",
+    "category": "no_hint",
+    "title": "Pure Mind 5",
+    "description": "Complete 5 levels without hints",
+    "target": 5,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_6",
+    "category": "no_hint",
+    "title": "Pure Mind 6",
+    "description": "Complete 6 levels without hints",
+    "target": 6,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_7",
+    "category": "no_hint",
+    "title": "Pure Mind 7",
+    "description": "Complete 7 levels without hints",
+    "target": 7,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_8",
+    "category": "no_hint",
+    "title": "Pure Mind 8",
+    "description": "Complete 8 levels without hints",
+    "target": 8,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_9",
+    "category": "no_hint",
+    "title": "Pure Mind 9",
+    "description": "Complete 9 levels without hints",
+    "target": 9,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_10",
+    "category": "no_hint",
+    "title": "Pure Mind 10",
+    "description": "Complete 10 levels without hints",
+    "target": 10,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_11",
+    "category": "no_hint",
+    "title": "Pure Mind 11",
+    "description": "Complete 11 levels without hints",
+    "target": 11,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_12",
+    "category": "no_hint",
+    "title": "Pure Mind 12",
+    "description": "Complete 12 levels without hints",
+    "target": 12,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_13",
+    "category": "no_hint",
+    "title": "Pure Mind 13",
+    "description": "Complete 13 levels without hints",
+    "target": 13,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_14",
+    "category": "no_hint",
+    "title": "Pure Mind 14",
+    "description": "Complete 14 levels without hints",
+    "target": 14,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_15",
+    "category": "no_hint",
+    "title": "Pure Mind 15",
+    "description": "Complete 15 levels without hints",
+    "target": 15,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_16",
+    "category": "no_hint",
+    "title": "Pure Mind 16",
+    "description": "Complete 16 levels without hints",
+    "target": 16,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_17",
+    "category": "no_hint",
+    "title": "Pure Mind 17",
+    "description": "Complete 17 levels without hints",
+    "target": 17,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_18",
+    "category": "no_hint",
+    "title": "Pure Mind 18",
+    "description": "Complete 18 levels without hints",
+    "target": 18,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_19",
+    "category": "no_hint",
+    "title": "Pure Mind 19",
+    "description": "Complete 19 levels without hints",
+    "target": 19,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_20",
+    "category": "no_hint",
+    "title": "Pure Mind 20",
+    "description": "Complete 20 levels without hints",
+    "target": 20,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_21",
+    "category": "no_hint",
+    "title": "Pure Mind 21",
+    "description": "Complete 21 levels without hints",
+    "target": 21,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_22",
+    "category": "no_hint",
+    "title": "Pure Mind 22",
+    "description": "Complete 22 levels without hints",
+    "target": 22,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_23",
+    "category": "no_hint",
+    "title": "Pure Mind 23",
+    "description": "Complete 23 levels without hints",
+    "target": 23,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_24",
+    "category": "no_hint",
+    "title": "Pure Mind 24",
+    "description": "Complete 24 levels without hints",
+    "target": 24,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_25",
+    "category": "no_hint",
+    "title": "Pure Mind 25",
+    "description": "Complete 25 levels without hints",
+    "target": 25,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_26",
+    "category": "no_hint",
+    "title": "Pure Mind 26",
+    "description": "Complete 26 levels without hints",
+    "target": 26,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_27",
+    "category": "no_hint",
+    "title": "Pure Mind 27",
+    "description": "Complete 27 levels without hints",
+    "target": 27,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_28",
+    "category": "no_hint",
+    "title": "Pure Mind 28",
+    "description": "Complete 28 levels without hints",
+    "target": 28,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_29",
+    "category": "no_hint",
+    "title": "Pure Mind 29",
+    "description": "Complete 29 levels without hints",
+    "target": 29,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_30",
+    "category": "no_hint",
+    "title": "Pure Mind 30",
+    "description": "Complete 30 levels without hints",
+    "target": 30,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_31",
+    "category": "no_hint",
+    "title": "Pure Mind 31",
+    "description": "Complete 31 levels without hints",
+    "target": 31,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_32",
+    "category": "no_hint",
+    "title": "Pure Mind 32",
+    "description": "Complete 32 levels without hints",
+    "target": 32,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_33",
+    "category": "no_hint",
+    "title": "Pure Mind 33",
+    "description": "Complete 33 levels without hints",
+    "target": 33,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_34",
+    "category": "no_hint",
+    "title": "Pure Mind 34",
+    "description": "Complete 34 levels without hints",
+    "target": 34,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_35",
+    "category": "no_hint",
+    "title": "Pure Mind 35",
+    "description": "Complete 35 levels without hints",
+    "target": 35,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_36",
+    "category": "no_hint",
+    "title": "Pure Mind 36",
+    "description": "Complete 36 levels without hints",
+    "target": 36,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_37",
+    "category": "no_hint",
+    "title": "Pure Mind 37",
+    "description": "Complete 37 levels without hints",
+    "target": 37,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_38",
+    "category": "no_hint",
+    "title": "Pure Mind 38",
+    "description": "Complete 38 levels without hints",
+    "target": 38,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_39",
+    "category": "no_hint",
+    "title": "Pure Mind 39",
+    "description": "Complete 39 levels without hints",
+    "target": 39,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_40",
+    "category": "no_hint",
+    "title": "Pure Mind 40",
+    "description": "Complete 40 levels without hints",
+    "target": 40,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_41",
+    "category": "no_hint",
+    "title": "Pure Mind 41",
+    "description": "Complete 41 levels without hints",
+    "target": 41,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_42",
+    "category": "no_hint",
+    "title": "Pure Mind 42",
+    "description": "Complete 42 levels without hints",
+    "target": 42,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_43",
+    "category": "no_hint",
+    "title": "Pure Mind 43",
+    "description": "Complete 43 levels without hints",
+    "target": 43,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_44",
+    "category": "no_hint",
+    "title": "Pure Mind 44",
+    "description": "Complete 44 levels without hints",
+    "target": 44,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_45",
+    "category": "no_hint",
+    "title": "Pure Mind 45",
+    "description": "Complete 45 levels without hints",
+    "target": 45,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_46",
+    "category": "no_hint",
+    "title": "Pure Mind 46",
+    "description": "Complete 46 levels without hints",
+    "target": 46,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_47",
+    "category": "no_hint",
+    "title": "Pure Mind 47",
+    "description": "Complete 47 levels without hints",
+    "target": 47,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_48",
+    "category": "no_hint",
+    "title": "Pure Mind 48",
+    "description": "Complete 48 levels without hints",
+    "target": 48,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_49",
+    "category": "no_hint",
+    "title": "Pure Mind 49",
+    "description": "Complete 49 levels without hints",
+    "target": 49,
+    "rewardCoins": 10,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_50",
+    "category": "no_hint",
+    "title": "Pure Mind 50",
+    "description": "Complete 50 levels without hints",
+    "target": 50,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_51",
+    "category": "no_hint",
+    "title": "Pure Mind 51",
+    "description": "Complete 51 levels without hints",
+    "target": 51,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_52",
+    "category": "no_hint",
+    "title": "Pure Mind 52",
+    "description": "Complete 52 levels without hints",
+    "target": 52,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_53",
+    "category": "no_hint",
+    "title": "Pure Mind 53",
+    "description": "Complete 53 levels without hints",
+    "target": 53,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_54",
+    "category": "no_hint",
+    "title": "Pure Mind 54",
+    "description": "Complete 54 levels without hints",
+    "target": 54,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_55",
+    "category": "no_hint",
+    "title": "Pure Mind 55",
+    "description": "Complete 55 levels without hints",
+    "target": 55,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_56",
+    "category": "no_hint",
+    "title": "Pure Mind 56",
+    "description": "Complete 56 levels without hints",
+    "target": 56,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_57",
+    "category": "no_hint",
+    "title": "Pure Mind 57",
+    "description": "Complete 57 levels without hints",
+    "target": 57,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_58",
+    "category": "no_hint",
+    "title": "Pure Mind 58",
+    "description": "Complete 58 levels without hints",
+    "target": 58,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_59",
+    "category": "no_hint",
+    "title": "Pure Mind 59",
+    "description": "Complete 59 levels without hints",
+    "target": 59,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_60",
+    "category": "no_hint",
+    "title": "Pure Mind 60",
+    "description": "Complete 60 levels without hints",
+    "target": 60,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_61",
+    "category": "no_hint",
+    "title": "Pure Mind 61",
+    "description": "Complete 61 levels without hints",
+    "target": 61,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_62",
+    "category": "no_hint",
+    "title": "Pure Mind 62",
+    "description": "Complete 62 levels without hints",
+    "target": 62,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_63",
+    "category": "no_hint",
+    "title": "Pure Mind 63",
+    "description": "Complete 63 levels without hints",
+    "target": 63,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_64",
+    "category": "no_hint",
+    "title": "Pure Mind 64",
+    "description": "Complete 64 levels without hints",
+    "target": 64,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_65",
+    "category": "no_hint",
+    "title": "Pure Mind 65",
+    "description": "Complete 65 levels without hints",
+    "target": 65,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_66",
+    "category": "no_hint",
+    "title": "Pure Mind 66",
+    "description": "Complete 66 levels without hints",
+    "target": 66,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_67",
+    "category": "no_hint",
+    "title": "Pure Mind 67",
+    "description": "Complete 67 levels without hints",
+    "target": 67,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_68",
+    "category": "no_hint",
+    "title": "Pure Mind 68",
+    "description": "Complete 68 levels without hints",
+    "target": 68,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_69",
+    "category": "no_hint",
+    "title": "Pure Mind 69",
+    "description": "Complete 69 levels without hints",
+    "target": 69,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_70",
+    "category": "no_hint",
+    "title": "Pure Mind 70",
+    "description": "Complete 70 levels without hints",
+    "target": 70,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_71",
+    "category": "no_hint",
+    "title": "Pure Mind 71",
+    "description": "Complete 71 levels without hints",
+    "target": 71,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_72",
+    "category": "no_hint",
+    "title": "Pure Mind 72",
+    "description": "Complete 72 levels without hints",
+    "target": 72,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_73",
+    "category": "no_hint",
+    "title": "Pure Mind 73",
+    "description": "Complete 73 levels without hints",
+    "target": 73,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_74",
+    "category": "no_hint",
+    "title": "Pure Mind 74",
+    "description": "Complete 74 levels without hints",
+    "target": 74,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_75",
+    "category": "no_hint",
+    "title": "Pure Mind 75",
+    "description": "Complete 75 levels without hints",
+    "target": 75,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_76",
+    "category": "no_hint",
+    "title": "Pure Mind 76",
+    "description": "Complete 76 levels without hints",
+    "target": 76,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_77",
+    "category": "no_hint",
+    "title": "Pure Mind 77",
+    "description": "Complete 77 levels without hints",
+    "target": 77,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_78",
+    "category": "no_hint",
+    "title": "Pure Mind 78",
+    "description": "Complete 78 levels without hints",
+    "target": 78,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_79",
+    "category": "no_hint",
+    "title": "Pure Mind 79",
+    "description": "Complete 79 levels without hints",
+    "target": 79,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_80",
+    "category": "no_hint",
+    "title": "Pure Mind 80",
+    "description": "Complete 80 levels without hints",
+    "target": 80,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_81",
+    "category": "no_hint",
+    "title": "Pure Mind 81",
+    "description": "Complete 81 levels without hints",
+    "target": 81,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_82",
+    "category": "no_hint",
+    "title": "Pure Mind 82",
+    "description": "Complete 82 levels without hints",
+    "target": 82,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_83",
+    "category": "no_hint",
+    "title": "Pure Mind 83",
+    "description": "Complete 83 levels without hints",
+    "target": 83,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_84",
+    "category": "no_hint",
+    "title": "Pure Mind 84",
+    "description": "Complete 84 levels without hints",
+    "target": 84,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_85",
+    "category": "no_hint",
+    "title": "Pure Mind 85",
+    "description": "Complete 85 levels without hints",
+    "target": 85,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_86",
+    "category": "no_hint",
+    "title": "Pure Mind 86",
+    "description": "Complete 86 levels without hints",
+    "target": 86,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_87",
+    "category": "no_hint",
+    "title": "Pure Mind 87",
+    "description": "Complete 87 levels without hints",
+    "target": 87,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_88",
+    "category": "no_hint",
+    "title": "Pure Mind 88",
+    "description": "Complete 88 levels without hints",
+    "target": 88,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_89",
+    "category": "no_hint",
+    "title": "Pure Mind 89",
+    "description": "Complete 89 levels without hints",
+    "target": 89,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_90",
+    "category": "no_hint",
+    "title": "Pure Mind 90",
+    "description": "Complete 90 levels without hints",
+    "target": 90,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_91",
+    "category": "no_hint",
+    "title": "Pure Mind 91",
+    "description": "Complete 91 levels without hints",
+    "target": 91,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_92",
+    "category": "no_hint",
+    "title": "Pure Mind 92",
+    "description": "Complete 92 levels without hints",
+    "target": 92,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_93",
+    "category": "no_hint",
+    "title": "Pure Mind 93",
+    "description": "Complete 93 levels without hints",
+    "target": 93,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_94",
+    "category": "no_hint",
+    "title": "Pure Mind 94",
+    "description": "Complete 94 levels without hints",
+    "target": 94,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_95",
+    "category": "no_hint",
+    "title": "Pure Mind 95",
+    "description": "Complete 95 levels without hints",
+    "target": 95,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_96",
+    "category": "no_hint",
+    "title": "Pure Mind 96",
+    "description": "Complete 96 levels without hints",
+    "target": 96,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_97",
+    "category": "no_hint",
+    "title": "Pure Mind 97",
+    "description": "Complete 97 levels without hints",
+    "target": 97,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_98",
+    "category": "no_hint",
+    "title": "Pure Mind 98",
+    "description": "Complete 98 levels without hints",
+    "target": 98,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_99",
+    "category": "no_hint",
+    "title": "Pure Mind 99",
+    "description": "Complete 99 levels without hints",
+    "target": 99,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_hint_100",
+    "category": "no_hint",
+    "title": "Pure Mind 100",
+    "description": "Complete 100 levels without hints",
+    "target": 100,
+    "rewardCoins": 150,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_1",
+    "category": "fast",
+    "title": "Speed Runner 1",
+    "description": "Complete 1 levels under 60 seconds",
+    "target": 1,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_2",
+    "category": "fast",
+    "title": "Speed Runner 2",
+    "description": "Complete 2 levels under 60 seconds",
+    "target": 2,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_3",
+    "category": "fast",
+    "title": "Speed Runner 3",
+    "description": "Complete 3 levels under 60 seconds",
+    "target": 3,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_4",
+    "category": "fast",
+    "title": "Speed Runner 4",
+    "description": "Complete 4 levels under 60 seconds",
+    "target": 4,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_5",
+    "category": "fast",
+    "title": "Speed Runner 5",
+    "description": "Complete 5 levels under 60 seconds",
+    "target": 5,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_6",
+    "category": "fast",
+    "title": "Speed Runner 6",
+    "description": "Complete 6 levels under 60 seconds",
+    "target": 6,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_7",
+    "category": "fast",
+    "title": "Speed Runner 7",
+    "description": "Complete 7 levels under 60 seconds",
+    "target": 7,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_8",
+    "category": "fast",
+    "title": "Speed Runner 8",
+    "description": "Complete 8 levels under 60 seconds",
+    "target": 8,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_9",
+    "category": "fast",
+    "title": "Speed Runner 9",
+    "description": "Complete 9 levels under 60 seconds",
+    "target": 9,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_10",
+    "category": "fast",
+    "title": "Speed Runner 10",
+    "description": "Complete 10 levels under 60 seconds",
+    "target": 10,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_11",
+    "category": "fast",
+    "title": "Speed Runner 11",
+    "description": "Complete 11 levels under 60 seconds",
+    "target": 11,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_12",
+    "category": "fast",
+    "title": "Speed Runner 12",
+    "description": "Complete 12 levels under 60 seconds",
+    "target": 12,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_13",
+    "category": "fast",
+    "title": "Speed Runner 13",
+    "description": "Complete 13 levels under 60 seconds",
+    "target": 13,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_14",
+    "category": "fast",
+    "title": "Speed Runner 14",
+    "description": "Complete 14 levels under 60 seconds",
+    "target": 14,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_15",
+    "category": "fast",
+    "title": "Speed Runner 15",
+    "description": "Complete 15 levels under 60 seconds",
+    "target": 15,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_16",
+    "category": "fast",
+    "title": "Speed Runner 16",
+    "description": "Complete 16 levels under 60 seconds",
+    "target": 16,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_17",
+    "category": "fast",
+    "title": "Speed Runner 17",
+    "description": "Complete 17 levels under 60 seconds",
+    "target": 17,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_18",
+    "category": "fast",
+    "title": "Speed Runner 18",
+    "description": "Complete 18 levels under 60 seconds",
+    "target": 18,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_19",
+    "category": "fast",
+    "title": "Speed Runner 19",
+    "description": "Complete 19 levels under 60 seconds",
+    "target": 19,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_20",
+    "category": "fast",
+    "title": "Speed Runner 20",
+    "description": "Complete 20 levels under 60 seconds",
+    "target": 20,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_21",
+    "category": "fast",
+    "title": "Speed Runner 21",
+    "description": "Complete 21 levels under 60 seconds",
+    "target": 21,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_22",
+    "category": "fast",
+    "title": "Speed Runner 22",
+    "description": "Complete 22 levels under 60 seconds",
+    "target": 22,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_23",
+    "category": "fast",
+    "title": "Speed Runner 23",
+    "description": "Complete 23 levels under 60 seconds",
+    "target": 23,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_24",
+    "category": "fast",
+    "title": "Speed Runner 24",
+    "description": "Complete 24 levels under 60 seconds",
+    "target": 24,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_25",
+    "category": "fast",
+    "title": "Speed Runner 25",
+    "description": "Complete 25 levels under 60 seconds",
+    "target": 25,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_26",
+    "category": "fast",
+    "title": "Speed Runner 26",
+    "description": "Complete 26 levels under 60 seconds",
+    "target": 26,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_27",
+    "category": "fast",
+    "title": "Speed Runner 27",
+    "description": "Complete 27 levels under 60 seconds",
+    "target": 27,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_28",
+    "category": "fast",
+    "title": "Speed Runner 28",
+    "description": "Complete 28 levels under 60 seconds",
+    "target": 28,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_29",
+    "category": "fast",
+    "title": "Speed Runner 29",
+    "description": "Complete 29 levels under 60 seconds",
+    "target": 29,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_30",
+    "category": "fast",
+    "title": "Speed Runner 30",
+    "description": "Complete 30 levels under 60 seconds",
+    "target": 30,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_31",
+    "category": "fast",
+    "title": "Speed Runner 31",
+    "description": "Complete 31 levels under 60 seconds",
+    "target": 31,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_32",
+    "category": "fast",
+    "title": "Speed Runner 32",
+    "description": "Complete 32 levels under 60 seconds",
+    "target": 32,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_33",
+    "category": "fast",
+    "title": "Speed Runner 33",
+    "description": "Complete 33 levels under 60 seconds",
+    "target": 33,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_34",
+    "category": "fast",
+    "title": "Speed Runner 34",
+    "description": "Complete 34 levels under 60 seconds",
+    "target": 34,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_35",
+    "category": "fast",
+    "title": "Speed Runner 35",
+    "description": "Complete 35 levels under 60 seconds",
+    "target": 35,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_36",
+    "category": "fast",
+    "title": "Speed Runner 36",
+    "description": "Complete 36 levels under 60 seconds",
+    "target": 36,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_37",
+    "category": "fast",
+    "title": "Speed Runner 37",
+    "description": "Complete 37 levels under 60 seconds",
+    "target": 37,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_38",
+    "category": "fast",
+    "title": "Speed Runner 38",
+    "description": "Complete 38 levels under 60 seconds",
+    "target": 38,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_39",
+    "category": "fast",
+    "title": "Speed Runner 39",
+    "description": "Complete 39 levels under 60 seconds",
+    "target": 39,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_40",
+    "category": "fast",
+    "title": "Speed Runner 40",
+    "description": "Complete 40 levels under 60 seconds",
+    "target": 40,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_41",
+    "category": "fast",
+    "title": "Speed Runner 41",
+    "description": "Complete 41 levels under 60 seconds",
+    "target": 41,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_42",
+    "category": "fast",
+    "title": "Speed Runner 42",
+    "description": "Complete 42 levels under 60 seconds",
+    "target": 42,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_43",
+    "category": "fast",
+    "title": "Speed Runner 43",
+    "description": "Complete 43 levels under 60 seconds",
+    "target": 43,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_44",
+    "category": "fast",
+    "title": "Speed Runner 44",
+    "description": "Complete 44 levels under 60 seconds",
+    "target": 44,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_45",
+    "category": "fast",
+    "title": "Speed Runner 45",
+    "description": "Complete 45 levels under 60 seconds",
+    "target": 45,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_46",
+    "category": "fast",
+    "title": "Speed Runner 46",
+    "description": "Complete 46 levels under 60 seconds",
+    "target": 46,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_47",
+    "category": "fast",
+    "title": "Speed Runner 47",
+    "description": "Complete 47 levels under 60 seconds",
+    "target": 47,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_48",
+    "category": "fast",
+    "title": "Speed Runner 48",
+    "description": "Complete 48 levels under 60 seconds",
+    "target": 48,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_49",
+    "category": "fast",
+    "title": "Speed Runner 49",
+    "description": "Complete 49 levels under 60 seconds",
+    "target": 49,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "fast_50",
+    "category": "fast",
+    "title": "Speed Runner 50",
+    "description": "Complete 50 levels under 60 seconds",
+    "target": 50,
+    "rewardCoins": 15,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_1",
+    "category": "no_reveal",
+    "title": "Reveal Free 1",
+    "description": "Complete 1 levels without reveal",
+    "target": 1,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_2",
+    "category": "no_reveal",
+    "title": "Reveal Free 2",
+    "description": "Complete 2 levels without reveal",
+    "target": 2,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_3",
+    "category": "no_reveal",
+    "title": "Reveal Free 3",
+    "description": "Complete 3 levels without reveal",
+    "target": 3,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_4",
+    "category": "no_reveal",
+    "title": "Reveal Free 4",
+    "description": "Complete 4 levels without reveal",
+    "target": 4,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_5",
+    "category": "no_reveal",
+    "title": "Reveal Free 5",
+    "description": "Complete 5 levels without reveal",
+    "target": 5,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_6",
+    "category": "no_reveal",
+    "title": "Reveal Free 6",
+    "description": "Complete 6 levels without reveal",
+    "target": 6,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_7",
+    "category": "no_reveal",
+    "title": "Reveal Free 7",
+    "description": "Complete 7 levels without reveal",
+    "target": 7,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_8",
+    "category": "no_reveal",
+    "title": "Reveal Free 8",
+    "description": "Complete 8 levels without reveal",
+    "target": 8,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_9",
+    "category": "no_reveal",
+    "title": "Reveal Free 9",
+    "description": "Complete 9 levels without reveal",
+    "target": 9,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_10",
+    "category": "no_reveal",
+    "title": "Reveal Free 10",
+    "description": "Complete 10 levels without reveal",
+    "target": 10,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_11",
+    "category": "no_reveal",
+    "title": "Reveal Free 11",
+    "description": "Complete 11 levels without reveal",
+    "target": 11,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_12",
+    "category": "no_reveal",
+    "title": "Reveal Free 12",
+    "description": "Complete 12 levels without reveal",
+    "target": 12,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_13",
+    "category": "no_reveal",
+    "title": "Reveal Free 13",
+    "description": "Complete 13 levels without reveal",
+    "target": 13,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_14",
+    "category": "no_reveal",
+    "title": "Reveal Free 14",
+    "description": "Complete 14 levels without reveal",
+    "target": 14,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_15",
+    "category": "no_reveal",
+    "title": "Reveal Free 15",
+    "description": "Complete 15 levels without reveal",
+    "target": 15,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_16",
+    "category": "no_reveal",
+    "title": "Reveal Free 16",
+    "description": "Complete 16 levels without reveal",
+    "target": 16,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_17",
+    "category": "no_reveal",
+    "title": "Reveal Free 17",
+    "description": "Complete 17 levels without reveal",
+    "target": 17,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_18",
+    "category": "no_reveal",
+    "title": "Reveal Free 18",
+    "description": "Complete 18 levels without reveal",
+    "target": 18,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_19",
+    "category": "no_reveal",
+    "title": "Reveal Free 19",
+    "description": "Complete 19 levels without reveal",
+    "target": 19,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_20",
+    "category": "no_reveal",
+    "title": "Reveal Free 20",
+    "description": "Complete 20 levels without reveal",
+    "target": 20,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_21",
+    "category": "no_reveal",
+    "title": "Reveal Free 21",
+    "description": "Complete 21 levels without reveal",
+    "target": 21,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_22",
+    "category": "no_reveal",
+    "title": "Reveal Free 22",
+    "description": "Complete 22 levels without reveal",
+    "target": 22,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_23",
+    "category": "no_reveal",
+    "title": "Reveal Free 23",
+    "description": "Complete 23 levels without reveal",
+    "target": 23,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_24",
+    "category": "no_reveal",
+    "title": "Reveal Free 24",
+    "description": "Complete 24 levels without reveal",
+    "target": 24,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_25",
+    "category": "no_reveal",
+    "title": "Reveal Free 25",
+    "description": "Complete 25 levels without reveal",
+    "target": 25,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_26",
+    "category": "no_reveal",
+    "title": "Reveal Free 26",
+    "description": "Complete 26 levels without reveal",
+    "target": 26,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_27",
+    "category": "no_reveal",
+    "title": "Reveal Free 27",
+    "description": "Complete 27 levels without reveal",
+    "target": 27,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_28",
+    "category": "no_reveal",
+    "title": "Reveal Free 28",
+    "description": "Complete 28 levels without reveal",
+    "target": 28,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_29",
+    "category": "no_reveal",
+    "title": "Reveal Free 29",
+    "description": "Complete 29 levels without reveal",
+    "target": 29,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_30",
+    "category": "no_reveal",
+    "title": "Reveal Free 30",
+    "description": "Complete 30 levels without reveal",
+    "target": 30,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_31",
+    "category": "no_reveal",
+    "title": "Reveal Free 31",
+    "description": "Complete 31 levels without reveal",
+    "target": 31,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_32",
+    "category": "no_reveal",
+    "title": "Reveal Free 32",
+    "description": "Complete 32 levels without reveal",
+    "target": 32,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_33",
+    "category": "no_reveal",
+    "title": "Reveal Free 33",
+    "description": "Complete 33 levels without reveal",
+    "target": 33,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_34",
+    "category": "no_reveal",
+    "title": "Reveal Free 34",
+    "description": "Complete 34 levels without reveal",
+    "target": 34,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_35",
+    "category": "no_reveal",
+    "title": "Reveal Free 35",
+    "description": "Complete 35 levels without reveal",
+    "target": 35,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_36",
+    "category": "no_reveal",
+    "title": "Reveal Free 36",
+    "description": "Complete 36 levels without reveal",
+    "target": 36,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_37",
+    "category": "no_reveal",
+    "title": "Reveal Free 37",
+    "description": "Complete 37 levels without reveal",
+    "target": 37,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_38",
+    "category": "no_reveal",
+    "title": "Reveal Free 38",
+    "description": "Complete 38 levels without reveal",
+    "target": 38,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_39",
+    "category": "no_reveal",
+    "title": "Reveal Free 39",
+    "description": "Complete 39 levels without reveal",
+    "target": 39,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_40",
+    "category": "no_reveal",
+    "title": "Reveal Free 40",
+    "description": "Complete 40 levels without reveal",
+    "target": 40,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_41",
+    "category": "no_reveal",
+    "title": "Reveal Free 41",
+    "description": "Complete 41 levels without reveal",
+    "target": 41,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_42",
+    "category": "no_reveal",
+    "title": "Reveal Free 42",
+    "description": "Complete 42 levels without reveal",
+    "target": 42,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_43",
+    "category": "no_reveal",
+    "title": "Reveal Free 43",
+    "description": "Complete 43 levels without reveal",
+    "target": 43,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_44",
+    "category": "no_reveal",
+    "title": "Reveal Free 44",
+    "description": "Complete 44 levels without reveal",
+    "target": 44,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_45",
+    "category": "no_reveal",
+    "title": "Reveal Free 45",
+    "description": "Complete 45 levels without reveal",
+    "target": 45,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_46",
+    "category": "no_reveal",
+    "title": "Reveal Free 46",
+    "description": "Complete 46 levels without reveal",
+    "target": 46,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_47",
+    "category": "no_reveal",
+    "title": "Reveal Free 47",
+    "description": "Complete 47 levels without reveal",
+    "target": 47,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_48",
+    "category": "no_reveal",
+    "title": "Reveal Free 48",
+    "description": "Complete 48 levels without reveal",
+    "target": 48,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_49",
+    "category": "no_reveal",
+    "title": "Reveal Free 49",
+    "description": "Complete 49 levels without reveal",
+    "target": 49,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_50",
+    "category": "no_reveal",
+    "title": "Reveal Free 50",
+    "description": "Complete 50 levels without reveal",
+    "target": 50,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_51",
+    "category": "no_reveal",
+    "title": "Reveal Free 51",
+    "description": "Complete 51 levels without reveal",
+    "target": 51,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_52",
+    "category": "no_reveal",
+    "title": "Reveal Free 52",
+    "description": "Complete 52 levels without reveal",
+    "target": 52,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_53",
+    "category": "no_reveal",
+    "title": "Reveal Free 53",
+    "description": "Complete 53 levels without reveal",
+    "target": 53,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_54",
+    "category": "no_reveal",
+    "title": "Reveal Free 54",
+    "description": "Complete 54 levels without reveal",
+    "target": 54,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_55",
+    "category": "no_reveal",
+    "title": "Reveal Free 55",
+    "description": "Complete 55 levels without reveal",
+    "target": 55,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_56",
+    "category": "no_reveal",
+    "title": "Reveal Free 56",
+    "description": "Complete 56 levels without reveal",
+    "target": 56,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_57",
+    "category": "no_reveal",
+    "title": "Reveal Free 57",
+    "description": "Complete 57 levels without reveal",
+    "target": 57,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_58",
+    "category": "no_reveal",
+    "title": "Reveal Free 58",
+    "description": "Complete 58 levels without reveal",
+    "target": 58,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_59",
+    "category": "no_reveal",
+    "title": "Reveal Free 59",
+    "description": "Complete 59 levels without reveal",
+    "target": 59,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_60",
+    "category": "no_reveal",
+    "title": "Reveal Free 60",
+    "description": "Complete 60 levels without reveal",
+    "target": 60,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_61",
+    "category": "no_reveal",
+    "title": "Reveal Free 61",
+    "description": "Complete 61 levels without reveal",
+    "target": 61,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_62",
+    "category": "no_reveal",
+    "title": "Reveal Free 62",
+    "description": "Complete 62 levels without reveal",
+    "target": 62,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_63",
+    "category": "no_reveal",
+    "title": "Reveal Free 63",
+    "description": "Complete 63 levels without reveal",
+    "target": 63,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_64",
+    "category": "no_reveal",
+    "title": "Reveal Free 64",
+    "description": "Complete 64 levels without reveal",
+    "target": 64,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_65",
+    "category": "no_reveal",
+    "title": "Reveal Free 65",
+    "description": "Complete 65 levels without reveal",
+    "target": 65,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_66",
+    "category": "no_reveal",
+    "title": "Reveal Free 66",
+    "description": "Complete 66 levels without reveal",
+    "target": 66,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_67",
+    "category": "no_reveal",
+    "title": "Reveal Free 67",
+    "description": "Complete 67 levels without reveal",
+    "target": 67,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_68",
+    "category": "no_reveal",
+    "title": "Reveal Free 68",
+    "description": "Complete 68 levels without reveal",
+    "target": 68,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_69",
+    "category": "no_reveal",
+    "title": "Reveal Free 69",
+    "description": "Complete 69 levels without reveal",
+    "target": 69,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_70",
+    "category": "no_reveal",
+    "title": "Reveal Free 70",
+    "description": "Complete 70 levels without reveal",
+    "target": 70,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_71",
+    "category": "no_reveal",
+    "title": "Reveal Free 71",
+    "description": "Complete 71 levels without reveal",
+    "target": 71,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_72",
+    "category": "no_reveal",
+    "title": "Reveal Free 72",
+    "description": "Complete 72 levels without reveal",
+    "target": 72,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_73",
+    "category": "no_reveal",
+    "title": "Reveal Free 73",
+    "description": "Complete 73 levels without reveal",
+    "target": 73,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_74",
+    "category": "no_reveal",
+    "title": "Reveal Free 74",
+    "description": "Complete 74 levels without reveal",
+    "target": 74,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_75",
+    "category": "no_reveal",
+    "title": "Reveal Free 75",
+    "description": "Complete 75 levels without reveal",
+    "target": 75,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_76",
+    "category": "no_reveal",
+    "title": "Reveal Free 76",
+    "description": "Complete 76 levels without reveal",
+    "target": 76,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_77",
+    "category": "no_reveal",
+    "title": "Reveal Free 77",
+    "description": "Complete 77 levels without reveal",
+    "target": 77,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_78",
+    "category": "no_reveal",
+    "title": "Reveal Free 78",
+    "description": "Complete 78 levels without reveal",
+    "target": 78,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_79",
+    "category": "no_reveal",
+    "title": "Reveal Free 79",
+    "description": "Complete 79 levels without reveal",
+    "target": 79,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_80",
+    "category": "no_reveal",
+    "title": "Reveal Free 80",
+    "description": "Complete 80 levels without reveal",
+    "target": 80,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_81",
+    "category": "no_reveal",
+    "title": "Reveal Free 81",
+    "description": "Complete 81 levels without reveal",
+    "target": 81,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_82",
+    "category": "no_reveal",
+    "title": "Reveal Free 82",
+    "description": "Complete 82 levels without reveal",
+    "target": 82,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_83",
+    "category": "no_reveal",
+    "title": "Reveal Free 83",
+    "description": "Complete 83 levels without reveal",
+    "target": 83,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_84",
+    "category": "no_reveal",
+    "title": "Reveal Free 84",
+    "description": "Complete 84 levels without reveal",
+    "target": 84,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_85",
+    "category": "no_reveal",
+    "title": "Reveal Free 85",
+    "description": "Complete 85 levels without reveal",
+    "target": 85,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_86",
+    "category": "no_reveal",
+    "title": "Reveal Free 86",
+    "description": "Complete 86 levels without reveal",
+    "target": 86,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_87",
+    "category": "no_reveal",
+    "title": "Reveal Free 87",
+    "description": "Complete 87 levels without reveal",
+    "target": 87,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_88",
+    "category": "no_reveal",
+    "title": "Reveal Free 88",
+    "description": "Complete 88 levels without reveal",
+    "target": 88,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_89",
+    "category": "no_reveal",
+    "title": "Reveal Free 89",
+    "description": "Complete 89 levels without reveal",
+    "target": 89,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_90",
+    "category": "no_reveal",
+    "title": "Reveal Free 90",
+    "description": "Complete 90 levels without reveal",
+    "target": 90,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_91",
+    "category": "no_reveal",
+    "title": "Reveal Free 91",
+    "description": "Complete 91 levels without reveal",
+    "target": 91,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_92",
+    "category": "no_reveal",
+    "title": "Reveal Free 92",
+    "description": "Complete 92 levels without reveal",
+    "target": 92,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_93",
+    "category": "no_reveal",
+    "title": "Reveal Free 93",
+    "description": "Complete 93 levels without reveal",
+    "target": 93,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_94",
+    "category": "no_reveal",
+    "title": "Reveal Free 94",
+    "description": "Complete 94 levels without reveal",
+    "target": 94,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_95",
+    "category": "no_reveal",
+    "title": "Reveal Free 95",
+    "description": "Complete 95 levels without reveal",
+    "target": 95,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_96",
+    "category": "no_reveal",
+    "title": "Reveal Free 96",
+    "description": "Complete 96 levels without reveal",
+    "target": 96,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_97",
+    "category": "no_reveal",
+    "title": "Reveal Free 97",
+    "description": "Complete 97 levels without reveal",
+    "target": 97,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_98",
+    "category": "no_reveal",
+    "title": "Reveal Free 98",
+    "description": "Complete 98 levels without reveal",
+    "target": 98,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_99",
+    "category": "no_reveal",
+    "title": "Reveal Free 99",
+    "description": "Complete 99 levels without reveal",
+    "target": 99,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "no_reveal_100",
+    "category": "no_reveal",
+    "title": "Reveal Free 100",
+    "description": "Complete 100 levels without reveal",
+    "target": 100,
+    "rewardCoins": 12,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_maldives",
+    "category": "world",
+    "title": "Explore MALDIVES",
+    "description": "Complete the maldives world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_santorini",
+    "category": "world",
+    "title": "Explore SANTORINI",
+    "description": "Complete the santorini world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_bali",
+    "category": "world",
+    "title": "Explore BALI",
+    "description": "Complete the bali world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_tokyo",
+    "category": "world",
+    "title": "Explore TOKYO",
+    "description": "Complete the tokyo world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_paris",
+    "category": "world",
+    "title": "Explore PARIS",
+    "description": "Complete the paris world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_dubai",
+    "category": "world",
+    "title": "Explore DUBAI",
+    "description": "Complete the dubai world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_dark_luxury",
+    "category": "world",
+    "title": "Explore DARK LUXURY",
+    "description": "Complete the dark_luxury world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_neon_city",
+    "category": "world",
+    "title": "Explore NEON CITY",
+    "description": "Complete the neon_city world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_forest_quest",
+    "category": "world",
+    "title": "Explore FOREST QUEST",
+    "description": "Complete the forest_quest world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "world_winter_alps",
+    "category": "world",
+    "title": "Explore WINTER ALPS",
+    "description": "Complete the winter_alps world",
+    "target": 1,
+    "rewardCoins": 100,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_1",
+    "category": "daily",
+    "title": "Daily Hero 1",
+    "description": "Complete 1 daily challenges",
+    "target": 1,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_2",
+    "category": "daily",
+    "title": "Daily Hero 2",
+    "description": "Complete 2 daily challenges",
+    "target": 2,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_3",
+    "category": "daily",
+    "title": "Daily Hero 3",
+    "description": "Complete 3 daily challenges",
+    "target": 3,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_4",
+    "category": "daily",
+    "title": "Daily Hero 4",
+    "description": "Complete 4 daily challenges",
+    "target": 4,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_5",
+    "category": "daily",
+    "title": "Daily Hero 5",
+    "description": "Complete 5 daily challenges",
+    "target": 5,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_6",
+    "category": "daily",
+    "title": "Daily Hero 6",
+    "description": "Complete 6 daily challenges",
+    "target": 6,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_7",
+    "category": "daily",
+    "title": "Daily Hero 7",
+    "description": "Complete 7 daily challenges",
+    "target": 7,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_8",
+    "category": "daily",
+    "title": "Daily Hero 8",
+    "description": "Complete 8 daily challenges",
+    "target": 8,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_9",
+    "category": "daily",
+    "title": "Daily Hero 9",
+    "description": "Complete 9 daily challenges",
+    "target": 9,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_10",
+    "category": "daily",
+    "title": "Daily Hero 10",
+    "description": "Complete 10 daily challenges",
+    "target": 10,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_11",
+    "category": "daily",
+    "title": "Daily Hero 11",
+    "description": "Complete 11 daily challenges",
+    "target": 11,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_12",
+    "category": "daily",
+    "title": "Daily Hero 12",
+    "description": "Complete 12 daily challenges",
+    "target": 12,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_13",
+    "category": "daily",
+    "title": "Daily Hero 13",
+    "description": "Complete 13 daily challenges",
+    "target": 13,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_14",
+    "category": "daily",
+    "title": "Daily Hero 14",
+    "description": "Complete 14 daily challenges",
+    "target": 14,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_15",
+    "category": "daily",
+    "title": "Daily Hero 15",
+    "description": "Complete 15 daily challenges",
+    "target": 15,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_16",
+    "category": "daily",
+    "title": "Daily Hero 16",
+    "description": "Complete 16 daily challenges",
+    "target": 16,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_17",
+    "category": "daily",
+    "title": "Daily Hero 17",
+    "description": "Complete 17 daily challenges",
+    "target": 17,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_18",
+    "category": "daily",
+    "title": "Daily Hero 18",
+    "description": "Complete 18 daily challenges",
+    "target": 18,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_19",
+    "category": "daily",
+    "title": "Daily Hero 19",
+    "description": "Complete 19 daily challenges",
+    "target": 19,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_20",
+    "category": "daily",
+    "title": "Daily Hero 20",
+    "description": "Complete 20 daily challenges",
+    "target": 20,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_21",
+    "category": "daily",
+    "title": "Daily Hero 21",
+    "description": "Complete 21 daily challenges",
+    "target": 21,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_22",
+    "category": "daily",
+    "title": "Daily Hero 22",
+    "description": "Complete 22 daily challenges",
+    "target": 22,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_23",
+    "category": "daily",
+    "title": "Daily Hero 23",
+    "description": "Complete 23 daily challenges",
+    "target": 23,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_24",
+    "category": "daily",
+    "title": "Daily Hero 24",
+    "description": "Complete 24 daily challenges",
+    "target": 24,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_25",
+    "category": "daily",
+    "title": "Daily Hero 25",
+    "description": "Complete 25 daily challenges",
+    "target": 25,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_26",
+    "category": "daily",
+    "title": "Daily Hero 26",
+    "description": "Complete 26 daily challenges",
+    "target": 26,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_27",
+    "category": "daily",
+    "title": "Daily Hero 27",
+    "description": "Complete 27 daily challenges",
+    "target": 27,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_28",
+    "category": "daily",
+    "title": "Daily Hero 28",
+    "description": "Complete 28 daily challenges",
+    "target": 28,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_29",
+    "category": "daily",
+    "title": "Daily Hero 29",
+    "description": "Complete 29 daily challenges",
+    "target": 29,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_30",
+    "category": "daily",
+    "title": "Daily Hero 30",
+    "description": "Complete 30 daily challenges",
+    "target": 30,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_31",
+    "category": "daily",
+    "title": "Daily Hero 31",
+    "description": "Complete 31 daily challenges",
+    "target": 31,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_32",
+    "category": "daily",
+    "title": "Daily Hero 32",
+    "description": "Complete 32 daily challenges",
+    "target": 32,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_33",
+    "category": "daily",
+    "title": "Daily Hero 33",
+    "description": "Complete 33 daily challenges",
+    "target": 33,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_34",
+    "category": "daily",
+    "title": "Daily Hero 34",
+    "description": "Complete 34 daily challenges",
+    "target": 34,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_35",
+    "category": "daily",
+    "title": "Daily Hero 35",
+    "description": "Complete 35 daily challenges",
+    "target": 35,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_36",
+    "category": "daily",
+    "title": "Daily Hero 36",
+    "description": "Complete 36 daily challenges",
+    "target": 36,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_37",
+    "category": "daily",
+    "title": "Daily Hero 37",
+    "description": "Complete 37 daily challenges",
+    "target": 37,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_38",
+    "category": "daily",
+    "title": "Daily Hero 38",
+    "description": "Complete 38 daily challenges",
+    "target": 38,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_39",
+    "category": "daily",
+    "title": "Daily Hero 39",
+    "description": "Complete 39 daily challenges",
+    "target": 39,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_40",
+    "category": "daily",
+    "title": "Daily Hero 40",
+    "description": "Complete 40 daily challenges",
+    "target": 40,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_41",
+    "category": "daily",
+    "title": "Daily Hero 41",
+    "description": "Complete 41 daily challenges",
+    "target": 41,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_42",
+    "category": "daily",
+    "title": "Daily Hero 42",
+    "description": "Complete 42 daily challenges",
+    "target": 42,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_43",
+    "category": "daily",
+    "title": "Daily Hero 43",
+    "description": "Complete 43 daily challenges",
+    "target": 43,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_44",
+    "category": "daily",
+    "title": "Daily Hero 44",
+    "description": "Complete 44 daily challenges",
+    "target": 44,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_45",
+    "category": "daily",
+    "title": "Daily Hero 45",
+    "description": "Complete 45 daily challenges",
+    "target": 45,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_46",
+    "category": "daily",
+    "title": "Daily Hero 46",
+    "description": "Complete 46 daily challenges",
+    "target": 46,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_47",
+    "category": "daily",
+    "title": "Daily Hero 47",
+    "description": "Complete 47 daily challenges",
+    "target": 47,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_48",
+    "category": "daily",
+    "title": "Daily Hero 48",
+    "description": "Complete 48 daily challenges",
+    "target": 48,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_49",
+    "category": "daily",
+    "title": "Daily Hero 49",
+    "description": "Complete 49 daily challenges",
+    "target": 49,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_50",
+    "category": "daily",
+    "title": "Daily Hero 50",
+    "description": "Complete 50 daily challenges",
+    "target": 50,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_51",
+    "category": "daily",
+    "title": "Daily Hero 51",
+    "description": "Complete 51 daily challenges",
+    "target": 51,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_52",
+    "category": "daily",
+    "title": "Daily Hero 52",
+    "description": "Complete 52 daily challenges",
+    "target": 52,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_53",
+    "category": "daily",
+    "title": "Daily Hero 53",
+    "description": "Complete 53 daily challenges",
+    "target": 53,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_54",
+    "category": "daily",
+    "title": "Daily Hero 54",
+    "description": "Complete 54 daily challenges",
+    "target": 54,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_55",
+    "category": "daily",
+    "title": "Daily Hero 55",
+    "description": "Complete 55 daily challenges",
+    "target": 55,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_56",
+    "category": "daily",
+    "title": "Daily Hero 56",
+    "description": "Complete 56 daily challenges",
+    "target": 56,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_57",
+    "category": "daily",
+    "title": "Daily Hero 57",
+    "description": "Complete 57 daily challenges",
+    "target": 57,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_58",
+    "category": "daily",
+    "title": "Daily Hero 58",
+    "description": "Complete 58 daily challenges",
+    "target": 58,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_59",
+    "category": "daily",
+    "title": "Daily Hero 59",
+    "description": "Complete 59 daily challenges",
+    "target": 59,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_60",
+    "category": "daily",
+    "title": "Daily Hero 60",
+    "description": "Complete 60 daily challenges",
+    "target": 60,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_61",
+    "category": "daily",
+    "title": "Daily Hero 61",
+    "description": "Complete 61 daily challenges",
+    "target": 61,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_62",
+    "category": "daily",
+    "title": "Daily Hero 62",
+    "description": "Complete 62 daily challenges",
+    "target": 62,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_63",
+    "category": "daily",
+    "title": "Daily Hero 63",
+    "description": "Complete 63 daily challenges",
+    "target": 63,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_64",
+    "category": "daily",
+    "title": "Daily Hero 64",
+    "description": "Complete 64 daily challenges",
+    "target": 64,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_65",
+    "category": "daily",
+    "title": "Daily Hero 65",
+    "description": "Complete 65 daily challenges",
+    "target": 65,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_66",
+    "category": "daily",
+    "title": "Daily Hero 66",
+    "description": "Complete 66 daily challenges",
+    "target": 66,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_67",
+    "category": "daily",
+    "title": "Daily Hero 67",
+    "description": "Complete 67 daily challenges",
+    "target": 67,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_68",
+    "category": "daily",
+    "title": "Daily Hero 68",
+    "description": "Complete 68 daily challenges",
+    "target": 68,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_69",
+    "category": "daily",
+    "title": "Daily Hero 69",
+    "description": "Complete 69 daily challenges",
+    "target": 69,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_70",
+    "category": "daily",
+    "title": "Daily Hero 70",
+    "description": "Complete 70 daily challenges",
+    "target": 70,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_71",
+    "category": "daily",
+    "title": "Daily Hero 71",
+    "description": "Complete 71 daily challenges",
+    "target": 71,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_72",
+    "category": "daily",
+    "title": "Daily Hero 72",
+    "description": "Complete 72 daily challenges",
+    "target": 72,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_73",
+    "category": "daily",
+    "title": "Daily Hero 73",
+    "description": "Complete 73 daily challenges",
+    "target": 73,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_74",
+    "category": "daily",
+    "title": "Daily Hero 74",
+    "description": "Complete 74 daily challenges",
+    "target": 74,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_75",
+    "category": "daily",
+    "title": "Daily Hero 75",
+    "description": "Complete 75 daily challenges",
+    "target": 75,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_76",
+    "category": "daily",
+    "title": "Daily Hero 76",
+    "description": "Complete 76 daily challenges",
+    "target": 76,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_77",
+    "category": "daily",
+    "title": "Daily Hero 77",
+    "description": "Complete 77 daily challenges",
+    "target": 77,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_78",
+    "category": "daily",
+    "title": "Daily Hero 78",
+    "description": "Complete 78 daily challenges",
+    "target": 78,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_79",
+    "category": "daily",
+    "title": "Daily Hero 79",
+    "description": "Complete 79 daily challenges",
+    "target": 79,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_80",
+    "category": "daily",
+    "title": "Daily Hero 80",
+    "description": "Complete 80 daily challenges",
+    "target": 80,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_81",
+    "category": "daily",
+    "title": "Daily Hero 81",
+    "description": "Complete 81 daily challenges",
+    "target": 81,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_82",
+    "category": "daily",
+    "title": "Daily Hero 82",
+    "description": "Complete 82 daily challenges",
+    "target": 82,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_83",
+    "category": "daily",
+    "title": "Daily Hero 83",
+    "description": "Complete 83 daily challenges",
+    "target": 83,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_84",
+    "category": "daily",
+    "title": "Daily Hero 84",
+    "description": "Complete 84 daily challenges",
+    "target": 84,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_85",
+    "category": "daily",
+    "title": "Daily Hero 85",
+    "description": "Complete 85 daily challenges",
+    "target": 85,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_86",
+    "category": "daily",
+    "title": "Daily Hero 86",
+    "description": "Complete 86 daily challenges",
+    "target": 86,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_87",
+    "category": "daily",
+    "title": "Daily Hero 87",
+    "description": "Complete 87 daily challenges",
+    "target": 87,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_88",
+    "category": "daily",
+    "title": "Daily Hero 88",
+    "description": "Complete 88 daily challenges",
+    "target": 88,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_89",
+    "category": "daily",
+    "title": "Daily Hero 89",
+    "description": "Complete 89 daily challenges",
+    "target": 89,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_90",
+    "category": "daily",
+    "title": "Daily Hero 90",
+    "description": "Complete 90 daily challenges",
+    "target": 90,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_91",
+    "category": "daily",
+    "title": "Daily Hero 91",
+    "description": "Complete 91 daily challenges",
+    "target": 91,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_92",
+    "category": "daily",
+    "title": "Daily Hero 92",
+    "description": "Complete 92 daily challenges",
+    "target": 92,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_93",
+    "category": "daily",
+    "title": "Daily Hero 93",
+    "description": "Complete 93 daily challenges",
+    "target": 93,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_94",
+    "category": "daily",
+    "title": "Daily Hero 94",
+    "description": "Complete 94 daily challenges",
+    "target": 94,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_95",
+    "category": "daily",
+    "title": "Daily Hero 95",
+    "description": "Complete 95 daily challenges",
+    "target": 95,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_96",
+    "category": "daily",
+    "title": "Daily Hero 96",
+    "description": "Complete 96 daily challenges",
+    "target": 96,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_97",
+    "category": "daily",
+    "title": "Daily Hero 97",
+    "description": "Complete 97 daily challenges",
+    "target": 97,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_98",
+    "category": "daily",
+    "title": "Daily Hero 98",
+    "description": "Complete 98 daily challenges",
+    "target": 98,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_99",
+    "category": "daily",
+    "title": "Daily Hero 99",
+    "description": "Complete 99 daily challenges",
+    "target": 99,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "daily_100",
+    "category": "daily",
+    "title": "Daily Hero 100",
+    "description": "Complete 100 daily challenges",
+    "target": 100,
+    "rewardCoins": 20,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_100",
+    "category": "xp",
+    "title": "100 XP",
+    "description": "Reach 100 total XP",
+    "target": 100,
+    "rewardCoins": 1,
+    "rewardXp": 10,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_500",
+    "category": "xp",
+    "title": "500 XP",
+    "description": "Reach 500 total XP",
+    "target": 500,
+    "rewardCoins": 5,
+    "rewardXp": 50,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_1000",
+    "category": "xp",
+    "title": "1K XP",
+    "description": "Reach 1000 total XP",
+    "target": 1000,
+    "rewardCoins": 10,
+    "rewardXp": 100,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_2500",
+    "category": "xp",
+    "title": "2K XP",
+    "description": "Reach 2500 total XP",
+    "target": 2500,
+    "rewardCoins": 25,
+    "rewardXp": 250,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_5000",
+    "category": "xp",
+    "title": "5K XP",
+    "description": "Reach 5000 total XP",
+    "target": 5000,
+    "rewardCoins": 50,
+    "rewardXp": 500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_10000",
+    "category": "xp",
+    "title": "10K XP",
+    "description": "Reach 10000 total XP",
+    "target": 10000,
+    "rewardCoins": 100,
+    "rewardXp": 1000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_25000",
+    "category": "xp",
+    "title": "25K XP",
+    "description": "Reach 25000 total XP",
+    "target": 25000,
+    "rewardCoins": 250,
+    "rewardXp": 2500,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_50000",
+    "category": "xp",
+    "title": "50K XP",
+    "description": "Reach 50000 total XP",
+    "target": 50000,
+    "rewardCoins": 500,
+    "rewardXp": 5000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_100000",
+    "category": "xp",
+    "title": "100K XP",
+    "description": "Reach 100000 total XP",
+    "target": 100000,
+    "rewardCoins": 1000,
+    "rewardXp": 10000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_500000",
+    "category": "xp",
+    "title": "500K XP",
+    "description": "Reach 500000 total XP",
+    "target": 500000,
+    "rewardCoins": 5000,
+    "rewardXp": 50000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "xp_1000000",
+    "category": "xp",
+    "title": "1M XP",
+    "description": "Reach 1000000 total XP",
+    "target": 1000000,
+    "rewardCoins": 10000,
+    "rewardXp": 100000,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_1",
+    "category": "misc",
+    "title": "Spinner 1",
+    "description": "Rotate the board 1 times",
+    "target": 2,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_2",
+    "category": "misc",
+    "title": "Spinner 2",
+    "description": "Rotate the board 2 times",
+    "target": 4,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_3",
+    "category": "misc",
+    "title": "Spinner 3",
+    "description": "Rotate the board 3 times",
+    "target": 6,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_4",
+    "category": "misc",
+    "title": "Spinner 4",
+    "description": "Rotate the board 4 times",
+    "target": 8,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_5",
+    "category": "misc",
+    "title": "Spinner 5",
+    "description": "Rotate the board 5 times",
+    "target": 10,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_6",
+    "category": "misc",
+    "title": "Spinner 6",
+    "description": "Rotate the board 6 times",
+    "target": 12,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_7",
+    "category": "misc",
+    "title": "Spinner 7",
+    "description": "Rotate the board 7 times",
+    "target": 14,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_8",
+    "category": "misc",
+    "title": "Spinner 8",
+    "description": "Rotate the board 8 times",
+    "target": 16,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_9",
+    "category": "misc",
+    "title": "Spinner 9",
+    "description": "Rotate the board 9 times",
+    "target": 18,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_10",
+    "category": "misc",
+    "title": "Spinner 10",
+    "description": "Rotate the board 10 times",
+    "target": 20,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_11",
+    "category": "misc",
+    "title": "Spinner 11",
+    "description": "Rotate the board 11 times",
+    "target": 22,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_12",
+    "category": "misc",
+    "title": "Spinner 12",
+    "description": "Rotate the board 12 times",
+    "target": 24,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_13",
+    "category": "misc",
+    "title": "Spinner 13",
+    "description": "Rotate the board 13 times",
+    "target": 26,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_14",
+    "category": "misc",
+    "title": "Spinner 14",
+    "description": "Rotate the board 14 times",
+    "target": 28,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_15",
+    "category": "misc",
+    "title": "Spinner 15",
+    "description": "Rotate the board 15 times",
+    "target": 30,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_16",
+    "category": "misc",
+    "title": "Spinner 16",
+    "description": "Rotate the board 16 times",
+    "target": 32,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_17",
+    "category": "misc",
+    "title": "Spinner 17",
+    "description": "Rotate the board 17 times",
+    "target": 34,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_18",
+    "category": "misc",
+    "title": "Spinner 18",
+    "description": "Rotate the board 18 times",
+    "target": 36,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_19",
+    "category": "misc",
+    "title": "Spinner 19",
+    "description": "Rotate the board 19 times",
+    "target": 38,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_20",
+    "category": "misc",
+    "title": "Spinner 20",
+    "description": "Rotate the board 20 times",
+    "target": 40,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_21",
+    "category": "misc",
+    "title": "Spinner 21",
+    "description": "Rotate the board 21 times",
+    "target": 42,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_22",
+    "category": "misc",
+    "title": "Spinner 22",
+    "description": "Rotate the board 22 times",
+    "target": 44,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_23",
+    "category": "misc",
+    "title": "Spinner 23",
+    "description": "Rotate the board 23 times",
+    "target": 46,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_24",
+    "category": "misc",
+    "title": "Spinner 24",
+    "description": "Rotate the board 24 times",
+    "target": 48,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_25",
+    "category": "misc",
+    "title": "Spinner 25",
+    "description": "Rotate the board 25 times",
+    "target": 50,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_26",
+    "category": "misc",
+    "title": "Spinner 26",
+    "description": "Rotate the board 26 times",
+    "target": 52,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_27",
+    "category": "misc",
+    "title": "Spinner 27",
+    "description": "Rotate the board 27 times",
+    "target": 54,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_28",
+    "category": "misc",
+    "title": "Spinner 28",
+    "description": "Rotate the board 28 times",
+    "target": 56,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_29",
+    "category": "misc",
+    "title": "Spinner 29",
+    "description": "Rotate the board 29 times",
+    "target": 58,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_30",
+    "category": "misc",
+    "title": "Spinner 30",
+    "description": "Rotate the board 30 times",
+    "target": 60,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_31",
+    "category": "misc",
+    "title": "Spinner 31",
+    "description": "Rotate the board 31 times",
+    "target": 62,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_32",
+    "category": "misc",
+    "title": "Spinner 32",
+    "description": "Rotate the board 32 times",
+    "target": 64,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_33",
+    "category": "misc",
+    "title": "Spinner 33",
+    "description": "Rotate the board 33 times",
+    "target": 66,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_34",
+    "category": "misc",
+    "title": "Spinner 34",
+    "description": "Rotate the board 34 times",
+    "target": 68,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_35",
+    "category": "misc",
+    "title": "Spinner 35",
+    "description": "Rotate the board 35 times",
+    "target": 70,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_36",
+    "category": "misc",
+    "title": "Spinner 36",
+    "description": "Rotate the board 36 times",
+    "target": 72,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_37",
+    "category": "misc",
+    "title": "Spinner 37",
+    "description": "Rotate the board 37 times",
+    "target": 74,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_38",
+    "category": "misc",
+    "title": "Spinner 38",
+    "description": "Rotate the board 38 times",
+    "target": 76,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_39",
+    "category": "misc",
+    "title": "Spinner 39",
+    "description": "Rotate the board 39 times",
+    "target": 78,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_40",
+    "category": "misc",
+    "title": "Spinner 40",
+    "description": "Rotate the board 40 times",
+    "target": 80,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_41",
+    "category": "misc",
+    "title": "Spinner 41",
+    "description": "Rotate the board 41 times",
+    "target": 82,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_42",
+    "category": "misc",
+    "title": "Spinner 42",
+    "description": "Rotate the board 42 times",
+    "target": 84,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_43",
+    "category": "misc",
+    "title": "Spinner 43",
+    "description": "Rotate the board 43 times",
+    "target": 86,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_44",
+    "category": "misc",
+    "title": "Spinner 44",
+    "description": "Rotate the board 44 times",
+    "target": 88,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_45",
+    "category": "misc",
+    "title": "Spinner 45",
+    "description": "Rotate the board 45 times",
+    "target": 90,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_46",
+    "category": "misc",
+    "title": "Spinner 46",
+    "description": "Rotate the board 46 times",
+    "target": 92,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_47",
+    "category": "misc",
+    "title": "Spinner 47",
+    "description": "Rotate the board 47 times",
+    "target": 94,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_48",
+    "category": "misc",
+    "title": "Spinner 48",
+    "description": "Rotate the board 48 times",
+    "target": 96,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_49",
+    "category": "misc",
+    "title": "Spinner 49",
+    "description": "Rotate the board 49 times",
+    "target": 98,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "rotate_50",
+    "category": "misc",
+    "title": "Spinner 50",
+    "description": "Rotate the board 50 times",
+    "target": 100,
+    "rewardCoins": 5,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_1",
+    "category": "misc",
+    "title": "Explorer 1",
+    "description": "Reach bonus milestone 1",
+    "target": 10,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_2",
+    "category": "misc",
+    "title": "Explorer 2",
+    "description": "Reach bonus milestone 2",
+    "target": 20,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_3",
+    "category": "misc",
+    "title": "Explorer 3",
+    "description": "Reach bonus milestone 3",
+    "target": 30,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_4",
+    "category": "misc",
+    "title": "Explorer 4",
+    "description": "Reach bonus milestone 4",
+    "target": 40,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_5",
+    "category": "misc",
+    "title": "Explorer 5",
+    "description": "Reach bonus milestone 5",
+    "target": 50,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_6",
+    "category": "misc",
+    "title": "Explorer 6",
+    "description": "Reach bonus milestone 6",
+    "target": 60,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_7",
+    "category": "misc",
+    "title": "Explorer 7",
+    "description": "Reach bonus milestone 7",
+    "target": 70,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_8",
+    "category": "misc",
+    "title": "Explorer 8",
+    "description": "Reach bonus milestone 8",
+    "target": 80,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_9",
+    "category": "misc",
+    "title": "Explorer 9",
+    "description": "Reach bonus milestone 9",
+    "target": 90,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_10",
+    "category": "misc",
+    "title": "Explorer 10",
+    "description": "Reach bonus milestone 10",
+    "target": 100,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_11",
+    "category": "misc",
+    "title": "Explorer 11",
+    "description": "Reach bonus milestone 11",
+    "target": 110,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_12",
+    "category": "misc",
+    "title": "Explorer 12",
+    "description": "Reach bonus milestone 12",
+    "target": 120,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_13",
+    "category": "misc",
+    "title": "Explorer 13",
+    "description": "Reach bonus milestone 13",
+    "target": 130,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_14",
+    "category": "misc",
+    "title": "Explorer 14",
+    "description": "Reach bonus milestone 14",
+    "target": 140,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_15",
+    "category": "misc",
+    "title": "Explorer 15",
+    "description": "Reach bonus milestone 15",
+    "target": 150,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_16",
+    "category": "misc",
+    "title": "Explorer 16",
+    "description": "Reach bonus milestone 16",
+    "target": 160,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_17",
+    "category": "misc",
+    "title": "Explorer 17",
+    "description": "Reach bonus milestone 17",
+    "target": 170,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_18",
+    "category": "misc",
+    "title": "Explorer 18",
+    "description": "Reach bonus milestone 18",
+    "target": 180,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_19",
+    "category": "misc",
+    "title": "Explorer 19",
+    "description": "Reach bonus milestone 19",
+    "target": 190,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_20",
+    "category": "misc",
+    "title": "Explorer 20",
+    "description": "Reach bonus milestone 20",
+    "target": 200,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_21",
+    "category": "misc",
+    "title": "Explorer 21",
+    "description": "Reach bonus milestone 21",
+    "target": 210,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_22",
+    "category": "misc",
+    "title": "Explorer 22",
+    "description": "Reach bonus milestone 22",
+    "target": 220,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_23",
+    "category": "misc",
+    "title": "Explorer 23",
+    "description": "Reach bonus milestone 23",
+    "target": 230,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_24",
+    "category": "misc",
+    "title": "Explorer 24",
+    "description": "Reach bonus milestone 24",
+    "target": 240,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_25",
+    "category": "misc",
+    "title": "Explorer 25",
+    "description": "Reach bonus milestone 25",
+    "target": 250,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_26",
+    "category": "misc",
+    "title": "Explorer 26",
+    "description": "Reach bonus milestone 26",
+    "target": 260,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_27",
+    "category": "misc",
+    "title": "Explorer 27",
+    "description": "Reach bonus milestone 27",
+    "target": 270,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_28",
+    "category": "misc",
+    "title": "Explorer 28",
+    "description": "Reach bonus milestone 28",
+    "target": 280,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_29",
+    "category": "misc",
+    "title": "Explorer 29",
+    "description": "Reach bonus milestone 29",
+    "target": 290,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_30",
+    "category": "misc",
+    "title": "Explorer 30",
+    "description": "Reach bonus milestone 30",
+    "target": 300,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_31",
+    "category": "misc",
+    "title": "Explorer 31",
+    "description": "Reach bonus milestone 31",
+    "target": 310,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_32",
+    "category": "misc",
+    "title": "Explorer 32",
+    "description": "Reach bonus milestone 32",
+    "target": 320,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_33",
+    "category": "misc",
+    "title": "Explorer 33",
+    "description": "Reach bonus milestone 33",
+    "target": 330,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_34",
+    "category": "misc",
+    "title": "Explorer 34",
+    "description": "Reach bonus milestone 34",
+    "target": 340,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_35",
+    "category": "misc",
+    "title": "Explorer 35",
+    "description": "Reach bonus milestone 35",
+    "target": 350,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_36",
+    "category": "misc",
+    "title": "Explorer 36",
+    "description": "Reach bonus milestone 36",
+    "target": 360,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_37",
+    "category": "misc",
+    "title": "Explorer 37",
+    "description": "Reach bonus milestone 37",
+    "target": 370,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_38",
+    "category": "misc",
+    "title": "Explorer 38",
+    "description": "Reach bonus milestone 38",
+    "target": 380,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_39",
+    "category": "misc",
+    "title": "Explorer 39",
+    "description": "Reach bonus milestone 39",
+    "target": 390,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_40",
+    "category": "misc",
+    "title": "Explorer 40",
+    "description": "Reach bonus milestone 40",
+    "target": 400,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_41",
+    "category": "misc",
+    "title": "Explorer 41",
+    "description": "Reach bonus milestone 41",
+    "target": 410,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_42",
+    "category": "misc",
+    "title": "Explorer 42",
+    "description": "Reach bonus milestone 42",
+    "target": 420,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_43",
+    "category": "misc",
+    "title": "Explorer 43",
+    "description": "Reach bonus milestone 43",
+    "target": 430,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_44",
+    "category": "misc",
+    "title": "Explorer 44",
+    "description": "Reach bonus milestone 44",
+    "target": 440,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_45",
+    "category": "misc",
+    "title": "Explorer 45",
+    "description": "Reach bonus milestone 45",
+    "target": 450,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_46",
+    "category": "misc",
+    "title": "Explorer 46",
+    "description": "Reach bonus milestone 46",
+    "target": 460,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_47",
+    "category": "misc",
+    "title": "Explorer 47",
+    "description": "Reach bonus milestone 47",
+    "target": 470,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_48",
+    "category": "misc",
+    "title": "Explorer 48",
+    "description": "Reach bonus milestone 48",
+    "target": 480,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_49",
+    "category": "misc",
+    "title": "Explorer 49",
+    "description": "Reach bonus milestone 49",
+    "target": 490,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_50",
+    "category": "misc",
+    "title": "Explorer 50",
+    "description": "Reach bonus milestone 50",
+    "target": 500,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_51",
+    "category": "misc",
+    "title": "Explorer 51",
+    "description": "Reach bonus milestone 51",
+    "target": 510,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_52",
+    "category": "misc",
+    "title": "Explorer 52",
+    "description": "Reach bonus milestone 52",
+    "target": 520,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_53",
+    "category": "misc",
+    "title": "Explorer 53",
+    "description": "Reach bonus milestone 53",
+    "target": 530,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_54",
+    "category": "misc",
+    "title": "Explorer 54",
+    "description": "Reach bonus milestone 54",
+    "target": 540,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_55",
+    "category": "misc",
+    "title": "Explorer 55",
+    "description": "Reach bonus milestone 55",
+    "target": 550,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_56",
+    "category": "misc",
+    "title": "Explorer 56",
+    "description": "Reach bonus milestone 56",
+    "target": 560,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_57",
+    "category": "misc",
+    "title": "Explorer 57",
+    "description": "Reach bonus milestone 57",
+    "target": 570,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_58",
+    "category": "misc",
+    "title": "Explorer 58",
+    "description": "Reach bonus milestone 58",
+    "target": 580,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_59",
+    "category": "misc",
+    "title": "Explorer 59",
+    "description": "Reach bonus milestone 59",
+    "target": 590,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  },
+  {
+    "id": "bonus_60",
+    "category": "misc",
+    "title": "Explorer 60",
+    "description": "Reach bonus milestone 60",
+    "target": 600,
+    "rewardCoins": 8,
+    "rewardXp": 0,
+    "badgeIcon": "star"
+  }
+]

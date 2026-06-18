@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
@@ -25,6 +26,7 @@ import 'package:word_game/features/game/domain/repositories/level_repository.dar
 import 'package:word_game/features/game/domain/usecases/load_level_usecase.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
+import 'package:word_game/injection.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc({
@@ -32,7 +34,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required GetNextLevelUseCase getNextLevel,
     required SaveProgressUseCase saveProgress,
     required SpendCoinsUseCase spendCoins,
-    required AddCoinsUseCase addCoins,
     required WalletRepository wallet,
     required AudioService audio,
     required AnalyticsService analytics,
@@ -45,7 +46,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
         _spendCoins = spendCoins,
-        _addCoins = addCoins,
         _wallet = wallet,
         _audio = audio,
         _analytics = analytics,
@@ -68,13 +68,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameResumed>(_onResume);
     on<GameTick>(_onTick);
     on<ClearGameFeedback>(_onClearFeedback);
+    on<TutorialDismissed>(_onTutorialDismissed);
   }
 
   final LoadLevelUseCase _loadLevel;
   final GetNextLevelUseCase _getNextLevel;
   final SaveProgressUseCase _saveProgress;
   final SpendCoinsUseCase _spendCoins;
-  final AddCoinsUseCase _addCoins;
   final WalletRepository _wallet;
   final AudioService _audio;
   final AnalyticsService _analytics;
@@ -95,8 +95,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final more = unlocks.length > 1 ? ' (+${unlocks.length - 1} more)' : '';
     return '🏆 ${first.achievement.title}! +${first.coinsAwarded} coins$more';
   }
+
   List<WordPlacement> _placements = [];
   GridCellCoord? _dragStart;
+
+  int _displayNumberForLevel(int levelId, int slotId) {
+    final levels = _content.levelsForSlot(slotId);
+    final sorted = levels.map((l) => l.id).toList()..sort();
+    final idx = sorted.indexOf(levelId);
+    return idx >= 0 ? idx + 1 : 1;
+  }
+
+  Future<bool> _isFirstLevelTutorial(int levelId, int slotId) async {
+    final levels = _content.levelsForSlot(slotId);
+    if (levels.isEmpty) return false;
+    final sorted = levels.map((l) => l.id).toList()..sort();
+    if (sorted.first != levelId) return false;
+    final prefs = getIt<SharedPreferences>();
+    return !(prefs.getBool('tutorial_level1_completed') ?? false);
+  }
 
   Future<void> _onLoadLevel(LoadLevel event, Emitter<GameState> emit) async {
     emit(const GameLoading());
@@ -119,7 +136,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _placements = result.placements;
     final coins = await _wallet.getCoins();
     await _analytics.logLevelStart(level.id);
-  final grid = _buildGridModels(result.grid);
+    final grid = _buildGridModels(result.grid);
+    final displayNumber = _displayNumberForLevel(level.id, level.themeId);
+    final showTutorial = await _isFirstLevelTutorial(level.id, level.themeId);
+    final coinsReward =
+        _vip.applyLevelCoinBonus(GameConfig.coinsPerLevelComplete);
+    final xpReward = _vip.applyLevelXpBonus(GameConfig.xpPerLevelComplete);
+
+    Set<int> tutorialIndices = {};
+    if (showTutorial && result.placements.isNotEmpty) {
+      final n = level.gridSize;
+      final first = result.placements.first;
+      tutorialIndices = first.cells
+          .map((c) => GameCellUtils.toIndex(c.row, c.col, n))
+          .toSet();
+    }
+
     emit(
       GameInProgress(
         grid: grid,
@@ -131,9 +163,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         hintCells: {},
         revealedCells: {},
         coins: coins,
-        hintsLeft: _vip.bonusHintsForLevel(),
         timeLimit: level.timeLimit,
         levelId: level.id,
+        displayNumber: displayNumber,
         elapsed: Duration.zero,
         isPaused: false,
         difficulty: level.difficulty,
@@ -141,11 +173,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         levelTheme: level.themeName,
         backgroundImage: level.backgroundImage,
         themeId: level.themeId,
-        coinsReward: _vip.applyLevelCoinBonus(level.coinsReward),
+        coinsReward: coinsReward,
+        xpReward: xpReward,
         hintsUsed: 0,
+        revealsUsed: 0,
+        maxReveals: GameConfig.maxRevealsPerLevel,
+        showTutorial: showTutorial,
+        tutorialHighlightIndices: tutorialIndices,
       ),
     );
     _startTimer();
+  }
+
+  void _onTutorialDismissed(TutorialDismissed event, Emitter<GameState> emit) {
+    final s = state;
+    if (s is! GameInProgress) return;
+    emit(s.copyWith(showTutorial: false));
   }
 
   Future<void> _onLoadNextLevel(
@@ -239,9 +282,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       s.grid.length,
     );
     if (!WordValidator.isStraightLine(line)) return;
-    final cells = line
-        .map((c) => s.grid[c.row][c.col])
-        .toList();
+    final cells = line.map((c) => s.grid[c.row][c.col]).toList();
     emit(s.copyWith(selectedCells: cells));
   }
 
@@ -279,6 +320,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         selectedCells: [],
         selectionState: SelectionState.correct,
       );
+
+      if (newState.showTutorial && newFoundWords.length >= 1) {
+        final prefs = getIt<SharedPreferences>();
+        await prefs.setBool('tutorial_level1_completed', true);
+        newState = newState.copyWith(showTutorial: false);
+      }
+
       if (newState.allWordsFound) {
         emit(newState.copyWith(isCompleting: true));
         await _finishLevel(newState, emit);
@@ -319,24 +367,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return;
     }
 
-    var working = s.copyWith(clearFeedback: true, selectedCells: []);
-    if (s.hintsLeft <= 0) {
-      final ok = await _spendCoins(GameConfig.hintCost);
-      if (!ok) {
-        emit(s.copyWith(feedback: 'Not enough coins for a hint.'));
-        return;
-      }
-      final coins = await _wallet.getCoins();
-      working = working.copyWith(coins: coins, hintsUsed: s.hintsUsed + 1);
-    } else {
-      working = working.copyWith(
-        hintsLeft: s.hintsLeft - 1,
-        hintsUsed: s.hintsUsed + 1,
-      );
+    final currentCoins = await _wallet.getCoins();
+    if (currentCoins < GameConfig.hintCost) {
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
+      return;
     }
 
-    final n = working.grid.length;
-    final foundTexts = working.foundWords.map((w) => w.text).toSet();
+    final ok = await _spendCoins(GameConfig.hintCost);
+    if (!ok) {
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
+      return;
+    }
+    final coins = await _wallet.getCoins();
+
+    final n = s.grid.length;
+    final foundTexts = s.foundWords.map((w) => w.text).toSet();
 
     WordPlacement? targetPlacement;
     for (final word in unfound) {
@@ -346,7 +391,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         placement.cells.first.col,
         n,
       );
-      if (!working.hintCells.contains(startIdx)) {
+      if (!s.hintCells.contains(startIdx)) {
         targetPlacement = placement;
         break;
       }
@@ -359,8 +404,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final idx = GameCellUtils.toIndex(start.row, start.col, n);
 
     emit(
-      working.copyWith(
-        hintCells: {...working.hintCells, idx},
+      s.copyWith(
+        coins: coins,
+        hintsUsed: s.hintsUsed + 1,
+        hintCells: {...s.hintCells, idx},
+        selectedCells: [],
+        clearFeedback: true,
         feedback: 'Hint: first letter of "${targetPlacement.word}"',
       ),
     );
@@ -370,6 +419,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
 
+    if (s.revealsUsed >= s.maxReveals) {
+      emit(s.copyWith(
+        feedback: 'Reveal limit reached (${s.maxReveals}/${s.maxReveals})',
+      ));
+      return;
+    }
+
     final unfound = s.wordsToFind
         .where((w) => !s.foundWords.any((f) => f.text == w.text))
         .toList();
@@ -378,9 +434,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return;
     }
 
+    final currentCoins = await _wallet.getCoins();
+    if (currentCoins < GameConfig.revealCost) {
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
+      return;
+    }
+
     final ok = await _spendCoins(GameConfig.revealCost);
     if (!ok) {
-      emit(s.copyWith(feedback: 'Not enough coins to reveal a word.'));
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
       return;
     }
     final coins = await _wallet.getCoins();
@@ -400,14 +462,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         .map((c) => GameCellUtils.toIndex(c.row, c.col, n))
         .toSet();
 
+    final newRevealsUsed = s.revealsUsed + 1;
+
     emit(
       s.copyWith(
         coins: coins,
         revealedCells: {...s.revealedCells, ...indices},
-        hintsUsed: s.hintsUsed + 1,
+        revealsUsed: newRevealsUsed,
         selectedCells: [],
         clearFeedback: true,
-        feedback: 'Revealed "${placement.word}" on the board',
+        feedback:
+            'Revealed "${placement.word}" ($newRevealsUsed/${s.maxReveals})',
       ),
     );
   }
@@ -446,9 +511,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
 
+    final currentCoins = await _wallet.getCoins();
+    if (currentCoins < GameConfig.shuffleCost) {
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
+      return;
+    }
+
     final ok = await _spendCoins(GameConfig.shuffleCost);
     if (!ok) {
-      emit(s.copyWith(feedback: 'Not enough coins to shuffle.'));
+      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
       return;
     }
     final coins = await _wallet.getCoins();
@@ -510,9 +581,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         GameCompleted(
           stars: GameConfig.starsForTimeRatio(ratio),
           coinsEarned: s.coinsReward,
+          xpEarned: s.xpReward,
           time: s.elapsed,
           hintsUsed: s.hintsUsed,
+          revealsUsed: s.revealsUsed,
           levelId: s.levelId,
+          displayNumber: s.displayNumber,
           themeId: s.themeId,
         ),
       );
@@ -529,14 +603,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         : 0.5;
     final stars = GameConfig.starsForTimeRatio(ratio);
 
-    await _addCoins(s.coinsReward);
-
     unawaited(
       _achievementFeedback(
         _achievements.onLevelComplete(
           stars: stars,
           timeSeconds: s.elapsed.inSeconds,
           hintsUsed: s.hintsUsed,
+          revealsUsed: s.revealsUsed,
           levelId: s.levelId,
         ),
       ),
@@ -563,9 +636,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       GameCompleted(
         stars: stars,
         coinsEarned: s.coinsReward,
+        xpEarned: s.xpReward,
         time: s.elapsed,
         hintsUsed: s.hintsUsed,
+        revealsUsed: s.revealsUsed,
         levelId: s.levelId,
+        displayNumber: s.displayNumber,
         themeId: s.themeId,
       ),
     );

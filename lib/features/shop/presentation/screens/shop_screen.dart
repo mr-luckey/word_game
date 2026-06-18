@@ -13,7 +13,6 @@ import 'package:word_game/core/widgets/app_logo.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/core/widgets/shell_nav_metrics.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/shop/presentation/widgets/shop_catalog.dart';
 import 'package:word_game/features/shop/presentation/widgets/shop_section_header.dart';
@@ -42,7 +41,6 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final preset = context.themePreset;
     return BlocProvider(
       create: (_) => getIt<ShopCubit>(),
       child: BlocListener<ShopCubit, ShopState>(
@@ -64,8 +62,6 @@ class _ShopScreenState extends State<ShopScreen> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           body: ScenicBackground(
-            imageAsset: AssetPaths.themeSplash(preset),
-            darken: 0.5,
             child: SafeArea(
               bottom: false,
               child: JourneyContentWidth(

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/data/game_content_loader.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/achievement_service.dart';
+import 'package:word_game/core/services/current_level_resolver.dart';
 import 'package:word_game/core/services/auth_service.dart';
 import 'package:word_game/core/services/firestore_user_service.dart';
 import 'package:word_game/core/services/leaderboard_service.dart';
@@ -30,6 +31,7 @@ import 'package:word_game/features/shop/presentation/cubit/shop_cubit.dart';
 import 'package:word_game/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -69,12 +71,17 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<WalletRepository>(
     () => WalletRepositoryImpl(db, getIt()),
   );
+  getIt.registerLazySingleton<XpRepository>(
+    () => XpRepositoryImpl(db, getIt()),
+  );
+  getIt.registerLazySingleton(() => CurrentLevelResolver(getIt()));
 
   getIt.registerLazySingleton(() => LoadLevelUseCase(getIt()));
   getIt.registerLazySingleton(() => GetNextLevelUseCase(getIt()));
   getIt.registerLazySingleton(() => SaveProgressUseCase(getIt()));
   getIt.registerLazySingleton(() => SpendCoinsUseCase(getIt()));
   getIt.registerLazySingleton(() => AddCoinsUseCase(getIt()));
+  getIt.registerLazySingleton(() => AddXpUseCase(getIt()));
 
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
@@ -82,7 +89,7 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AppRatingService(prefs));
   getIt.registerLazySingleton(() => AppUpdateService());
   getIt.registerLazySingleton(
-    () => AchievementService(db, getIt(), content.dailyChallenge.levelId),
+    () => AchievementService(db, getIt(), getIt(), content.dailyChallenge.levelId),
   );
   getIt.registerLazySingleton(() => DailyChallengeService(prefs, content));
   getIt.registerLazySingleton(() => LeaderboardService(getIt(), getIt(), db));
@@ -90,6 +97,7 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton(() => AuthCubit(getIt()));
 
   getIt.registerFactory(() => CoinCubit(getIt()));
+  getIt.registerFactory(() => XpCubit(getIt()));
   getIt.registerFactory(SplashCubit.new);
   getIt.registerFactory(
     () => GameBloc(
@@ -97,7 +105,6 @@ Future<void> configureDependencies() async {
       getNextLevel: getIt(),
       saveProgress: getIt(),
       spendCoins: getIt(),
-      addCoins: getIt(),
       wallet: getIt(),
       audio: getIt(),
       analytics: getIt(),
@@ -110,11 +117,9 @@ Future<void> configureDependencies() async {
   );
   getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt(), getIt()));
 
-  final row = await (db.select(db.keyValueTable)
-        ..where((t) => t.key.equals('coins')))
-      .getSingleOrNull();
-  if (row == null) {
-    await db.setCoins(250);
+  final wallet = getIt<WalletRepository>();
+  if (!await wallet.hasWelcomeBonusGranted()) {
+    await wallet.grantWelcomeBonus();
   }
 }
 
@@ -126,9 +131,10 @@ Future<void> _migrateLegacyProgressKeys(AppDatabase db) async {
     final isCompact = LevelProgressId.isCompactUnencodedKey(row.levelId);
     if (!isLegacy && !isCompact) continue;
 
+    final sharedLevelId = row.levelId >= 100 ? row.levelId - 100 : row.levelId;
     final encoded = LevelProgressId.encode(
       slotId: 1,
-      sharedLevelId: row.levelId,
+      sharedLevelId: sharedLevelId,
     );
     if (encoded == row.levelId) continue;
 
@@ -140,5 +146,8 @@ Future<void> _migrateLegacyProgressKeys(AppDatabase db) async {
         timeSeconds: row.timeSeconds,
       );
     }
+    await (db.delete(db.userProgressTable)
+          ..where((t) => t.levelId.equals(row.levelId)))
+        .go();
   }
 }

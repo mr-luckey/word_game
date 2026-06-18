@@ -8,7 +8,11 @@ class AdMobIds {
   static const String testAppId = 'ca-app-pub-3940256099942544~3347511713';
 
   static const List<String> interstitialAndroid = [
-    'ca-app-pub-3940256099942544/1033173712',
+    'ca-app-pub-5561438827097019/6060325087',
+    'ca-app-pub-5561438827097019/7812390450',
+    'ca-app-pub-5561438827097019/7425377646',
+    'ca-app-pub-5561438827097019/8149296799',
+    'ca-app-pub-5561438827097019/7429247074',
   ];
 
   static const List<String> interstitialIos = [
@@ -16,7 +20,11 @@ class AdMobIds {
   ];
 
   static const List<String> rewardedAndroid = [
-    'ca-app-pub-3940256099942544/5224354917',
+    'ca-app-pub-5561438827097019/3415844860',
+    'ca-app-pub-5561438827097019/7564102737',
+    'ca-app-pub-5561438827097019/9789681524',
+    'ca-app-pub-5561438827097019/4018480093',
+    'ca-app-pub-5561438827097019/8476599854',
   ];
 
   static const List<String> rewardedIos = [
@@ -24,7 +32,11 @@ class AdMobIds {
   ];
 
   static const List<String> bannerAndroid = [
-    'ca-app-pub-3940256099942544/6300978111',
+    'ca-app-pub-5561438827097019/9639601737',
+    'ca-app-pub-5561438827097019/7780600865',
+    'ca-app-pub-5561438827097019/3443765025',
+    'ca-app-pub-5561438827097019/5960252736',
+    'ca-app-pub-5561438827097019/6821866706',
   ];
 
   static const List<String> bannerIos = [

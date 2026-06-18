@@ -3,13 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/services/app_update_service.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/app_logo.dart';
 import 'package:word_game/core/widgets/journey_prompt_dialog.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
+import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:word_game/injection.dart';
 
@@ -27,41 +27,20 @@ class SplashScreen extends StatelessWidget {
         listenWhen: (p, c) => c.status == SplashStatus.complete,
         listener: (context, state) => _onSplashComplete(context),
         child: Scaffold(
-          body: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(
-                AssetPaths.themeSplash(preset),
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => DecoratedBox(
-                  decoration: BoxDecoration(gradient: colors.primaryGradient),
+          body: ScenicBackground(
+            darken: 0.45,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 0.82,
+                  colors: [
+                    spec.playButtonGlow.withValues(alpha: 0.2),
+                    Colors.transparent,
+                  ],
                 ),
               ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      colors.scrim.withValues(alpha: 0.25),
-                      colors.scrim.withValues(alpha: 0.7),
-                    ],
-                  ),
-                ),
-              ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: Alignment.center,
-                    radius: 0.82,
-                    colors: [
-                      spec.playButtonGlow.withValues(alpha: 0.2),
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
-              ),
-              SafeArea(
+              child: SafeArea(
                 child: JourneyContentWidth(
                   child: Padding(
                     padding: JourneyThemeKit.pagePadding(context),
@@ -177,7 +156,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

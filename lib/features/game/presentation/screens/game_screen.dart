@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:word_game/core/constants/game_config.dart';
@@ -15,7 +16,6 @@ import 'package:word_game/core/widgets/glass_panel.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/loading_overlay.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
-import 'package:word_game/core/widgets/tool_circle_button.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
@@ -23,7 +23,10 @@ import 'package:word_game/features/game/presentation/widgets/level_complete_over
 import 'package:word_game/features/game/presentation/widgets/pause_menu_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/game_timeout_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
+import 'package:word_game/core/widgets/insufficient_coins_dialog.dart';
+import 'package:word_game/features/game/presentation/widgets/level_tutorial_overlay.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/injection.dart';
@@ -73,6 +76,7 @@ class _GameView extends StatelessWidget {
           listener: (context, state) {
             if (state is! GameCompleted) return;
             context.read<CoinCubit>().refresh();
+            context.read<XpCubit>().refresh();
             final bloc = context.read<GameBloc>();
             final isDaily = state.levelId ==
                 getIt<GameContentRegistry>().dailyChallenge.levelId;
@@ -82,9 +86,11 @@ class _GameView extends StatelessWidget {
               builder: (dialogContext) => LevelCompleteOverlay(
                 stars: state.stars,
                 coinsEarned: state.coinsEarned,
+                xpEarned: state.xpEarned,
                 time: state.time,
                 hintsUsed: state.hintsUsed,
                 levelId: state.levelId,
+                displayNumber: state.displayNumber,
                 isDailyChallenge: isDaily,
                 onHome: () async {
                   Navigator.of(dialogContext).pop();
@@ -132,6 +138,11 @@ class _GameView extends StatelessWidget {
               (p is! GameInProgress || p.feedback != c.feedback),
           listener: (context, state) {
             if (state is! GameInProgress || state.feedback == null) return;
+            if (state.feedback == kInsufficientCoinsFeedback) {
+              InsufficientCoinsDialog.show(context);
+              context.read<GameBloc>().add(const ClearGameFeedback());
+              return;
+            }
             if (state.feedback!.startsWith('🏆')) {
               context.read<CoinCubit>().refresh();
             }
@@ -147,24 +158,33 @@ class _GameView extends StatelessWidget {
       ],
       child: BlocBuilder<GameBloc, GameState>(
         builder: (context, state) {
-          final bg = state is GameInProgress
+          final preset = context.themePreset;
+          final bg = state is GameInProgress &&
+                  state.backgroundImage.isNotEmpty
               ? AssetPaths.themeImage(state.backgroundImage)
-              : AssetPaths.themeSplash(context.themePreset);
+              : ScenicBackgroundStyle.hdAssetFor(preset);
 
           return Scaffold(
             body: Stack(
               children: [
-                ScenicBackground(
-                  imageAsset: bg,
-                  blurSigma: 2,
-                  darken: 0.45,
-                ),
+                ScenicBackground(imageAsset: bg),
                 SafeArea(
                   child: JourneyContentWidth(
                     child: Stack(
                       children: [
                         if (state is GameInProgress)
-                          _GameBody(state: state)
+                          Stack(
+                            children: [
+                              _GameBody(state: state),
+                              if (state.showTutorial)
+                                LevelTutorialOverlay(
+                                  state: state,
+                                  onDismiss: () => context
+                                      .read<GameBloc>()
+                                      .add(const TutorialDismissed()),
+                                ),
+                            ],
+                          )
                         else if (state is GameLoading || state is GameInitial)
                           const LoadingOverlay(message: 'Loading level...')
                         else if (state is GameCompleted)
@@ -294,7 +314,7 @@ class _TopBar extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        'Level ${state.levelId}',
+                        'Level ${state.displayNumber}',
                         style: AppTextStyles.bodyMuted(context).copyWith(
                           fontSize: 11,
                           color: colors.onScenicMuted,
@@ -410,6 +430,10 @@ class _Toolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
+    final colors = context.appColors;
+    final revealsLeft = state.revealsLeft;
+    final revealLocked = revealsLeft <= 0;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSizes.paddingMd,
@@ -418,33 +442,111 @@ class _Toolbar extends StatelessWidget {
         10,
       ),
       child: JourneyPanel(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         radius: 16,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ToolCircleButton(
-              compact: true,
+            _ActionChip(
               label: 'Hint',
-              subtitle: '${GameConfig.hintCost}',
+              cost: GameConfig.hintCost,
               icon: Icons.lightbulb_outline_rounded,
               onPressed: () => bloc.add(const HintRequested()),
             ),
-            ToolCircleButton(
-              compact: true,
-              label: 'Reveal',
-              subtitle: '${GameConfig.revealCost}',
-              icon: Icons.visibility_rounded,
-              onPressed: () => bloc.add(const RevealRequested()),
+            _ActionChip(
+              label: revealLocked ? 'Locked' : 'Reveal',
+              cost: GameConfig.revealCost,
+              icon: revealLocked ? Icons.lock_rounded : Icons.visibility_rounded,
+              badge: revealLocked
+                  ? '${state.maxReveals}/${state.maxReveals}'
+                  : 'Left: $revealsLeft',
+              disabled: revealLocked,
+              onPressed: revealLocked
+                  ? null
+                  : () => bloc.add(const RevealRequested()),
             ),
-            ToolCircleButton(
-              compact: true,
+            _ActionChip(
               label: 'Shuffle',
-              subtitle: '${GameConfig.shuffleCost}',
+              cost: GameConfig.shuffleCost,
               icon: Icons.shuffle_rounded,
               onPressed: () => bloc.add(const ShuffleRequested()),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionChip extends StatelessWidget {
+  const _ActionChip({
+    required this.label,
+    required this.cost,
+    required this.icon,
+    required this.onPressed,
+    this.badge,
+    this.disabled = false,
+  });
+
+  final String label;
+  final int cost;
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final String? badge;
+  final bool disabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return Opacity(
+      opacity: disabled ? 0.5 : 1,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: disabled
+                        ? null
+                        : LinearGradient(
+                            colors: [
+                              colors.gold.withValues(alpha: 0.35),
+                              colors.primary.withValues(alpha: 0.25),
+                            ],
+                          ),
+                    color: disabled ? colors.locked.withValues(alpha: 0.3) : null,
+                  ),
+                  child: Icon(icon, color: colors.gold, size: 22),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  style: AppTextStyles.subtitle(context).copyWith(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (badge != null)
+                  Text(
+                    badge!,
+                    style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 9),
+                  )
+                else
+                  Text(
+                    '$cost',
+                    style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 10),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

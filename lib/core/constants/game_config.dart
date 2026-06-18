@@ -1,7 +1,11 @@
 class GameConfig {
   GameConfig._();
 
-  static const int initialCoins = 250;
+  static const int initialCoins = 100;
+  static const int initialXp = 0;
+  static const int coinsPerLevelComplete = 5;
+  static const int xpPerLevelComplete = 100;
+  static const int maxRevealsPerLevel = 2;
   static const int hintCost = 15;
   static const int revealCost = 30;
   static const int shuffleCost = 25;
@@ -14,7 +18,7 @@ class GameConfig {
 
   static const int splashDelayMs = 2500;
   static const int interstitialEveryNLevels = 3;
-  static const int rewardedBonusCoins = 50;
+  static const int rewardedBonusCoins = 2;
 
   /// VIP Pass: multiply level & daily coin rewards by this factor.
   static const double vipCoinMultiplier = 1.5;

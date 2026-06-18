@@ -1,6 +1,5 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
@@ -9,9 +8,10 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
-import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/gradient_button.dart';
+import 'package:word_game/features/game/domain/usecases/load_level_usecase.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 import 'package:word_game/injection.dart';
 
 class LevelCompleteOverlay extends StatefulWidget {
@@ -19,9 +19,11 @@ class LevelCompleteOverlay extends StatefulWidget {
     super.key,
     required this.stars,
     required this.coinsEarned,
+    required this.xpEarned,
     required this.time,
     required this.hintsUsed,
     required this.levelId,
+    required this.displayNumber,
     required this.onHome,
     required this.onReplay,
     required this.onNext,
@@ -32,9 +34,11 @@ class LevelCompleteOverlay extends StatefulWidget {
 
   final int stars;
   final int coinsEarned;
+  final int xpEarned;
   final Duration time;
   final int hintsUsed;
   final int levelId;
+  final int displayNumber;
   final VoidCallback onHome;
   final VoidCallback onReplay;
   final VoidCallback onNext;
@@ -49,18 +53,37 @@ class LevelCompleteOverlay extends StatefulWidget {
 class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
   late final ConfettiController _confettiController;
   int _displayCoins = 0;
-  int _animFromCoins = 0;
+  int _displayXp = 0;
   bool _coinsDoubled = false;
-  bool _adLoading = false;
+  bool _xpDoubled = false;
+  bool _coinsAdLoading = false;
+  bool _xpAdLoading = false;
+  bool _rewardsGranted = false;
 
   @override
   void initState() {
     super.initState();
     _displayCoins = widget.coinsEarned;
-    _animFromCoins = widget.coinsEarned;
+    _displayXp = widget.xpEarned;
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 3),
     )..play();
+    _grantBaseRewards();
+  }
+
+  Future<void> _grantBaseRewards() async {
+    if (_rewardsGranted) return;
+    _rewardsGranted = true;
+    if (widget.coinsEarned > 0) {
+      await getIt<AddCoinsUseCase>()(widget.coinsEarned);
+    }
+    if (widget.xpEarned > 0) {
+      await getIt<AddXpUseCase>()(widget.xpEarned);
+    }
+    if (mounted) {
+      context.read<CoinCubit>().refresh();
+      context.read<XpCubit>().refresh();
+    }
   }
 
   @override
@@ -69,15 +92,9 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
     super.dispose();
   }
 
-  String _formatTime(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  Future<void> _watchAdForDouble() async {
-    if (_coinsDoubled || _adLoading || widget.coinsEarned <= 0) return;
-    setState(() => _adLoading = true);
+  Future<void> _watchAdForDoubleCoins() async {
+    if (_coinsDoubled || _coinsAdLoading || widget.coinsEarned <= 0) return;
+    setState(() => _coinsAdLoading = true);
 
     var granted = false;
     final ok = await getIt<AdService>().showDoubleCoinsAd(
@@ -90,19 +107,38 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
     if (ok && granted) {
       await context.read<CoinCubit>().add(widget.coinsEarned);
       setState(() {
-        _animFromCoins = _displayCoins;
         _displayCoins = widget.coinsEarned * 2;
         _coinsDoubled = true;
-        _adLoading = false;
+        _coinsAdLoading = false;
       });
       _confettiController.play();
     } else {
-      setState(() => _adLoading = false);
-      if (!ok || !granted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Ad not available. Try again later.')),
-        );
-      }
+      setState(() => _coinsAdLoading = false);
+    }
+  }
+
+  Future<void> _watchAdForDoubleXp() async {
+    if (_xpDoubled || _xpAdLoading || widget.xpEarned <= 0) return;
+    setState(() => _xpAdLoading = true);
+
+    var granted = false;
+    final ok = await getIt<AdService>().showDoubleXpAd(
+      xpAmount: widget.xpEarned,
+      onGranted: () => granted = true,
+    );
+
+    if (!mounted) return;
+
+    if (ok && granted) {
+      await context.read<XpCubit>().add(widget.xpEarned);
+      setState(() {
+        _displayXp = widget.xpEarned * 2;
+        _xpDoubled = true;
+        _xpAdLoading = false;
+      });
+      _confettiController.play();
+    } else {
+      setState(() => _xpAdLoading = false);
     }
   }
 
@@ -155,78 +191,69 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
                         color: colors.gold,
-                        letterSpacing: 1.4,
-                        shadows: JourneyThemeKit.textGlow(context),
                       ),
-                    ).animate().fadeIn().scale(
-                          begin: const Offset(0.85, 0.85),
-                          end: const Offset(1, 1),
-                        ),
+                    ),
+                    Text(
+                      'Level ${widget.displayNumber}',
+                      style: AppTextStyles.bodyMuted(context),
+                    ),
                     const SizedBox(height: AppSizes.paddingSm),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(3, (i) {
-                        final filled = i < widget.stars;
                         return Icon(
-                          filled ? Icons.star_rounded : Icons.star_outline_rounded,
+                          i < widget.stars
+                              ? Icons.star_rounded
+                              : Icons.star_outline_rounded,
                           color: colors.gold,
                           size: 32,
-                        )
-                            .animate(delay: (i * 100).ms)
-                            .scale(
-                              begin: const Offset(0, 0),
-                              end: const Offset(1, 1),
-                              curve: Curves.elasticOut,
-                              duration: 500.ms,
-                            );
+                        );
                       }),
                     ),
                     const SizedBox(height: AppSizes.paddingSm),
-                    _StatRow(
-                      context: context,
-                      icon: Icons.timer_rounded,
-                      label: 'Time',
-                      value: _formatTime(widget.time),
+                    _RewardChip(
+                      icon: Icons.bolt_rounded,
+                      label: '+$_displayXp XP',
+                      color: colors.primary,
+                      doubled: _xpDoubled,
                     ),
-                    if (widget.wordsTotal != null)
-                      _StatRow(
-                        context: context,
-                        icon: Icons.spellcheck_rounded,
-                        label: 'Words',
-                        value:
-                            '${widget.wordsFound ?? widget.wordsTotal}/${widget.wordsTotal}',
+                    const SizedBox(height: 8),
+                    _RewardChip(
+                      icon: Icons.monetization_on_rounded,
+                      label: '+$_displayCoins Coins',
+                      color: colors.gold,
+                      doubled: _coinsDoubled,
+                    ),
+                    const SizedBox(height: AppSizes.paddingMd),
+                    if (!_xpDoubled && widget.xpEarned > 0)
+                      _AdButton(
+                        label: 'Watch Ad — Double XP',
+                        loading: _xpAdLoading,
+                        onPressed: _watchAdForDoubleXp,
                       ),
-                    _StatRow(
-                      context: context,
-                      icon: Icons.lightbulb_rounded,
-                      label: 'Hints',
-                      value: '${widget.hintsUsed} used',
-                    ),
-                    const SizedBox(height: AppSizes.paddingSm),
-                    _CoinRewardDisplay(
-                      displayCoins: _displayCoins,
-                      animFromCoins: _animFromCoins,
-                      doubled: _coinsDoubled,
-                    ),
+                    if (!_coinsDoubled && widget.coinsEarned > 0) ...[
+                      const SizedBox(height: 8),
+                      _AdButton(
+                        label: 'Watch Ad — Double Coins',
+                        loading: _coinsAdLoading,
+                        onPressed: _watchAdForDoubleCoins,
+                      ),
+                    ],
                     const SizedBox(height: AppSizes.paddingMd),
-                    _RewardedAdButton(
-                      loading: _adLoading,
-                      doubled: _coinsDoubled,
-                      onPressed: _watchAdForDouble,
+                    GradientButton(
+                      label: 'Continue',
+                      expanded: true,
+                      useGold: true,
+                      compact: true,
+                      onPressed: widget.onNext,
                     ),
-                    const SizedBox(height: AppSizes.paddingMd),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton(
                             onPressed: widget.onHome,
-                            style: OutlinedButton.styleFrom(
-                              visualDensity: VisualDensity.compact,
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                            child: Text(
-                              widget.isDailyChallenge ? 'Done' : 'Home',
-                            ),
+                            child: Text(widget.isDailyChallenge ? 'Done' : 'Home'),
                           ),
                         ),
                         if (!widget.isDailyChallenge) ...[
@@ -234,298 +261,97 @@ class _LevelCompleteOverlayState extends State<LevelCompleteOverlay> {
                           Expanded(
                             child: OutlinedButton(
                               onPressed: widget.onReplay,
-                              style: OutlinedButton.styleFrom(
-                                visualDensity: VisualDensity.compact,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                              ),
                               child: const Text('Replay'),
                             ),
                           ),
                         ],
                       ],
                     ),
-                    if (!widget.isDailyChallenge) ...[
-                      const SizedBox(height: 8),
-                      GradientButton(
-                        label: 'Next Level',
-                        expanded: true,
-                        useGold: true,
-                        compact: true,
-                        onPressed: widget.onNext,
-                      ),
-                    ],
                   ],
                 ),
               ),
             ),
-          )
-              .animate()
-              .fadeIn(duration: 350.ms)
-              .scale(
-                begin: const Offset(0.9, 0.9),
-                end: const Offset(1, 1),
-                curve: Curves.easeOutBack,
-              ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _CoinRewardDisplay extends StatelessWidget {
-  const _CoinRewardDisplay({
-    required this.displayCoins,
-    required this.animFromCoins,
+class _RewardChip extends StatelessWidget {
+  const _RewardChip({
+    required this.icon,
+    required this.label,
+    required this.color,
     required this.doubled,
   });
 
-  final int displayCoins;
-  final int animFromCoins;
+  final IconData icon;
+  final String label;
+  final Color color;
   final bool doubled;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
-
-    return AnimatedContainer(
-      duration: 400.ms,
-      curve: Curves.easeOutCubic,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: doubled
-              ? [colors.gold, colors.goldDark]
-              : [
-                  colors.gold.withValues(alpha: 0.25),
-                  colors.gold.withValues(alpha: 0.1),
-                ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: doubled
-            ? [
-                BoxShadow(
-                  color: colors.gold.withValues(alpha: 0.5),
-                  blurRadius: 16,
-                  spreadRadius: 2,
-                ),
-              ]
-            : null,
+        color: color.withValues(alpha: doubled ? 0.35 : 0.18),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.monetization_on_rounded,
-            color: doubled ? colors.onPrimary : colors.goldDark,
-            size: 28,
-          )
-              .animate(target: doubled ? 1 : 0)
-              .scale(
-                begin: const Offset(1, 1),
-                end: const Offset(1.3, 1.3),
-                duration: 400.ms,
-                curve: Curves.elasticOut,
-              ),
+          Icon(icon, color: color, size: 24),
           const SizedBox(width: 8),
-          TweenAnimationBuilder<int>(
-            key: ValueKey('$animFromCoins-$displayCoins'),
-            tween: IntTween(begin: animFromCoins, end: displayCoins),
-            duration: const Duration(milliseconds: 900),
-            curve: Curves.easeOutCubic,
-            builder: (context, value, _) => Text(
-              '+ $value coins',
-              style: AppTextStyles.coinsScore(context).copyWith(
-                fontSize: doubled ? 22 : 18,
-                color: doubled ? colors.onPrimary : colors.goldDark,
-              ),
+          Text(
+            label,
+            style: AppTextStyles.coinsScore(context).copyWith(
+              color: color,
+              fontSize: 18,
             ),
           ),
           if (doubled) ...[
-            const SizedBox(width: 8),
-            Text(
-              '2×',
-              style: AppTextStyles.button(context).copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-              ),
-            ).animate().fadeIn().slideX(begin: 0.3, end: 0),
+            const SizedBox(width: 6),
+            Text('2×', style: TextStyle(color: color, fontWeight: FontWeight.bold)),
           ],
         ],
       ),
-    )
-        .animate(target: doubled ? 1 : 0)
-        .shake(hz: 3, duration: 400.ms);
+    );
   }
 }
 
-class _RewardedAdButton extends StatelessWidget {
-  const _RewardedAdButton({
+class _AdButton extends StatelessWidget {
+  const _AdButton({
+    required this.label,
     required this.loading,
-    required this.doubled,
     required this.onPressed,
   });
 
+  final String label;
   final bool loading;
-  final bool doubled;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-
-    if (doubled) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.check_circle_rounded, color: colors.success, size: 20),
-          const SizedBox(width: 6),
-          Text(
-            'Coins doubled!',
-            style: AppTextStyles.wordList(context).copyWith(
-              color: colors.success,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ).animate().fadeIn().scale();
-    }
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: loading ? null : onPressed,
-        borderRadius: BorderRadius.circular(16),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: colors.playButtonGradient,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: colors.goldLight, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: colors.gold.withValues(alpha: 0.45),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (loading)
-                  SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: colors.onPrimary,
-                    ),
-                  )
-                else
-                  Icon(Icons.play_circle_filled_rounded,
-                      color: colors.onPrimary, size: 28)
-                      .animate(onPlay: (c) => c.repeat(reverse: true))
-                      .scale(
-                        begin: const Offset(1, 1),
-                        end: const Offset(1.12, 1.12),
-                        duration: 800.ms,
-                      ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'WATCH AD',
-                      style: AppTextStyles.button(context).copyWith(
-                        fontSize: 15,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    Text(
-                      'Double your coins!',
-                      style: AppTextStyles.button(context).copyWith(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        color: colors.onPrimary.withValues(alpha: 0.9),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: colors.onPrimary.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '2×',
-                    style: AppTextStyles.button(context).copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: loading ? null : onPressed,
+        icon: loading
+            ? SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2, color: colors.gold),
+              )
+            : Icon(Icons.play_circle_outline_rounded, color: colors.gold),
+        label: Text(label, style: TextStyle(color: colors.onScenic)),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: colors.gold.withValues(alpha: 0.6)),
+          padding: const EdgeInsets.symmetric(vertical: 12),
         ),
-      ),
-    )
-        .animate(onPlay: (c) => c.repeat(reverse: true))
-        .shimmer(
-          duration: 2.seconds,
-          color: colors.onPrimary.withValues(alpha: 0.35),
-        )
-        .then()
-        .shake(hz: 0.5, duration: 2.seconds);
-  }
-}
-
-class _StatRow extends StatelessWidget {
-  const _StatRow({
-    required this.context,
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final BuildContext context;
-  final IconData icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext ctx) {
-    final colors = context.appColors;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 14, color: colors.gold),
-          const SizedBox(width: 6),
-          Text(
-            '$label: ',
-            style: AppTextStyles.wordList(context).copyWith(
-              fontSize: 13,
-              color: colors.onScenicMuted,
-            ),
-          ),
-          Text(
-            value,
-            style: AppTextStyles.wordList(context).copyWith(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: colors.onScenic,
-            ),
-          ),
-        ],
       ),
     );
   }

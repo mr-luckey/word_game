@@ -155,10 +155,12 @@ class _HomeViewState extends State<_HomeView> {
                             .where((d) => d.unlockOrder == 1)
                             .firstOrNull ??
                         presetDestinations.first;
-                    final completed = state.featuredCompleted;
+                    final destinationId = featured.id;
+                    final slotId = state.featuredSlotId;
+                    final currentLevel = state.currentLevelForSlot(slotId);
+                    final completed = state.completedForSlot(slotId);
                     final total =
                         state.featuredTotal > 0 ? state.featuredTotal : 20;
-                    final destinationId = featured.id;
 
                     return CustomScrollView(
                       physics: const BouncingScrollPhysics(),
@@ -175,6 +177,7 @@ class _HomeViewState extends State<_HomeView> {
                                 country: featured.country,
                                 completed: completed,
                                 total: total,
+                                currentLevel: currentLevel,
                                 imageAsset: featured.imageAsset,
                                 height: metrics.featuredHeight,
                                 compact: metrics.compact,
@@ -184,6 +187,7 @@ class _HomeViewState extends State<_HomeView> {
                               SizedBox(height: metrics.sectionGap),
                               HomePlayButton(
                                 height: metrics.playButtonHeight,
+                                levelLabel: 'Level $currentLevel',
                                 onPressed: () =>
                                     _continuePlay(context, destinationId),
                               ),

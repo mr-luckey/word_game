@@ -41,7 +41,7 @@ class PauseMenuOverlay extends StatelessWidget {
 
   String get _subtitle {
     if (state.levelId == _dailyLevelId) return 'Daily Challenge';
-    return 'Level ${state.levelId}';
+    return 'Level ${state.displayNumber}';
   }
 
   @override

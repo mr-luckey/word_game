@@ -3,8 +3,10 @@ import 'package:equatable/equatable.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/utils/destination_unlock.dart';
 import 'package:word_game/core/utils/level_progress_id.dart';
+import 'package:word_game/core/utils/level_progress_stats.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
+import 'package:word_game/core/services/current_level_resolver.dart';
 import 'package:word_game/injection.dart';
 
 class LevelSelectState extends Equatable {
@@ -18,6 +20,8 @@ class LevelSelectState extends Equatable {
     this.difficultyIndex = 0,
     this.destinationLocked = false,
     this.unlockRequirement,
+    this.currentDisplayNumber = 1,
+    this.currentSharedLevelId,
   });
 
   final bool loading;
@@ -29,6 +33,8 @@ class LevelSelectState extends Equatable {
   final int difficultyIndex;
   final bool destinationLocked;
   final String? unlockRequirement;
+  final int currentDisplayNumber;
+  final int? currentSharedLevelId;
 
   List<LevelJson> get filteredLevels =>
       levels.where((l) => l.difficultyIndex == difficultyIndex).toList();
@@ -44,6 +50,8 @@ class LevelSelectState extends Equatable {
         difficultyIndex,
         destinationLocked,
         unlockRequirement,
+        currentDisplayNumber,
+        currentSharedLevelId,
       ];
 }
 
@@ -99,10 +107,11 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
       return;
     }
 
-    final stars = starsBySlot[themeId] ?? {};
+    final rawStars = starsBySlot[themeId] ?? {};
     if (isClosed) return;
 
     final orderedShared = theme.levels.map((l) => l.id).toList()..sort();
+    final stars = LevelProgressStats.normalizeStars(rawStars, orderedShared);
     final orderedStorage = orderedShared
         .map(
           (id) => LevelProgressId.encode(slotId: themeId, sharedLevelId: id),
@@ -119,6 +128,12 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
     }
     if (isClosed) return;
 
+    final resolver = getIt<CurrentLevelResolver>();
+    final currentLevel = await resolver.resolve(
+      slotId: themeId,
+      orderedSharedLevelIds: orderedShared,
+    );
+
     emit(
       LevelSelectState(
         loading: false,
@@ -127,6 +142,8 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
         levels: theme.levels,
         stars: stars,
         unlocked: unlocked,
+        currentDisplayNumber: currentLevel.displayNumber,
+        currentSharedLevelId: currentLevel.sharedLevelId,
       ),
     );
   }
@@ -142,6 +159,8 @@ class LevelSelectCubit extends Cubit<LevelSelectState> {
       difficultyIndex: index,
       destinationLocked: state.destinationLocked,
       unlockRequirement: state.unlockRequirement,
+      currentDisplayNumber: state.currentDisplayNumber,
+      currentSharedLevelId: state.currentSharedLevelId,
     ));
   }
 }

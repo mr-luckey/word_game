@@ -5,12 +5,22 @@ class UserCloudData {
     this.purchasedProducts = const [],
     this.stats = const {},
     this.achievementIds = const [],
+    this.xp = 0,
+    this.welcomeBonusGranted = false,
+    this.streak = 0,
+    this.lastPlayedDate = '',
+    this.photoUrl = '',
   });
 
   final bool removeAds;
   final List<String> purchasedProducts;
   final Map<String, int> stats;
   final List<String> achievementIds;
+  final int xp;
+  final bool welcomeBonusGranted;
+  final int streak;
+  final String lastPlayedDate;
+  final String photoUrl;
 
   factory UserCloudData.fromFirestore(Map<String, dynamic>? data) {
     if (data == null) return const UserCloudData();
@@ -48,6 +58,11 @@ class UserCloudData {
           : const [],
       stats: stats,
       achievementIds: achievementIds,
+      xp: (data['xp'] as num?)?.toInt() ?? 0,
+      welcomeBonusGranted: data['welcomeBonusGranted'] == true,
+      streak: (data['streak'] as num?)?.toInt() ?? 0,
+      lastPlayedDate: data['lastPlayedDate'] as String? ?? '',
+      photoUrl: data['photoUrl'] as String? ?? '',
     );
   }
 
@@ -59,6 +74,11 @@ class UserCloudData {
       'achievements': {
         for (final id in achievementIds) id: {'unlocked': true},
       },
+      'xp': xp,
+      'welcomeBonusGranted': welcomeBonusGranted,
+      'streak': streak,
+      if (lastPlayedDate.isNotEmpty) 'lastPlayedDate': lastPlayedDate,
+      if (photoUrl.isNotEmpty) 'photoUrl': photoUrl,
     };
   }
 }

@@ -43,8 +43,24 @@ class AppDatabase extends _$AppDatabase {
     final row = await (select(keyValueTable)
           ..where((t) => t.key.equals('coins')))
         .getSingleOrNull();
-    return int.tryParse(row?.value ?? '') ?? GameConfig.initialCoins;
+    if (row == null) return 0;
+    return int.tryParse(row.value) ?? 0;
   }
+
+  Future<int> getXp() async {
+    final row = await (select(keyValueTable)
+          ..where((t) => t.key.equals('xp')))
+        .getSingleOrNull();
+    if (row == null) return GameConfig.initialXp;
+    return int.tryParse(row.value) ?? GameConfig.initialXp;
+  }
+
+  Future<void> setXp(int xp) => into(keyValueTable).insertOnConflictUpdate(
+        KeyValueTableCompanion(
+          key: const Value('xp'),
+          value: Value(xp.toString()),
+        ),
+      );
 
   Future<void> setCoins(int coins) => into(keyValueTable).insertOnConflictUpdate(
         KeyValueTableCompanion(
@@ -100,7 +116,11 @@ class AppDatabase extends _$AppDatabase {
     'stat_words_found',
     'stat_levels_completed',
     'stat_no_hint_streak',
+    'stat_no_reveal_streak',
     'stat_rotates',
+    'stat_fast_levels',
+    'stat_daily_challenges',
+    'stat_reveals_used',
   ];
 
   Future<List<String>> getPurchasedProducts() async {

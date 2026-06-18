@@ -50,12 +50,14 @@ class AchievementListTile extends StatelessWidget {
     required this.description,
     required this.coinReward,
     required this.unlocked,
+    this.target = 1,
   });
 
   final String title;
   final String description;
   final int coinReward;
   final bool unlocked;
+  final int target;
 
   @override
   Widget build(BuildContext context) {

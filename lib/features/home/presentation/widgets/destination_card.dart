@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/hd_asset_image.dart';
 
 /// Featured destination card — image + title overlay + progress footer.
 class DestinationCard extends StatelessWidget {
@@ -55,10 +56,9 @@ class DestinationCard extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.asset(
-                        image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => DecoratedBox(
+                      HdAssetImage(
+                        asset: image,
+                        fallback: DecoratedBox(
                           decoration:
                               BoxDecoration(gradient: colors.primaryGradient),
                         ),

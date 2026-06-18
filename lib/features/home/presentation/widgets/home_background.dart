@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/hd_asset_image.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
-/// Full-screen themed background — splash + grid overlay + vignette.
+/// Full-screen themed HD background — splash + grid overlay + vignette.
 class HomeBackground extends StatelessWidget {
   const HomeBackground({super.key, required this.child});
 
@@ -20,19 +21,17 @@ class HomeBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          AssetPaths.themeSplash(preset),
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => DecoratedBox(
+        HdAssetImage(
+          asset: ScenicBackgroundStyle.hdAssetFor(preset),
+          fallback: DecoratedBox(
             decoration: BoxDecoration(gradient: colors.primaryGradient),
           ),
         ),
         Opacity(
-          opacity: 0.32,
-          child: Image.asset(
-            preset.homeBackgroundAsset,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+          opacity: 0.22,
+          child: HdAssetImage(
+            asset: 'assets/images/themes/${preset.folder}/splash.webp',
+            fallback: const SizedBox.shrink(),
           ),
         ),
         DecoratedBox(

@@ -21,6 +21,12 @@ class VipService {
     return (baseCoins * GameConfig.vipCoinMultiplier).round();
   }
 
+  /// +50% XP on level complete.
+  int applyLevelXpBonus(int baseXp) {
+    if (!isVipActive || baseXp <= 0) return baseXp;
+    return (baseXp * GameConfig.vipCoinMultiplier).round();
+  }
+
   /// +1 free hint at level start.
   int bonusHintsForLevel() => isVipActive ? GameConfig.vipExtraHintsPerLevel : 0;
 

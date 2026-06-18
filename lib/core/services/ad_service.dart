@@ -100,6 +100,18 @@ class AdService {
     required int levelCoins,
     required void Function() onGranted,
   }) async {
+    return _showRewarded(onGranted: onGranted);
+  }
+
+  /// Doubles level XP: caller should add [xpAmount] again on success.
+  Future<bool> showDoubleXpAd({
+    required int xpAmount,
+    required void Function() onGranted,
+  }) async {
+    return _showRewarded(onGranted: onGranted);
+  }
+
+  Future<bool> _showRewarded({required void Function() onGranted}) async {
     final ad = _rewarded;
     if (ad == null) {
       loadRewarded();

@@ -55,8 +55,6 @@ class _DailyRewardsView extends StatelessWidget {
       child: Scaffold(
       extendBodyBehindAppBar: true,
       body: ScenicBackground(
-        imageAsset: context.themePreset.homeBackgroundAsset,
-        darken: 0.35,
         child: SafeArea(
           child: JourneyContentWidth(
             child: BlocBuilder<DailyRewardsCubit, DailyRewardsState>(

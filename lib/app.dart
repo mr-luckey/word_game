@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/widgets/app_lifecycle_audio_scope.dart';
-import 'package:word_game/core/widgets/exit_app_dialog.dart';
 import 'package:word_game/core/widgets/main_shell.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
@@ -20,6 +18,7 @@ import 'package:word_game/features/settings/presentation/screens/settings_screen
 import 'package:word_game/features/shop/presentation/screens/shop_screen.dart';
 import 'package:word_game/features/splash/presentation/screens/splash_screen.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
+import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 import 'package:word_game/injection.dart';
 
 class WordSearchApp extends StatelessWidget {
@@ -30,6 +29,7 @@ class WordSearchApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<CoinCubit>()),
+        BlocProvider(create: (_) => getIt<XpCubit>()),
         BlocProvider.value(value: getIt<AppThemeBloc>()),
         BlocProvider.value(value: getIt<AuthCubit>()),
       ],
@@ -48,14 +48,13 @@ class WordSearchApp extends StatelessWidget {
   }
 }
 
-/// Unique page keys per route to avoid navigator key collisions.
+/// Unique page keys per route (GoRouter assigns a fresh key per navigation).
 CustomTransitionPage<void> _fadePage(
   GoRouterState state, {
   required Widget child,
-  required String keyName,
 }) =>
     CustomTransitionPage<void>(
-      key: ValueKey(keyName),
+      key: state.pageKey,
       child: child,
       transitionsBuilder: (context, animation, secondary, child) =>
           FadeTransition(opacity: animation, child: child),
@@ -64,10 +63,9 @@ CustomTransitionPage<void> _fadePage(
 CustomTransitionPage<void> _slideFromRightPage(
   GoRouterState state, {
   required Widget child,
-  required String keyName,
 }) =>
     CustomTransitionPage<void>(
-      key: ValueKey(keyName),
+      key: state.pageKey,
       child: child,
       transitionsBuilder: (context, animation, secondary, child) =>
           SlideTransition(
@@ -82,10 +80,9 @@ CustomTransitionPage<void> _slideFromRightPage(
 CustomTransitionPage<void> _slideFromBottomPage(
   GoRouterState state, {
   required Widget child,
-  required String keyName,
 }) =>
     CustomTransitionPage<void>(
-      key: ValueKey(keyName),
+      key: state.pageKey,
       child: child,
       transitionsBuilder: (context, animation, secondary, child) =>
           SlideTransition(
@@ -105,7 +102,6 @@ final _router = GoRouter(
       pageBuilder: (context, state) => _fadePage(
         state,
         child: const SplashScreen(),
-        keyName: 'splash-${state.uri}',
       ),
     ),
     ShellRoute(
@@ -113,17 +109,9 @@ final _router = GoRouter(
       routes: [
         GoRoute(
           path: '/home',
-          onExit: (context, state) async {
-            final exit = await showExitAppDialog(context);
-            if (exit) {
-              await SystemNavigator.pop();
-            }
-            return false;
-          },
           pageBuilder: (context, state) => _fadePage(
             state,
             child: const HomeScreen(),
-            keyName: 'home-${state.uri}',
           ),
         ),
         GoRoute(
@@ -131,7 +119,6 @@ final _router = GoRouter(
           pageBuilder: (context, state) => _slideFromRightPage(
             state,
             child: const DestinationsScreen(),
-            keyName: 'destinations-${state.uri}',
           ),
         ),
         GoRoute(
@@ -139,7 +126,6 @@ final _router = GoRouter(
           pageBuilder: (context, state) => _fadePage(
             state,
             child: const ShopScreen(),
-            keyName: 'shop-${state.uri}',
           ),
         ),
         GoRoute(
@@ -147,7 +133,6 @@ final _router = GoRouter(
           pageBuilder: (context, state) => _fadePage(
             state,
             child: const ProfileScreen(),
-            keyName: 'profile-${state.uri}',
           ),
         ),
         GoRoute(
@@ -158,7 +143,6 @@ final _router = GoRouter(
             return _slideFromRightPage(
               state,
               child: LevelSelectScreen(themeId: themeId),
-              keyName: 'levels-${state.uri}',
             );
           },
         ),
@@ -169,7 +153,6 @@ final _router = GoRouter(
       pageBuilder: (context, state) => _slideFromRightPage(
         state,
         child: const AchievementsScreen(),
-        keyName: 'achievements-${state.uri}',
       ),
     ),
     GoRoute(
@@ -177,7 +160,6 @@ final _router = GoRouter(
       pageBuilder: (context, state) => _slideFromBottomPage(
         state,
         child: const DailyRewardsScreen(),
-        keyName: 'daily-rewards-${state.uri}',
       ),
     ),
     GoRoute(
@@ -185,7 +167,6 @@ final _router = GoRouter(
       pageBuilder: (context, state) => _slideFromBottomPage(
         state,
         child: const SettingsScreen(),
-        keyName: 'settings-${state.uri}',
       ),
     ),
     GoRoute(
@@ -199,7 +180,6 @@ final _router = GoRouter(
             create: (_) => getIt<GameBloc>()..add(LoadLevel(levelId)),
             child: GameScreen(levelId: levelId),
           ),
-          keyName: 'game-${state.uri}',
         );
       },
     ),

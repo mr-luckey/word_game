@@ -8,10 +8,12 @@ class HomePlayButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.height = 56,
+    this.levelLabel,
   });
 
   final VoidCallback? onPressed;
   final double height;
+  final String? levelLabel;
 
   static const _radius = 28.0;
 
@@ -75,12 +77,12 @@ class HomePlayButton extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'PLAY NOW',
+                    levelLabel ?? 'PLAY NOW',
                     maxLines: 1,
-                    style: GoogleFonts.cinzel(
+                    style: GoogleFonts.poppins(
                       fontSize: height < 52 ? 15 : 18,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 1.8,
+                      letterSpacing: 1.2,
                       color: spec.playButtonTextColor,
                     ),
                   ),

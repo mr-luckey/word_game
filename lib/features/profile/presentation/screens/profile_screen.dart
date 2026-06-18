@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/profile_config.dart';
 import 'package:word_game/core/services/leaderboard_service.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
@@ -89,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => ProfileCubit(getIt(), getIt())),
+        BlocProvider(create: (_) => ProfileCubit(getIt(), getIt(), getIt())),
       ],
       child: BlocListener<AuthCubit, AuthState>(
         listenWhen: (a, b) => a.isSignedIn != b.isSignedIn,
@@ -103,9 +102,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           body: ScenicBackground(
-            imageAsset: AssetPaths.themeSplash(context.themePreset),
-            darken: 0.5,
-            blurSigma: 1,
             child: SafeArea(
               bottom: false,
               child: JourneyContentWidth(
@@ -583,31 +579,10 @@ class _RankingSection extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Container(
-                          width: 32,
-                          height: 32,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: entry.isCurrentUser
-                                ? colors.gold.withValues(alpha: 0.2)
-                                : colors.surface.withValues(alpha: 0.5),
-                            border: Border.all(
-                              color: entry.isCurrentUser
-                                  ? colors.gold
-                                  : colors.glassBorder,
-                            ),
-                          ),
-                          child: Text(
-                            '#${entry.rank}',
-                            style: AppTextStyles.wordList(context).copyWith(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w800,
-                              color: entry.isCurrentUser
-                                  ? colors.gold
-                                  : colors.onScenicMuted,
-                            ),
-                          ),
+                        _LeaderboardAvatar(
+                          rank: entry.rank,
+                          photoUrl: entry.photoUrl,
+                          isCurrentUser: entry.isCurrentUser,
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -624,10 +599,10 @@ class _RankingSection extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${entry.coins}',
+                          '${_formatXp(entry.xp)} XP',
                           style: AppTextStyles.coinsScore(context).copyWith(
                             fontSize: 14,
-                            color: colors.accentCoin,
+                            color: colors.primary,
                           ),
                         ),
                       ],
@@ -636,6 +611,76 @@ class _RankingSection extends StatelessWidget {
                 ),
               ),
       ],
+    );
+  }
+}
+
+String _formatXp(int xp) {
+  if (xp >= 1000000) return '${(xp / 1000000).toStringAsFixed(1)}M';
+  if (xp >= 1000) {
+    return xp.toString().replaceAllMapped(
+          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+          (m) => '${m[1]},',
+        );
+  }
+  return '$xp';
+}
+
+class _LeaderboardAvatar extends StatelessWidget {
+  const _LeaderboardAvatar({
+    required this.rank,
+    required this.photoUrl,
+    required this.isCurrentUser,
+  });
+
+  final int rank;
+  final String photoUrl;
+  final bool isCurrentUser;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final hasPhoto = photoUrl.isNotEmpty;
+
+    return SizedBox(
+      width: 44,
+      height: 44,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: isCurrentUser
+                ? colors.gold.withValues(alpha: 0.2)
+                : colors.surface.withValues(alpha: 0.5),
+            backgroundImage:
+                hasPhoto ? CachedNetworkImageProvider(photoUrl) : null,
+            child: hasPhoto
+                ? null
+                : Icon(Icons.person_rounded, color: colors.onScenicMuted, size: 22),
+          ),
+          Positioned(
+            top: -4,
+            right: -4,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: colors.gold,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: colors.onPrimary, width: 1),
+              ),
+              child: Text(
+                '#$rank',
+                style: AppTextStyles.wordList(context).copyWith(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w800,
+                  color: colors.onPrimary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

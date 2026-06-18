@@ -28,10 +28,21 @@ abstract class ProgressRepository {
     required int slotId,
     required List<int> orderedSharedLevelIds,
   });
+
+  /// Completed levels (stars > 0) for one explore slot.
+  Future<int> countCompletedLevels(int slotId);
 }
 
 abstract class WalletRepository {
   Future<int> getCoins();
   Future<bool> spendCoins(int amount);
   Future<void> addCoins(int amount);
+  Future<bool> hasWelcomeBonusGranted();
+  Future<void> grantWelcomeBonus();
+}
+
+abstract class XpRepository {
+  Future<int> getXp();
+  Future<void> addXp(int amount);
+  Future<void> setXp(int amount);
 }

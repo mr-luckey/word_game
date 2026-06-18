@@ -72,3 +72,7 @@ class GameTick extends GameEvent {
 class ClearGameFeedback extends GameEvent {
   const ClearGameFeedback();
 }
+
+class TutorialDismissed extends GameEvent {
+  const TutorialDismissed();
+}

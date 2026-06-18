@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
-import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
@@ -18,8 +18,8 @@ class ScenicPage extends StatelessWidget {
     this.backgroundAsset,
     this.showBack = true,
     this.showCoins = true,
-    this.blurSigma = 1.5,
-    this.darken = 0.4,
+    this.blurSigma = ScenicBackgroundStyle.hdBlur,
+    this.darken = ScenicBackgroundStyle.hdDarken,
   });
 
   final String title;
@@ -33,12 +33,11 @@ class ScenicPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final bg = backgroundAsset ?? AssetPaths.themeSplash(context.themePreset);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: ScenicBackground(
-        imageAsset: bg,
+        imageAsset: backgroundAsset,
         blurSigma: blurSigma,
         darken: darken,
         child: SafeArea(

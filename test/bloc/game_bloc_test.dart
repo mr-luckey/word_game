@@ -13,6 +13,8 @@ import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
+import 'package:word_game/core/data/models/slots_config.dart';
+import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/features/game/domain/usecases/load_level_usecase.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
@@ -40,6 +42,8 @@ class MockDailyChallenge extends Mock implements DailyChallengeService {}
 
 class MockThemeBloc extends Mock implements AppThemeBloc {}
 
+class MockVip extends Mock implements VipService {}
+
 void main() {
   const sampleLevel = LevelEntity(
     id: 101,
@@ -63,6 +67,7 @@ void main() {
   late MockAchievements achievements;
   late MockDailyChallenge dailyChallenge;
   late MockThemeBloc themeBloc;
+  late MockVip vip;
   late GameContentRegistry testContent;
 
   GameBloc buildBloc() => GameBloc(
@@ -70,7 +75,6 @@ void main() {
         getNextLevel: getNextLevel,
         saveProgress: saveProgress,
         spendCoins: MockSpendCoins(),
-        addCoins: MockAddCoins(),
         wallet: wallet,
         audio: audio,
         analytics: analytics,
@@ -78,6 +82,7 @@ void main() {
         dailyChallenge: dailyChallenge,
         themeBloc: themeBloc,
         content: testContent,
+        vip: vip,
       );
 
   setUp(() {
@@ -90,8 +95,10 @@ void main() {
     achievements = MockAchievements();
     dailyChallenge = MockDailyChallenge();
     themeBloc = MockThemeBloc();
+    vip = MockVip();
     testContent = GameContentRegistry(
-      sharedLevels: const [],
+      levelPacksBySlot: const {1: []},
+      slotsConfig: const SlotsConfig(slotCount: 10),
       exploreByPreset: const {},
       dailyChallenge: DailyChallengeConfig(
         levelId: 9999,
@@ -104,12 +111,16 @@ void main() {
         coinSchedule: const [50, 100],
         wordPool: const ['TEST'],
         wordsPerDay: 1,
+        games: const [],
       ),
       achievements: const AchievementsConfig(
         defaultBadges: [],
         themeBadges: {},
       ),
     );
+    when(() => vip.applyLevelCoinBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
+    when(() => vip.applyLevelXpBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
+    when(() => vip.applyDailyCoinBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
     when(() => dailyChallenge.todayRewardCoins).thenReturn(50);
     when(() => themeBloc.state).thenReturn(
       AppThemeState(
@@ -126,6 +137,7 @@ void main() {
         stars: any(named: 'stars'),
         timeSeconds: any(named: 'timeSeconds'),
         hintsUsed: any(named: 'hintsUsed'),
+        revealsUsed: any(named: 'revealsUsed'),
         levelId: any(named: 'levelId'),
       ),
     ).thenAnswer((_) async => []);

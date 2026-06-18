@@ -3,11 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/hd_asset_image.dart';
 import 'package:word_game/core/widgets/journey_screen_header.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
@@ -69,9 +71,6 @@ class _DestinationsBodyState extends State<_DestinationsBody> {
     return Scaffold(
         extendBodyBehindAppBar: true,
         body: ScenicBackground(
-          imageAsset: AssetPaths.themeGrid(preset),
-          darken: 0.55,
-          blurSigma: 1.5,
           child: SafeArea(
             bottom: false,
             child: JourneyContentWidth(
@@ -131,11 +130,7 @@ class _DestinationsBodyState extends State<_DestinationsBody> {
                             final theme = state.themes[index];
                             final meta =
                                 DestinationCatalog.byId(theme.id, preset);
-                            final slotStars =
-                                state.starsBySlot[theme.id] ?? const {};
-                            final completed = theme.levels
-                                .where((l) => (slotStars[l.id] ?? 0) > 0)
-                                .length;
+                            final completed = state.completedForSlot(theme.id);
                             final total = theme.levels.length;
                             final isUnlocked = state.isSlotUnlocked(theme.id);
                             final unlockHint = isUnlocked
@@ -148,7 +143,7 @@ class _DestinationsBodyState extends State<_DestinationsBody> {
                             final imagePath = theme.backgroundImage.isNotEmpty
                                 ? AssetPaths.themeImage(theme.backgroundImage)
                                 : meta?.imageAsset ??
-                                    AssetPaths.themeSplash(preset);
+                                    ScenicBackgroundStyle.hdAssetFor(preset);
 
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -159,7 +154,7 @@ class _DestinationsBodyState extends State<_DestinationsBody> {
                                 country: meta?.country ?? '',
                                 imageAsset: imagePath,
                                 levelLabel: isUnlocked
-                                    ? '$completed/$total levels'
+                                    ? 'Level ${state.currentLevelForSlot(theme.id)} · $completed/$total'
                                     : 'Locked',
                                 locked: !isUnlocked,
                                 lockHint: unlockHint == null
@@ -265,20 +260,18 @@ class _ExploreDestinationCard extends StatelessWidget {
                       0.35, 0.35, 0.35, 0, 0,
                       0, 0, 0, 1, 0,
                     ]),
-                    child: Image.asset(
-                      imageAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => DecoratedBox(
+                    child: HdAssetImage(
+                      asset: imageAsset,
+                      fallback: DecoratedBox(
                         decoration:
                             BoxDecoration(gradient: colors.primaryGradient),
                       ),
                     ),
                   )
                 else
-                  Image.asset(
-                    imageAsset,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => DecoratedBox(
+                  HdAssetImage(
+                    asset: imageAsset,
+                    fallback: DecoratedBox(
                       decoration:
                           BoxDecoration(gradient: colors.primaryGradient),
                     ),

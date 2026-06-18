@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/core/widgets/coin_display.dart';
-import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 
 enum LevelSelectTab { map, stats }
 
@@ -34,11 +31,6 @@ class LevelSelectHeader extends StatelessWidget {
           Row(
             children: [
               _BackButton(onPressed: onBack),
-              const Spacer(),
-              BlocBuilder<CoinCubit, CoinState>(
-                builder: (context, state) =>
-                    CoinDisplay(coins: state.coins, light: true),
-              ),
             ],
           ),
           const SizedBox(height: 10),

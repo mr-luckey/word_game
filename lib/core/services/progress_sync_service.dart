@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/firestore_user_service.dart';
 import 'package:word_game/core/constants/product_ids.dart';
 import 'package:word_game/core/services/user_cloud_data.dart';
@@ -26,19 +27,25 @@ class ProgressSyncService {
     required String uid,
     required String displayName,
     required String email,
+    String? photoUrl,
   }) async {
     final localRows = await _db.getAllProgress();
     final localCoins = await _db.getCoins();
+    final localXp = await _db.getXp();
     final localExtras = await _readLocalExtras();
 
     var cloudProgress = <int, LevelProgressRecord>{};
     var cloudCoins = 0;
+    var cloudXp = 0;
     var cloudExtras = const UserCloudData();
+    var isNewAccount = true;
 
     try {
       cloudProgress = await _firestore.fetchLevelProgress(uid);
       cloudCoins = await _firestore.fetchCoins(uid) ?? 0;
+      cloudXp = await _firestore.fetchXp(uid) ?? 0;
       cloudExtras = await _firestore.fetchUserCloudData(uid);
+      isNewAccount = !await _firestore.userDocExists(uid);
     } on FirebaseException catch (e) {
       if (e.code != 'permission-denied') rethrow;
     }
@@ -55,8 +62,40 @@ class ProgressSyncService {
       }
     }
 
-    final mergedCoins = localCoins > cloudCoins ? localCoins : cloudCoins;
-    final mergedExtras = _mergeExtras(localExtras, cloudExtras);
+    var mergedCoins = localCoins > cloudCoins ? localCoins : cloudCoins;
+    var mergedXp = localXp > cloudXp ? localXp : cloudXp;
+    var mergedExtras = _mergeExtras(localExtras, cloudExtras);
+
+    if (isNewAccount && !mergedExtras.welcomeBonusGranted) {
+      if (mergedCoins < GameConfig.initialCoins) {
+        mergedCoins = GameConfig.initialCoins;
+      }
+      mergedExtras = UserCloudData(
+        removeAds: mergedExtras.removeAds,
+        purchasedProducts: mergedExtras.purchasedProducts,
+        stats: mergedExtras.stats,
+        achievementIds: mergedExtras.achievementIds,
+        xp: mergedXp,
+        welcomeBonusGranted: true,
+        streak: mergedExtras.streak,
+        lastPlayedDate: mergedExtras.lastPlayedDate,
+        photoUrl: photoUrl ?? mergedExtras.photoUrl,
+      );
+    }
+
+    if (photoUrl != null && photoUrl.isNotEmpty) {
+      mergedExtras = UserCloudData(
+        removeAds: mergedExtras.removeAds,
+        purchasedProducts: mergedExtras.purchasedProducts,
+        stats: mergedExtras.stats,
+        achievementIds: mergedExtras.achievementIds,
+        xp: mergedExtras.xp,
+        welcomeBonusGranted: mergedExtras.welcomeBonusGranted,
+        streak: mergedExtras.streak,
+        lastPlayedDate: mergedExtras.lastPlayedDate,
+        photoUrl: photoUrl,
+      );
+    }
 
     for (final entry in mergedLevels.values) {
       await _db.saveProgress(
@@ -66,6 +105,7 @@ class ProgressSyncService {
       );
     }
     await _db.setCoins(mergedCoins);
+    await _db.setXp(mergedXp);
     await _applyExtrasLocally(mergedExtras);
 
     try {
@@ -74,6 +114,7 @@ class ProgressSyncService {
         displayName: displayName,
         email: email,
         coins: mergedCoins,
+        xp: mergedXp,
         extras: mergedExtras,
       );
 
@@ -106,7 +147,9 @@ class ProgressSyncService {
         timeSeconds: timeSeconds,
       );
       final coins = await _db.getCoins();
+      final xp = await _db.getXp();
       await _firestore.updateCoins(uid, coins);
+      await _firestore.updateXp(uid, xp);
     } on FirebaseException catch (_) {}
   }
 
@@ -116,6 +159,15 @@ class ProgressSyncService {
     final coins = await _db.getCoins();
     try {
       await _firestore.updateCoins(uid, coins);
+    } on FirebaseException catch (_) {}
+  }
+
+  Future<void> syncXp() async {
+    final uid = _uid;
+    if (uid == null) return;
+    final xp = await _db.getXp();
+    try {
+      await _firestore.updateXp(uid, xp);
     } on FirebaseException catch (_) {}
   }
 
@@ -131,6 +183,7 @@ class ProgressSyncService {
           ? user.displayName!.trim()
           : 'Player',
       email: user.email ?? '',
+      photoUrl: user.photoURL,
     );
   }
 
@@ -147,6 +200,7 @@ class ProgressSyncService {
       final extras = await _readLocalExtras();
       await _firestore.syncUserMetadata(uid: _uid!, extras: extras);
       await syncCoins();
+      await syncXp();
     } on FirebaseException catch (_) {}
   }
 
@@ -168,6 +222,10 @@ class ProgressSyncService {
       purchasedProducts: await _db.getPurchasedProducts(),
       stats: await _db.getGameplayStats(),
       achievementIds: await _db.getUnlockedAchievementIds(),
+      xp: await _db.getXp(),
+      welcomeBonusGranted: await _db.getBool('welcome_bonus_granted'),
+      streak: int.tryParse(await _db.getString('daily_streak') ?? '') ?? 0,
+      lastPlayedDate: await _db.getString('last_played_date') ?? '',
     );
   }
 
@@ -183,6 +241,13 @@ class ProgressSyncService {
     }
     await _db.applyGameplayStats(data.stats);
     await _db.applyUnlockedAchievements(data.achievementIds);
+    await _db.setXp(data.xp);
+    if (data.welcomeBonusGranted) {
+      await _db.setBool('welcome_bonus_granted', true);
+    }
+    if (data.lastPlayedDate.isNotEmpty) {
+      await _db.setString('last_played_date', data.lastPlayedDate);
+    }
   }
 
   UserCloudData _mergeExtras(UserCloudData local, UserCloudData cloud) {
@@ -202,7 +267,18 @@ class ProgressSyncService {
       purchasedProducts: purchased,
       stats: stats,
       achievementIds: achievements,
+      xp: _maxInt(cloud.xp, local.xp),
+      welcomeBonusGranted: local.welcomeBonusGranted || cloud.welcomeBonusGranted,
+      streak: _maxInt(cloud.streak, local.streak),
+      lastPlayedDate: _newerDate(local.lastPlayedDate, cloud.lastPlayedDate),
+      photoUrl: local.photoUrl.isNotEmpty ? local.photoUrl : cloud.photoUrl,
     );
+  }
+
+  String _newerDate(String a, String b) {
+    if (a.isEmpty) return b;
+    if (b.isEmpty) return a;
+    return a.compareTo(b) >= 0 ? a : b;
   }
 
   int _maxInt(int? a, int b) {

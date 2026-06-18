@@ -41,13 +41,13 @@ class MainShell extends StatelessWidget {
         onSelected: (i) {
           switch (i) {
             case 0:
-              context.go('/home');
+              if (selectedIndex != 0) context.go('/home');
             case 1:
-              context.go('/destinations');
+              if (selectedIndex != 1) context.go('/destinations');
             case 2:
-              context.go('/shop');
+              if (selectedIndex != 2) context.go('/shop');
             case 3:
-              context.go('/profile');
+              if (selectedIndex != 3) context.go('/profile');
           }
         },
       ),

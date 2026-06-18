@@ -50,3 +50,11 @@ class AddCoinsUseCase {
 
   Future<void> call(int amount) => _repository.addCoins(amount);
 }
+
+class AddXpUseCase {
+  AddXpUseCase(this._repository);
+
+  final XpRepository _repository;
+
+  Future<void> call(int amount) => _repository.addXp(amount);
+}

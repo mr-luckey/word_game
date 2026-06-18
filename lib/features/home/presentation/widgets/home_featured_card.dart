@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/theme/theme_context.dart';
+import 'package:word_game/core/widgets/hd_asset_image.dart';
 import 'package:word_game/features/home/presentation/widgets/home_glass_card.dart';
 
 /// Featured destination — Paris full-bleed / Safari·Tokyo split glass (mockup).
@@ -13,6 +14,7 @@ class HomeFeaturedCard extends StatelessWidget {
     required this.completed,
     required this.total,
     required this.imageAsset,
+    this.currentLevel,
     this.height = 196,
     this.compact = false,
     this.dense = false,
@@ -23,6 +25,7 @@ class HomeFeaturedCard extends StatelessWidget {
   final String country;
   final int completed;
   final int total;
+  final int? currentLevel;
   final String imageAsset;
   final double height;
   final bool compact;
@@ -51,6 +54,7 @@ class HomeFeaturedCard extends StatelessWidget {
               stampLine2: preset.stampLinesFor(title, country).$2,
               completed: completed,
               total: total,
+              currentLevel: currentLevel,
               pct: pct,
               imageAsset: imageAsset,
               height: height,
@@ -65,6 +69,7 @@ class HomeFeaturedCard extends StatelessWidget {
               stampLine2: preset.stampLinesFor(title, country).$2,
               completed: completed,
               total: total,
+              currentLevel: currentLevel,
               pct: pct,
               imageAsset: imageAsset,
               height: height,
@@ -170,6 +175,7 @@ class _ProgressFooter extends StatelessWidget {
     required this.completed,
     required this.total,
     required this.pct,
+    this.currentLevel,
     this.compact = false,
     this.dense = false,
   });
@@ -177,6 +183,7 @@ class _ProgressFooter extends StatelessWidget {
   final int completed;
   final int total;
   final int pct;
+  final int? currentLevel;
   final bool compact;
   final bool dense;
 
@@ -235,16 +242,14 @@ class _ProgressFooter extends StatelessWidget {
       );
     }
 
-    final levelsLabel = dense ? 'Levels' : 'Levels Completed';
-    final countStyle = GoogleFonts.cinzel(
-      fontSize: dense ? 15 : (compact ? 18 : 22),
+    final levelsLabel = dense ? 'Progress' : 'Your progress';
+    final progressText = currentLevel != null
+        ? 'Level $currentLevel · $completed/$total'
+        : '$completed / $total';
+    final progressStyle = GoogleFonts.cinzel(
+      fontSize: dense ? 13 : (compact ? 16 : 19),
       fontWeight: FontWeight.w800,
       color: colors.gold,
-    );
-    final totalStyle = GoogleFonts.cinzel(
-      fontSize: dense ? 12 : (compact ? 14 : 17),
-      fontWeight: FontWeight.w600,
-      color: colors.onScenic,
     );
 
     if (dense) {
@@ -270,13 +275,9 @@ class _ProgressFooter extends StatelessWidget {
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: '$completed', style: countStyle),
-                        TextSpan(text: ' / $total', style: totalStyle),
-                      ],
-                    ),
+                  child: Text(
+                    progressText,
+                    style: progressStyle,
                   ),
                 ),
               ],
@@ -310,13 +311,9 @@ class _ProgressFooter extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(text: '$completed', style: countStyle),
-                      TextSpan(text: ' / $total', style: totalStyle),
-                    ],
-                  ),
+                child: Text(
+                  progressText,
+                  style: progressStyle,
                 ),
               ),
             ],
@@ -400,6 +397,7 @@ class _FullBleedCard extends StatelessWidget {
     required this.pct,
     required this.imageAsset,
     required this.height,
+    this.currentLevel,
     this.compact = false,
     this.dense = false,
     this.onTap,
@@ -414,6 +412,7 @@ class _FullBleedCard extends StatelessWidget {
   final int pct;
   final String imageAsset;
   final double height;
+  final int? currentLevel;
   final bool compact;
   final bool dense;
   final VoidCallback? onTap;
@@ -449,7 +448,7 @@ class _FullBleedCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(imageAsset, fit: BoxFit.cover),
+                HdAssetImage(asset: imageAsset),
                 DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -486,6 +485,7 @@ class _FullBleedCard extends StatelessWidget {
                         completed: completed,
                         total: total,
                         pct: pct,
+                        currentLevel: currentLevel,
                         compact: compact,
                         dense: dense,
                       ),
@@ -521,6 +521,7 @@ class _SplitGlassCard extends StatelessWidget {
     required this.pct,
     required this.imageAsset,
     required this.height,
+    this.currentLevel,
     this.compact = false,
     this.dense = true,
     this.onTap,
@@ -535,6 +536,7 @@ class _SplitGlassCard extends StatelessWidget {
   final int pct;
   final String imageAsset;
   final double height;
+  final int? currentLevel;
   final bool compact;
   final bool dense;
   final VoidCallback? onTap;
@@ -575,6 +577,7 @@ class _SplitGlassCard extends StatelessWidget {
                     completed: completed,
                     total: total,
                     pct: pct,
+                    currentLevel: currentLevel,
                     compact: true,
                     dense: true,
                   ),
@@ -589,7 +592,7 @@ class _SplitGlassCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(imageAsset, fit: BoxFit.cover),
+                  child: HdAssetImage(asset: imageAsset),
                 ),
                 Positioned(
                   top: 2,

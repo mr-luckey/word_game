@@ -6,17 +6,21 @@ class LeaderboardEntry {
   const LeaderboardEntry({
     required this.rank,
     required this.name,
-    required this.coins,
+    required this.xp,
     required this.isCurrentUser,
+    this.photoUrl = '',
+    this.completedLevels = 0,
   });
 
   final int rank;
   final String name;
-  final int coins;
+  final int xp;
   final bool isCurrentUser;
+  final String photoUrl;
+  final int completedLevels;
 }
 
-/// Global ranking from Firestore — sorted by coins (desc).
+/// Global ranking from Firestore — sorted by XP (desc).
 class LeaderboardService {
   LeaderboardService(this._firestore, this._auth, this._db);
 
@@ -29,18 +33,18 @@ class LeaderboardService {
       return const LeaderboardSnapshot(
         entries: [],
         userRank: null,
-        userCoins: null,
+        userXp: null,
       );
     }
 
     try {
       final records = await _firestore.fetchLeaderboard(limit: 50);
       final uid = _auth.userId;
-      final localCoins = await _db.getCoins();
+      final localXp = await _db.getXp();
 
       final entries = <LeaderboardEntry>[];
       var userRank = 0;
-      var userCoins = localCoins;
+      var userXp = localXp;
 
       for (var i = 0; i < records.length; i++) {
         final record = records[i];
@@ -48,36 +52,36 @@ class LeaderboardService {
         final isUser = record.uid == uid;
         if (isUser) {
           userRank = rank;
-          userCoins = record.coins;
+          userXp = record.xp;
         }
         entries.add(
           LeaderboardEntry(
             rank: rank,
             name: record.displayName,
-            coins: record.coins,
+            xp: record.xp,
             isCurrentUser: isUser,
+            photoUrl: record.photoUrl,
+            completedLevels: record.completedLevels,
           ),
         );
       }
 
-      // User not in top 50 — still show their rank estimate from coins.
       if (uid != null && userRank == 0 && records.isNotEmpty) {
-        final higherCount =
-            records.where((r) => r.coins > localCoins).length;
+        final higherCount = records.where((r) => r.xp > localXp).length;
         userRank = higherCount + 1;
-        userCoins = localCoins;
+        userXp = localXp;
       }
 
       return LeaderboardSnapshot(
         entries: entries,
         userRank: userRank > 0 ? userRank : null,
-        userCoins: userCoins,
+        userXp: userXp,
       );
     } catch (_) {
       return LeaderboardSnapshot(
         entries: const [],
         userRank: null,
-        userCoins: await _db.getCoins(),
+        userXp: await _db.getXp(),
         loadFailed: true,
       );
     }
@@ -88,12 +92,12 @@ class LeaderboardSnapshot {
   const LeaderboardSnapshot({
     required this.entries,
     required this.userRank,
-    required this.userCoins,
+    required this.userXp,
     this.loadFailed = false,
   });
 
   final List<LeaderboardEntry> entries;
   final int? userRank;
-  final int? userCoins;
+  final int? userXp;
   final bool loadFailed;
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/core/utils/level_progress_id.dart';
+import 'package:word_game/core/utils/level_progress_stats.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
 
@@ -35,7 +37,19 @@ class ProgressRepositoryImpl implements ProgressRepository {
       if (slotId == 1 &&
           (LevelProgressId.isLegacyStorageKey(sharedId) ||
               LevelProgressId.isCompactUnencodedKey(sharedId))) {
-        return (await _db.getProgress(sharedId)) != null;
+        if ((await _db.getProgress(sharedId)) != null) return true;
+      }
+      if (slotId == 1 && sharedId < 100) {
+        final legacyShared = sharedId + 100;
+        final legacyEncoded = LevelProgressId.encode(
+          slotId: slotId,
+          sharedLevelId: legacyShared,
+        );
+        if ((await _db.getProgress(legacyEncoded)) != null) return true;
+        if (LevelProgressId.isLegacyStorageKey(legacyShared) &&
+            (await _db.getProgress(legacyShared)) != null) {
+          return true;
+        }
       }
     }
     return false;
@@ -46,26 +60,21 @@ class ProgressRepositoryImpl implements ProgressRepository {
     required int slotId,
     required List<int> orderedSharedLevelIds,
   }) async {
-    if (orderedSharedLevelIds.isEmpty) return 101;
+    if (orderedSharedLevelIds.isEmpty) return 1;
 
-    final stars = await getStarsForSlot(slotId);
-    final orderedStorage = orderedSharedLevelIds
+    final sorted = [...orderedSharedLevelIds]..sort();
+    final rawStars = await getStarsForSlot(slotId);
+    final stars = LevelProgressStats.normalizeStars(rawStars, sorted);
+    final orderedStorage = sorted
         .map((id) => LevelProgressId.encode(slotId: slotId, sharedLevelId: id))
         .toList();
 
-    for (var i = 0; i < orderedSharedLevelIds.length; i++) {
-      final sharedId = orderedSharedLevelIds[i];
-      final storageId = orderedStorage[i];
-      if (!await isLevelUnlocked(storageId, orderedStorage)) break;
-      if ((stars[sharedId] ?? 0) == 0) return sharedId;
-    }
-
-    for (var i = orderedSharedLevelIds.length - 1; i >= 0; i--) {
-      final sharedId = orderedSharedLevelIds[i];
-      if ((stars[sharedId] ?? 0) > 0) return sharedId;
-    }
-
-    return orderedSharedLevelIds.first;
+    return LevelProgressStats.pickResumeSharedId(
+      normalizedStars: stars,
+      orderedPackIds: sorted,
+      isUnlocked: isLevelUnlocked,
+      orderedStorageIds: orderedStorage,
+    );
   }
 
   @override
@@ -109,6 +118,12 @@ class ProgressRepositoryImpl implements ProgressRepository {
     }
     return stars;
   }
+
+  @override
+  Future<int> countCompletedLevels(int slotId) async {
+    final stars = await getStarsForSlot(slotId);
+    return stars.values.where((s) => s > 0).length;
+  }
 }
 
 class WalletRepositoryImpl implements WalletRepository {
@@ -137,6 +152,46 @@ class WalletRepositoryImpl implements WalletRepository {
     await _db.setCoins(current + amount);
     unawaited(_sync.syncCoins().catchError((Object e, StackTrace st) {
       debugPrint('Cloud coins sync failed: $e\n$st');
+    }));
+  }
+
+  @override
+  Future<bool> hasWelcomeBonusGranted() => _db.getBool('welcome_bonus_granted');
+
+  @override
+  Future<void> grantWelcomeBonus() async {
+    if (await hasWelcomeBonusGranted()) return;
+    await _db.setCoins(GameConfig.initialCoins);
+    await _db.setBool('welcome_bonus_granted', true);
+    unawaited(_sync.syncCoins().catchError((Object e, StackTrace st) {
+      debugPrint('Cloud coins sync failed: $e\n$st');
+    }));
+  }
+}
+
+class XpRepositoryImpl implements XpRepository {
+  XpRepositoryImpl(this._db, this._sync);
+
+  final AppDatabase _db;
+  final ProgressSyncService _sync;
+
+  @override
+  Future<int> getXp() => _db.getXp();
+
+  @override
+  Future<void> addXp(int amount) async {
+    final current = await getXp();
+    await _db.setXp(current + amount);
+    unawaited(_sync.syncXp().catchError((Object e, StackTrace st) {
+      debugPrint('Cloud xp sync failed: $e\n$st');
+    }));
+  }
+
+  @override
+  Future<void> setXp(int amount) async {
+    await _db.setXp(amount);
+    unawaited(_sync.syncXp().catchError((Object e, StackTrace st) {
+      debugPrint('Cloud xp sync failed: $e\n$st');
     }));
   }
 }

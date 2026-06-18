@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
+import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
@@ -62,33 +63,17 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
 
   int? _activeLevelId(
     List<LevelJson> levels,
+    int? currentSharedLevelId,
     Set<int> unlocked,
-    Map<int, int> stars,
   ) {
-    for (final level in levels) {
-      if (unlocked.contains(level.id) && (stars[level.id] ?? 0) == 0) {
-        return level.id;
-      }
+    if (currentSharedLevelId != null &&
+        unlocked.contains(currentSharedLevelId)) {
+      return currentSharedLevelId;
     }
-    if (levels.isNotEmpty && unlocked.contains(levels.first.id)) {
-      return levels.first.id;
+    for (final level in levels) {
+      if (unlocked.contains(level.id)) return level.id;
     }
     return null;
-  }
-
-  int _activeLevelNumber(
-    List<LevelJson> levels,
-    int? activeId,
-    Set<int> unlocked,
-  ) {
-    if (activeId != null) {
-      final idx = levels.indexWhere((l) => l.id == activeId);
-      if (idx >= 0) return idx + 1;
-    }
-    for (var i = 0; i < levels.length; i++) {
-      if (unlocked.contains(levels[i].id)) return i + 1;
-    }
-    return 1;
   }
 
   int _totalStars(Map<int, int> stars, List<LevelJson> levels) {
@@ -151,12 +136,15 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
         final dest = DestinationCatalog.byId(themeId, context.themePreset);
         final bgAsset = state.backgroundImage.isNotEmpty
             ? AssetPaths.themeImage(state.backgroundImage)
-            : dest?.imageAsset ?? AssetPaths.themeSplash(preset);
+            : dest?.imageAsset ?? ScenicBackgroundStyle.hdAssetFor(preset);
         final mapLevels = sortedMapLevels(state.levels);
         final statsLevels = state.filteredLevels;
         final mapSections = buildLevelMapSections(mapLevels);
-        final activeId =
-            _activeLevelId(mapLevels, state.unlocked, state.stars);
+        final activeId = _activeLevelId(
+          mapLevels,
+          state.currentSharedLevelId,
+          state.unlocked,
+        );
         final hasMapLevels = mapLevels.isNotEmpty;
         final activeIndex =
             hasMapLevels ? _activeIndex(mapLevels, activeId) : 0;
@@ -167,14 +155,12 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
             ? (lastCompleted > activeIndex ? lastCompleted : activeIndex)
             : 0;
         final levelLabel =
-            'Level ${_activeLevelNumber(mapLevels, activeId, state.unlocked)} of ${mapLevels.length}';
+            'Level ${state.currentDisplayNumber} of ${mapLevels.length}';
 
         return Scaffold(
           extendBodyBehindAppBar: true,
           body: ScenicBackground(
             imageAsset: bgAsset,
-            darken: 0.28,
-            blurSigma: 0,
             child: SafeArea(
               bottom: false,
               child: Padding(

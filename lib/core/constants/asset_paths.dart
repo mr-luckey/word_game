@@ -23,6 +23,9 @@ class AssetPaths {
   static String themeGrid(AppThemePreset preset) =>
       'assets/images/themes/${preset.folder}/grid_full.webp';
 
+  /// Full-screen HD scenic background (same asset as treasure / daily rewards).
+  static String themeHdBackground(AppThemePreset preset) => themeGrid(preset);
+
   static String destinationImage(AppThemePreset preset, String slug) =>
       'assets/images/themes/${preset.folder}/$slug.webp';
 

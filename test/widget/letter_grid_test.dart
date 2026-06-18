@@ -25,9 +25,9 @@ void main() {
       hintCells: {},
       revealedCells: {},
       coins: 100,
-      hintsLeft: 3,
       timeLimit: 60,
       levelId: 1,
+      displayNumber: 1,
       elapsed: Duration.zero,
       isPaused: false,
       difficulty: DifficultyLevel.easy,
@@ -36,7 +36,10 @@ void main() {
       backgroundImage: 'paris_bg.jpg',
       themeId: 1,
       coinsReward: 10,
+      xpReward: 100,
       hintsUsed: 0,
+      revealsUsed: 0,
+      maxReveals: 2,
     );
   }
 

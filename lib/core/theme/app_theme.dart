@@ -10,7 +10,7 @@ class AppTheme {
     bool darkMode = true,
   }) {
     final c = preset.colors(dark: darkMode);
-    final textTheme = GoogleFonts.montserratTextTheme(
+    final textTheme = GoogleFonts.poppinsTextTheme(
       ThemeData.dark().textTheme,
     ).apply(bodyColor: c.onSurface, displayColor: c.onSurface);
 
@@ -51,7 +51,7 @@ class AppTheme {
       progressIndicatorTheme: ProgressIndicatorThemeData(color: c.gold),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: const Color(0xFF1A2438),
-        contentTextStyle: GoogleFonts.montserrat(
+        contentTextStyle: GoogleFonts.poppins(
           color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w600,
