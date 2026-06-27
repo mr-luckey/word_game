@@ -7,7 +7,6 @@ import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
-import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
@@ -60,183 +59,184 @@ class _GameView extends StatelessWidget {
         journeyPopFromGame(context, themeId: themeId);
       },
       child: MultiBlocListener(
-      listeners: [
-        BlocListener<GameBloc, GameState>(
-          listenWhen: (p, c) =>
-              c is GameInProgress &&
-              (p is! GameInProgress || p.coins != c.coins),
-          listener: (context, state) {
-            if (state is GameInProgress) {
-              context.read<CoinCubit>().syncCoins(state.coins);
-            }
-          },
-        ),
-        BlocListener<GameBloc, GameState>(
-          listenWhen: (p, c) => c is GameCompleted && p is! GameCompleted,
-          listener: (context, state) {
-            if (state is! GameCompleted) return;
-            context.read<CoinCubit>().refresh();
-            context.read<XpCubit>().refresh();
-            final bloc = context.read<GameBloc>();
-            final isDaily = state.levelId ==
-                getIt<GameContentRegistry>().dailyChallenge.levelId;
-            showDialog<void>(
-              context: context,
-              barrierDismissible: false,
-              builder: (dialogContext) => LevelCompleteOverlay(
-                stars: state.stars,
-                coinsEarned: state.coinsEarned,
-                xpEarned: state.xpEarned,
-                time: state.time,
-                hintsUsed: state.hintsUsed,
-                levelId: state.levelId,
-                displayNumber: state.displayNumber,
-                isDailyChallenge: isDaily,
-                onHome: () async {
-                  Navigator.of(dialogContext).pop();
-                  if (isDaily) {
-                    await getIt<DailyChallengeService>()
-                        .recordSuccessfulClaim();
-                    if (context.mounted && context.canPop()) {
-                      context.pop(true);
-                    } else if (context.mounted) {
+        listeners: [
+          BlocListener<GameBloc, GameState>(
+            listenWhen: (p, c) =>
+                c is GameInProgress &&
+                (p is! GameInProgress || p.coins != c.coins),
+            listener: (context, state) {
+              if (state is GameInProgress) {
+                context.read<CoinCubit>().syncCoins(state.coins);
+              }
+            },
+          ),
+          BlocListener<GameBloc, GameState>(
+            listenWhen: (p, c) => c is GameCompleted && p is! GameCompleted,
+            listener: (context, state) {
+              if (state is! GameCompleted) return;
+              context.read<CoinCubit>().refresh();
+              context.read<XpCubit>().refresh();
+              final bloc = context.read<GameBloc>();
+              final isDaily = state.levelId ==
+                  getIt<GameContentRegistry>().dailyChallenge.levelId;
+              showDialog<void>(
+                context: context,
+                barrierDismissible: false,
+                builder: (dialogContext) => LevelCompleteOverlay(
+                  stars: state.stars,
+                  coinsEarned: state.coinsEarned,
+                  xpEarned: state.xpEarned,
+                  time: state.time,
+                  hintsUsed: state.hintsUsed,
+                  levelId: state.levelId,
+                  displayNumber: state.displayNumber,
+                  isDailyChallenge: isDaily,
+                  onHome: () async {
+                    Navigator.of(dialogContext).pop();
+                    if (isDaily) {
+                      await getIt<DailyChallengeService>()
+                          .recordSuccessfulClaim();
+                      if (context.mounted && context.canPop()) {
+                        context.pop(true);
+                      } else if (context.mounted) {
+                        context.go('/home');
+                      }
+                    } else {
                       context.go('/home');
                     }
-                  } else {
-                    context.go('/home');
-                  }
-                },
-                onReplay: () {
-                  Navigator.of(dialogContext).pop();
-                  bloc.add(LoadLevel(state.levelId));
-                },
-                onNext: () {
-                  Navigator.of(dialogContext).pop();
-                  bloc.add(const LoadNextLevel());
-                },
-              ),
-            ).then((_) {
-              getIt<AdService>().onLevelComplete();
-            });
-          },
-        ),
-        BlocListener<GameBloc, GameState>(
-          listenWhen: (p, c) => c is GameNoMoreLevels,
-          listener: (context, state) {
-            if (state is! GameNoMoreLevels) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text('All levels complete in this pack!')),
-            );
-            context.go('/levels?themeId=${state.themeId}');
-          },
-        ),
-        BlocListener<GameBloc, GameState>(
-          listenWhen: (p, c) =>
-              c is GameInProgress &&
-              c.feedback != null &&
-              (p is! GameInProgress || p.feedback != c.feedback),
-          listener: (context, state) {
-            if (state is! GameInProgress || state.feedback == null) return;
-            if (state.feedback == kInsufficientCoinsFeedback) {
-              InsufficientCoinsDialog.show(context);
-              context.read<GameBloc>().add(const ClearGameFeedback());
-              return;
-            }
-            if (state.feedback!.startsWith('🏆')) {
-              context.read<CoinCubit>().refresh();
-            }
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.feedback!),
-                duration: const Duration(seconds: 2),
-              ),
-            );
-            context.read<GameBloc>().add(const ClearGameFeedback());
-          },
-        ),
-      ],
-      child: BlocBuilder<GameBloc, GameState>(
-        builder: (context, state) {
-          final preset = context.themePreset;
-          final bg = state is GameInProgress &&
-                  state.backgroundImage.isNotEmpty
-              ? AssetPaths.themeImage(state.backgroundImage)
-              : ScenicBackgroundStyle.hdAssetFor(preset);
-
-          return Scaffold(
-            body: Stack(
-              children: [
-                ScenicBackground(imageAsset: bg),
-                SafeArea(
-                  child: JourneyContentWidth(
-                    child: Stack(
-                      children: [
-                        if (state is GameInProgress)
-                          Stack(
-                            children: [
-                              _GameBody(state: state),
-                              if (state.showTutorial)
-                                LevelTutorialOverlay(
-                                  state: state,
-                                  onDismiss: () => context
-                                      .read<GameBloc>()
-                                      .add(const TutorialDismissed()),
-                                ),
-                            ],
-                          )
-                        else if (state is GameLoading || state is GameInitial)
-                          const LoadingOverlay(message: 'Loading level...')
-                        else if (state is GameCompleted)
-                          const LoadingOverlay(message: 'Level complete!')
-                        else if (state is GameError)
-                          Center(
-                            child: GlassPanel(
-                              child: Text(
-                                state.message,
-                                style: AppTextStyles.levelName(context),
-                              ),
-                            ),
-                          )
-                        else
-                          const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
+                  },
+                  onReplay: () {
+                    Navigator.of(dialogContext).pop();
+                    bloc.add(LoadLevel(state.levelId));
+                  },
+                  onNext: () {
+                    Navigator.of(dialogContext).pop();
+                    bloc.add(const LoadNextLevel());
+                  },
                 ),
-                if (state is GameInProgress && state.isCompleting)
-                  const LoadingOverlay(message: 'Level complete...'),
-                if (state is GameInProgress && state.isTimedOut)
-                  GameTimeoutOverlay(
-                    state: state,
-                    onRetry: () =>
-                        context.read<GameBloc>().add(LoadLevel(state.levelId)),
-                    onQuit: () => journeyPopFromGame(
-                      context,
-                      themeId: state.themeId,
-                    ),
-                  )
-                else if (state is GameInProgress && state.isPaused)
-                  PauseMenuOverlay(
-                    state: state,
-                    onResume: () =>
-                        context.read<GameBloc>().add(const GameResumed()),
-                    onRestart: () {
-                      final bloc = context.read<GameBloc>();
-                      bloc.add(LoadLevel(state.levelId));
-                    },
-                    onSettings: () => context.push('/settings'),
-                    onQuit: () => journeyPopFromGame(
-                      context,
-                      themeId: state.themeId,
+              ).then((_) {
+                getIt<AdService>().onLevelComplete();
+              });
+            },
+          ),
+          BlocListener<GameBloc, GameState>(
+            listenWhen: (p, c) => c is GameNoMoreLevels,
+            listener: (context, state) {
+              if (state is! GameNoMoreLevels) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('All levels complete in this pack!')),
+              );
+              context.go('/levels?themeId=${state.themeId}');
+            },
+          ),
+          BlocListener<GameBloc, GameState>(
+            listenWhen: (p, c) =>
+                c is GameInProgress &&
+                c.feedback != null &&
+                (p is! GameInProgress || p.feedback != c.feedback),
+            listener: (context, state) {
+              if (state is! GameInProgress || state.feedback == null) return;
+              if (state.feedback == kInsufficientCoinsFeedback) {
+                InsufficientCoinsDialog.show(context);
+                context.read<GameBloc>().add(const ClearGameFeedback());
+                return;
+              }
+              if (state.feedback!.startsWith('🏆')) {
+                context.read<CoinCubit>().refresh();
+              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.feedback!),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+              context.read<GameBloc>().add(const ClearGameFeedback());
+            },
+          ),
+        ],
+        child: BlocBuilder<GameBloc, GameState>(
+          builder: (context, state) {
+            final preset = context.themePreset;
+            final bg =
+                state is GameInProgress && state.backgroundImage.isNotEmpty
+                    ? AssetPaths.themeImage(state.backgroundImage)
+                    : ScenicBackgroundStyle.hdAssetFor(preset);
+
+            return Scaffold(
+              body: Stack(
+                children: [
+                  ScenicBackground(imageAsset: bg),
+                  SafeArea(
+                    child: JourneyContentWidth(
+                      child: Stack(
+                        children: [
+                          if (state is GameInProgress)
+                            Stack(
+                              children: [
+                                _GameBody(state: state),
+                                if (state.showTutorial)
+                                  LevelTutorialOverlay(
+                                    state: state,
+                                    onDismiss: () => context
+                                        .read<GameBloc>()
+                                        .add(const TutorialDismissed()),
+                                  ),
+                              ],
+                            )
+                          else if (state is GameLoading || state is GameInitial)
+                            const LoadingOverlay(message: 'Loading level...')
+                          else if (state is GameCompleted)
+                            const LoadingOverlay(message: 'Level complete!')
+                          else if (state is GameError)
+                            Center(
+                              child: GlassPanel(
+                                child: Text(
+                                  state.message,
+                                  style: AppTextStyles.levelName(context),
+                                ),
+                              ),
+                            )
+                          else
+                            const SizedBox.shrink(),
+                        ],
+                      ),
                     ),
                   ),
-              ],
-            ),
-          );
-        },
+                  if (state is GameInProgress && state.isCompleting)
+                    const LoadingOverlay(message: 'Level complete...'),
+                  if (state is GameInProgress && state.isTimedOut)
+                    GameTimeoutOverlay(
+                      state: state,
+                      onRetry: () => context
+                          .read<GameBloc>()
+                          .add(LoadLevel(state.levelId)),
+                      onQuit: () => journeyPopFromGame(
+                        context,
+                        themeId: state.themeId,
+                      ),
+                    )
+                  else if (state is GameInProgress && state.isPaused)
+                    PauseMenuOverlay(
+                      state: state,
+                      onResume: () =>
+                          context.read<GameBloc>().add(const GameResumed()),
+                      onRestart: () {
+                        final bloc = context.read<GameBloc>();
+                        bloc.add(LoadLevel(state.levelId));
+                      },
+                      onSettings: () => context.push('/settings'),
+                      onQuit: () => journeyPopFromGame(
+                        context,
+                        themeId: state.themeId,
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
-    ),
     );
   }
 }
@@ -246,8 +246,6 @@ class _GameBody extends StatelessWidget {
 
   final GameInProgress state;
 
-  static const _sectionGap = AppSizes.paddingSm;
-
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
@@ -255,18 +253,52 @@ class _GameBody extends StatelessWidget {
     return Column(
       children: [
         _TopBar(state: state),
-        const SizedBox(height: _sectionGap),
-        WordListPanel(state: state),
-        const SizedBox(height: _sectionGap),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-            child: LetterGrid(
-              state: state,
-              colors: colors,
-              onDragStart: (r, c) => bloc.add(CellDragStarted(row: r, col: c)),
-              onDragUpdate: (r, c) => bloc.add(CellDragUpdated(row: r, col: c)),
-              onDragEnd: () => bloc.add(const CellDragEnded()),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(6, 8, 6, 0),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(6, 4, 6, 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: colors.shadow.withValues(alpha: 0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    WordListPanel(state: state, embedded: true),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: colors.cellBorder.withValues(alpha: 0.45),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: LetterGrid(
+                        state: state,
+                        colors: colors,
+                        embedded: true,
+                        onDragStart: (r, c) =>
+                            bloc.add(CellDragStarted(row: r, col: c)),
+                        onDragUpdate: (r, c) =>
+                            bloc.add(CellDragUpdated(row: r, col: c)),
+                        onDragEnd: () => bloc.add(const CellDragEnded()),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -286,132 +318,103 @@ class _TopBar extends StatelessWidget {
     final bloc = context.read<GameBloc>();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-      child: JourneyPanel(
-        padding: const EdgeInsets.fromLTRB(6, 6, 8, 8),
-        radius: 20,
-        child: Column(
-          children: [
-            Row(
+      padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CoinDisplay(coins: state.coins, compact: true),
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back_rounded, color: colors.gold),
-                  onPressed: () => journeyPopFromGame(context,
-                      result: true, themeId: state.themeId),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        state.levelTheme.toUpperCase(),
-                        style: AppTextStyles.levelName(context).copyWith(
-                          fontSize: 15,
-                          letterSpacing: 0.6,
-                          shadows: JourneyThemeKit.textGlow(context),
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        'Level ${state.displayNumber}',
-                        style: AppTextStyles.bodyMuted(context).copyWith(
-                          fontSize: 11,
-                          color: colors.onScenicMuted,
-                        ),
-                      ),
-                    ],
+                Text(
+                  'Level ${state.displayNumber}',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.levelName(context).copyWith(
+                    fontSize: 28,
+                    letterSpacing: 0.6,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2
+                      ..color = Colors.black,
                   ),
                 ),
-                CoinDisplay(coins: state.coins, light: true),
+                Text(
+                  'Level ${state.displayNumber}',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.levelName(context).copyWith(
+                    fontSize: 28,
+                    letterSpacing: 0.6,
+                    shadows: JourneyThemeKit.textGlow(context),
+                  ),
+                ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Container(
-                    constraints: const BoxConstraints(minWidth: 76),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: colors.scrim.withValues(
-                        alpha: state.timerDanger ? 0.92 : 0.55,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: state.timerDanger
-                            ? colors.timerDanger
-                            : colors.glassBorder.withValues(alpha: 0.4),
-                        width: state.timerDanger ? 2 : 1,
-                      ),
-                      boxShadow: state.timerDanger
-                          ? [
-                              BoxShadow(
-                                color: colors.timerDanger.withValues(alpha: 0.45),
-                                blurRadius: 8,
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.timer_outlined,
-                          size: 16,
-                          color: state.timerDanger ? Colors.white : colors.gold,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          _formatTimer(state.remainingSeconds),
-                          style: AppTextStyles.timer(
-                            context,
-                            danger: state.timerDanger,
-                          ),
-                        ),
-                      ],
-                    ),
+          ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                if (state.isPaused) {
+                  bloc.add(const GameResumed());
+                } else {
+                  bloc.add(const GamePaused());
+                }
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: colors.scrim.withValues(
+                    alpha: state.timerDanger ? 0.92 : 0.55,
                   ),
-                  const Spacer(),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      if (state.isPaused) {
-                        bloc.add(const GameResumed());
-                      } else {
-                        bloc.add(const GamePaused());
-                      }
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: colors.onScenic,
-                      side: BorderSide(color: colors.glassBorder),
-                      backgroundColor: colors.scrim.withValues(alpha: 0.45),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: state.timerDanger
+                        ? colors.timerDanger
+                        : colors.glassBorder.withValues(alpha: 0.4),
+                    width: state.timerDanger ? 2 : 1,
+                  ),
+                  boxShadow: state.timerDanger
+                      ? [
+                          BoxShadow(
+                            color: colors.timerDanger.withValues(alpha: 0.45),
+                            blurRadius: 8,
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _formatTimer(state.remainingSeconds),
+                      style: AppTextStyles.timer(
+                        context,
+                        danger: state.timerDanger,
                       ),
                     ),
-                    icon: Icon(
+                    const SizedBox(width: 8),
+                    Icon(
                       state.isPaused
                           ? Icons.play_arrow_rounded
                           : Icons.pause_rounded,
                       size: 18,
-                      color: colors.gold,
+                      color: state.timerDanger ? Colors.white : colors.gold,
                     ),
-                    label: Text(
-                      state.isPaused ? 'Resume' : 'Pause',
-                      style: AppTextStyles.subtitle(context).copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: colors.onScenic,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -434,12 +437,7 @@ class _Toolbar extends StatelessWidget {
     final revealLocked = revealsLeft <= 0;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSizes.paddingMd,
-        4,
-        AppSizes.paddingMd,
-        10,
-      ),
+      padding: const EdgeInsets.fromLTRB(6, 2, 6, 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -457,9 +455,8 @@ class _Toolbar extends StatelessWidget {
                 ? '${state.maxReveals}/${state.maxReveals}'
                 : 'Left: $revealsLeft',
             disabled: revealLocked,
-            onPressed: revealLocked
-                ? null
-                : () => bloc.add(const RevealRequested()),
+            onPressed:
+                revealLocked ? null : () => bloc.add(const RevealRequested()),
           ),
           _ActionChip(
             label: 'Shuffle',
@@ -499,27 +496,30 @@ class _ActionChip extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: disabled
-                        ? null
-                        : LinearGradient(
-                            colors: [
-                              colors.gold.withValues(alpha: 0.35),
-                              colors.primary.withValues(alpha: 0.25),
-                            ],
-                          ),
-                    color: disabled ? colors.locked.withValues(alpha: 0.3) : null,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
                   ),
-                  child: Icon(icon, color: colors.gold, size: 22),
+                  decoration: BoxDecoration(
+                    color: colors.scrim.withValues(alpha: 0.55),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: colors.glassBorder.withValues(alpha: 0.4),
+                      width: 1,
+                    ),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: colors.gold,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -527,17 +527,24 @@ class _ActionChip extends StatelessWidget {
                   style: AppTextStyles.subtitle(context).copyWith(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
+                    color: colors.onScenic,
                   ),
                 ),
                 if (badge != null)
                   Text(
                     badge!,
-                    style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 9),
+                    style: AppTextStyles.bodyMuted(context).copyWith(
+                      fontSize: 9,
+                      color: colors.onScenicMuted,
+                    ),
                   )
                 else
                   Text(
                     '$cost',
-                    style: AppTextStyles.bodyMuted(context).copyWith(fontSize: 10),
+                    style: AppTextStyles.bodyMuted(context).copyWith(
+                      fontSize: 10,
+                      color: colors.onScenicMuted,
+                    ),
                   ),
               ],
             ),

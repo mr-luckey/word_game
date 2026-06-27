@@ -300,7 +300,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (placement != null && !alreadyFound) {
       await _audio.playWordFound();
       final n = s.grid.length;
-      final colorIndex = s.foundWords.length;
+      final wordIndex =
+          s.wordsToFind.indexWhere((w) => w.text == placement.word);
+      final colorIndex = wordIndex >= 0 ? wordIndex : s.foundWords.length;
       final newFoundCells = {
         ...s.foundCells,
         ...placement.cells.map((c) => c.row * n + c.col),

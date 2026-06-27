@@ -14,6 +14,7 @@ class LetterGrid extends StatelessWidget {
     required this.onDragStart,
     required this.onDragUpdate,
     required this.onDragEnd,
+    this.embedded = false,
   });
 
   final GameInProgress state;
@@ -21,6 +22,7 @@ class LetterGrid extends StatelessWidget {
   final void Function(int row, int col) onDragStart;
   final void Function(int row, int col) onDragUpdate;
   final VoidCallback onDragEnd;
+  final bool embedded;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +34,47 @@ class LetterGrid extends StatelessWidget {
         final innerRadius = AppSizes.radiusLg - borderWidth;
         final maxW = constraints.maxWidth;
         final maxH = constraints.maxHeight;
-        final cellFromWidth = (maxW - gap * 2) / n;
-        final cellFromHeight =
-            maxH.isFinite ? (maxH - gap * 2) / n : cellFromWidth;
-        final cellSize = math.min(cellFromWidth, cellFromHeight);
+        final cellFromWidth = maxW / n;
+        final cellFromHeight = maxH.isFinite ? maxH / n : cellFromWidth;
+        final cellSize = embedded
+            ? cellFromWidth
+            : math.min(cellFromWidth, cellFromHeight);
         final gridExtent = cellSize * n;
         final totalSize = gridExtent + gap * 2;
+
+        final gridContent = ClipRRect(
+          borderRadius: BorderRadius.circular(innerRadius),
+          child: SizedBox(
+            width: gridExtent,
+            height: gridExtent,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanStart: (d) {
+                final cell = _cellFromOffset(d.localPosition, cellSize, n);
+                if (cell != null) onDragStart(cell.$1, cell.$2);
+              },
+              onPanUpdate: (d) {
+                final cell = _cellFromOffset(d.localPosition, cellSize, n);
+                if (cell != null) onDragUpdate(cell.$1, cell.$2);
+              },
+              onPanEnd: (_) => onDragEnd(),
+              child: CustomPaint(
+                painter: GridPainter(
+                  state: state,
+                  colors: colors,
+                  cellSize: cellSize,
+                  letterStyle:
+                      AppTextStyles.gridLetter(context, n.toDouble()),
+                ),
+                size: Size.square(gridExtent),
+              ),
+            ),
+          ),
+        );
+
+        if (embedded) {
+          return gridContent;
+        }
 
         return Center(
           child: Container(
@@ -60,35 +97,7 @@ class LetterGrid extends StatelessWidget {
               ],
             ),
             padding: const EdgeInsets.all(gap),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(innerRadius),
-              child: SizedBox(
-                width: gridExtent,
-                height: gridExtent,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onPanStart: (d) {
-                    final cell = _cellFromOffset(d.localPosition, cellSize, n);
-                    if (cell != null) onDragStart(cell.$1, cell.$2);
-                  },
-                  onPanUpdate: (d) {
-                    final cell = _cellFromOffset(d.localPosition, cellSize, n);
-                    if (cell != null) onDragUpdate(cell.$1, cell.$2);
-                  },
-                  onPanEnd: (_) => onDragEnd(),
-                  child: CustomPaint(
-                    painter: GridPainter(
-                      state: state,
-                      colors: colors,
-                      cellSize: cellSize,
-                      letterStyle:
-                          AppTextStyles.gridLetter(context, n.toDouble()),
-                    ),
-                    size: Size.square(gridExtent),
-                  ),
-                ),
-              ),
-            ),
+            child: gridContent,
           ),
         );
       },
