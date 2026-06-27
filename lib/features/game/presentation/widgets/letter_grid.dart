@@ -166,66 +166,161 @@ class GridPainter extends CustomPainter {
     );
   }
 
+  Color _cellBackground(int idx) {
+    if (state.revealedCells.contains(idx)) {
+      return colors.cellRevealed;
+    }
+    if (state.hintCells.contains(idx)) {
+      return colors.cellHint;
+    }
+    return colors.cellDefault;
+  }
+
+  bool _isSelected(int row, int col) =>
+      state.selectedCells.any((cell) => cell.row == row && cell.col == col);
+
+  Color get _selectionFillColor => state.selectionState == SelectionState.wrong
+      ? colors.cellWrong.withValues(alpha: 0.88)
+      : colors.selectionLine.withValues(alpha: 0.82);
+
+  double get _selectionStrokeWidth => cellSize * 0.58;
+
+  void _sortCellsInLine(List<({int row, int col})> cells) {
+    if (cells.length <= 1) return;
+
+    var anchor = cells.first;
+    var farthest = cells.first;
+    var maxDistSq = 0.0;
+    for (final a in cells) {
+      for (final b in cells) {
+        final dx = (a.col - b.col).toDouble();
+        final dy = (a.row - b.row).toDouble();
+        final distSq = dx * dx + dy * dy;
+        if (distSq > maxDistSq) {
+          maxDistSq = distSq;
+          anchor = a;
+          farthest = b;
+        }
+      }
+    }
+
+    final dirRow = farthest.row - anchor.row;
+    final dirCol = farthest.col - anchor.col;
+    cells.sort((a, b) {
+      final projA =
+          (a.row - anchor.row) * dirRow + (a.col - anchor.col) * dirCol;
+      final projB =
+          (b.row - anchor.row) * dirRow + (b.col - anchor.col) * dirCol;
+      return projA.compareTo(projB);
+    });
+  }
+
+  void _drawRoundedPath(
+    Canvas canvas,
+    List<({int row, int col})> cells,
+    Color color,
+  ) {
+    if (cells.isEmpty) return;
+
+    if (cells.length == 1) {
+      final cell = cells.first;
+      canvas.drawCircle(
+        _cellCenter(cell.row, cell.col),
+        _selectionStrokeWidth / 2,
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill,
+      );
+      return;
+    }
+
+    final path = Path();
+    final first = cells.first;
+    path.moveTo(
+      _cellCenter(first.row, first.col).dx,
+      _cellCenter(first.row, first.col).dy,
+    );
+    for (var i = 1; i < cells.length; i++) {
+      final cell = cells[i];
+      path.lineTo(
+        _cellCenter(cell.row, cell.col).dx,
+        _cellCenter(cell.row, cell.col).dy,
+      );
+    }
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color
+        ..strokeWidth = _selectionStrokeWidth
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round,
+    );
+  }
+
+  void _drawFoundWords(Canvas canvas, int n) {
+    final groups = <int, List<({int row, int col})>>{};
+    for (final entry in state.foundCellColors.entries) {
+      groups.putIfAbsent(entry.value, () => []).add(
+            (row: entry.key ~/ n, col: entry.key % n),
+          );
+    }
+
+    for (final entry in groups.entries) {
+      final cells = entry.value;
+      _sortCellsInLine(cells);
+      _drawRoundedPath(
+        canvas,
+        cells,
+        colors.foundColorForIndex(entry.key).withValues(alpha: 0.82),
+      );
+    }
+  }
+
+  void _drawRoundedSelection(Canvas canvas) {
+    if (state.selectedCells.isEmpty) return;
+
+    final cells = state.selectedCells
+        .map((cell) => (row: cell.row, col: cell.col))
+        .toList();
+    _drawRoundedPath(canvas, cells, _selectionFillColor);
+  }
+
+  Color _letterBackground(int idx, bool isSelected) {
+    if (isSelected) return _selectionFillColor;
+    final colorIndex = state.foundCellColors[idx];
+    if (colorIndex != null) {
+      return colors.foundColorForIndex(colorIndex).withValues(alpha: 0.82);
+    }
+    return _cellBackground(idx);
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final n = state.grid.length;
 
-    if (state.selectedCells.length >= 2 &&
-        state.selectionState != SelectionState.wrong) {
-      final path = Path();
-      final first = state.selectedCells.first;
-      path.moveTo(_cellCenter(first.row, first.col).dx,
-          _cellCenter(first.row, first.col).dy);
-      for (var i = 1; i < state.selectedCells.length; i++) {
-        final c = state.selectedCells[i];
-        path.lineTo(_cellCenter(c.row, c.col).dx, _cellCenter(c.row, c.col).dy);
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        final idx = r * n + c;
+        canvas.drawRect(_cellRect(r, c), Paint()..color = _cellBackground(idx));
       }
-      canvas.drawPath(
-        path,
-        Paint()
-          ..color = colors.selectionLine.withValues(alpha: 0.85)
-          ..strokeWidth = cellSize * 0.38
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round,
-      );
+    }
+
+    _drawFoundWords(canvas, n);
+
+    if (state.selectedCells.isNotEmpty) {
+      _drawRoundedSelection(canvas);
     }
 
     for (var r = 0; r < n; r++) {
       for (var c = 0; c < n; c++) {
-        final idx = r * n + c;
         final rect = _cellRect(r, c);
-
-        Color bg = colors.cellDefault;
-        if (state.foundCellColors.containsKey(idx)) {
-          bg = colors.foundColorForIndex(state.foundCellColors[idx]!);
-        } else if (state.revealedCells.contains(idx)) {
-          bg = colors.cellRevealed;
-        } else if (state.hintCells.contains(idx)) {
-          bg = colors.cellHint;
-        } else if (state.selectedCells
-            .any((cell) => cell.row == r && cell.col == c)) {
-          bg = state.selectionState == SelectionState.wrong
-              ? colors.cellWrong
-              : colors.cellSelected;
-        }
-
-        canvas.drawRect(rect, Paint()..color = bg);
-
-        final isSelected =
-            state.selectedCells.any((cell) => cell.row == r && cell.col == c);
-        if (isSelected && state.selectionState != SelectionState.wrong) {
-          canvas.drawRect(
-            rect,
-            Paint()
-              ..color = colors.gold.withValues(alpha: 0.35)
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 2,
-          );
-        }
+        final idx = r * n + c;
+        final isSelected = _isSelected(r, c);
+        final letterBg = _letterBackground(idx, isSelected);
+        final letterColor = _contrastLetterColor(letterBg);
 
         final letter = state.grid[r][c].letter;
-        final letterColor = _contrastLetterColor(bg);
         final tp = TextPainter(
           text: TextSpan(
             text: letter,
