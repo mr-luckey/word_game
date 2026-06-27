@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
@@ -24,6 +25,7 @@ import 'package:word_game/features/game/presentation/widgets/game_timeout_overla
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 import 'package:word_game/core/widgets/insufficient_coins_dialog.dart';
 import 'package:word_game/features/game/presentation/widgets/level_tutorial_overlay.dart';
+import 'package:word_game/features/level_select/presentation/cubit/banner_ad_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
@@ -37,7 +39,10 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _GameView(levelId: levelId);
+    return BlocProvider(
+      create: (_) => BannerAdCubit(getIt()),
+      child: _GameView(levelId: levelId),
+    );
   }
 }
 
@@ -164,73 +169,85 @@ class _GameView extends StatelessWidget {
                     : ScenicBackgroundStyle.hdAssetFor(preset);
 
             return Scaffold(
-              body: Stack(
+              body: Column(
                 children: [
-                  ScenicBackground(imageAsset: bg),
-                  SafeArea(
-                    child: JourneyContentWidth(
-                      child: Stack(
-                        children: [
-                          if (state is GameInProgress)
-                            Stack(
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        ScenicBackground(imageAsset: bg),
+                        SafeArea(
+                          bottom: false,
+                          child: JourneyContentWidth(
+                            child: Stack(
                               children: [
-                                _GameBody(state: state),
-                                if (state.showTutorial)
-                                  LevelTutorialOverlay(
-                                    state: state,
-                                    onDismiss: () => context
-                                        .read<GameBloc>()
-                                        .add(const TutorialDismissed()),
-                                  ),
+                                if (state is GameInProgress)
+                                  Stack(
+                                    children: [
+                                      _GameBody(state: state),
+                                      if (state.showTutorial)
+                                        LevelTutorialOverlay(
+                                          state: state,
+                                          onDismiss: () => context
+                                              .read<GameBloc>()
+                                              .add(const TutorialDismissed()),
+                                        ),
+                                    ],
+                                  )
+                                else if (state is GameLoading ||
+                                    state is GameInitial)
+                                  const LoadingOverlay(
+                                      message: 'Loading level...')
+                                else if (state is GameCompleted)
+                                  const LoadingOverlay(
+                                      message: 'Level complete!')
+                                else if (state is GameError)
+                                  Center(
+                                    child: GlassPanel(
+                                      child: Text(
+                                        state.message,
+                                        style: AppTextStyles.levelName(context),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  const SizedBox.shrink(),
                               ],
-                            )
-                          else if (state is GameLoading || state is GameInitial)
-                            const LoadingOverlay(message: 'Loading level...')
-                          else if (state is GameCompleted)
-                            const LoadingOverlay(message: 'Level complete!')
-                          else if (state is GameError)
-                            Center(
-                              child: GlassPanel(
-                                child: Text(
-                                  state.message,
-                                  style: AppTextStyles.levelName(context),
-                                ),
-                              ),
-                            )
-                          else
-                            const SizedBox.shrink(),
-                        ],
-                      ),
+                            ),
+                          ),
+                        ),
+                        if (state is GameInProgress && state.isCompleting)
+                          const LoadingOverlay(message: 'Level complete...'),
+                        if (state is GameInProgress && state.isTimedOut)
+                          GameTimeoutOverlay(
+                            state: state,
+                            onRetry: () => context
+                                .read<GameBloc>()
+                                .add(LoadLevel(state.levelId)),
+                            onQuit: () => journeyPopFromGame(
+                              context,
+                              themeId: state.themeId,
+                            ),
+                          )
+                        else if (state is GameInProgress && state.isPaused)
+                          PauseMenuOverlay(
+                            state: state,
+                            onResume: () => context
+                                .read<GameBloc>()
+                                .add(const GameResumed()),
+                            onRestart: () {
+                              final bloc = context.read<GameBloc>();
+                              bloc.add(LoadLevel(state.levelId));
+                            },
+                            onSettings: () => context.push('/settings'),
+                            onQuit: () => journeyPopFromGame(
+                              context,
+                              themeId: state.themeId,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-                  if (state is GameInProgress && state.isCompleting)
-                    const LoadingOverlay(message: 'Level complete...'),
-                  if (state is GameInProgress && state.isTimedOut)
-                    GameTimeoutOverlay(
-                      state: state,
-                      onRetry: () => context
-                          .read<GameBloc>()
-                          .add(LoadLevel(state.levelId)),
-                      onQuit: () => journeyPopFromGame(
-                        context,
-                        themeId: state.themeId,
-                      ),
-                    )
-                  else if (state is GameInProgress && state.isPaused)
-                    PauseMenuOverlay(
-                      state: state,
-                      onResume: () =>
-                          context.read<GameBloc>().add(const GameResumed()),
-                      onRestart: () {
-                        final bloc = context.read<GameBloc>();
-                        bloc.add(LoadLevel(state.levelId));
-                      },
-                      onSettings: () => context.push('/settings'),
-                      onQuit: () => journeyPopFromGame(
-                        context,
-                        themeId: state.themeId,
-                      ),
-                    ),
+                  if (state is GameInProgress) const _GameBannerAd(),
                 ],
               ),
             );
@@ -254,55 +271,61 @@ class _GameBody extends StatelessWidget {
       children: [
         _TopBar(state: state),
         Expanded(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(6, 8, 6, 0),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(6, 4, 6, 2),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
-                    BoxShadow(
-                      color: colors.shadow.withValues(alpha: 0.12),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(6, 8, 6, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    WordListPanel(state: state, embedded: true),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: colors.cellBorder.withValues(alpha: 0.45),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(6, 4, 6, 2),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colors.shadow.withValues(alpha: 0.12),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          WordListPanel(state: state, embedded: true),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: colors.cellBorder.withValues(alpha: 0.45),
+                            ),
+                          ),
+                          LetterGrid(
+                            state: state,
+                            colors: colors,
+                            embedded: true,
+                            onDragStart: (r, c) =>
+                                bloc.add(CellDragStarted(row: r, col: c)),
+                            onDragUpdate: (r, c) =>
+                                bloc.add(CellDragUpdated(row: r, col: c)),
+                            onDragEnd: () => bloc.add(const CellDragEnded()),
+                          ),
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: LetterGrid(
-                        state: state,
-                        colors: colors,
-                        embedded: true,
-                        onDragStart: (r, c) =>
-                            bloc.add(CellDragStarted(row: r, col: c)),
-                        onDragUpdate: (r, c) =>
-                            bloc.add(CellDragUpdated(row: r, col: c)),
-                        onDragEnd: () => bloc.add(const CellDragEnded()),
-                      ),
-                    ),
+                    const SizedBox(height: 8),
+                    _Toolbar(state: state),
                   ],
                 ),
               ),
             ),
           ),
         ),
-        _Toolbar(state: state),
       ],
     );
   }
@@ -426,6 +449,33 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+class _GameBannerAd extends StatelessWidget {
+  const _GameBannerAd();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return BlocBuilder<BannerAdCubit, BannerAd?>(
+      builder: (context, banner) {
+        if (banner == null) return const SizedBox.shrink();
+        return ColoredBox(
+          color: colors.navSurface,
+          child: SafeArea(
+            top: false,
+            child: Center(
+              child: SizedBox(
+                width: banner.size.width.toDouble(),
+                height: banner.size.height.toDouble(),
+                child: AdWidget(ad: banner),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _Toolbar extends StatelessWidget {
   const _Toolbar({required this.state});
   final GameInProgress state;
@@ -437,7 +487,7 @@ class _Toolbar extends StatelessWidget {
     final revealLocked = revealsLeft <= 0;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(6, 2, 6, 4),
+      padding: const EdgeInsets.fromLTRB(6, 0, 6, 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

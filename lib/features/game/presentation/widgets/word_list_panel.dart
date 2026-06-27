@@ -41,8 +41,7 @@ class WordListPanel extends StatelessWidget {
           runSpacing: 8,
           alignment: WrapAlignment.center,
           children: state.wordsToFind.asMap().entries.map((e) {
-            final found =
-                state.foundWords.any((f) => f.text == e.value.text);
+            final found = state.foundWords.any((f) => f.text == e.value.text);
             return AnimatedWordChip(
               word: e.value.text,
               found: found,
