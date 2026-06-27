@@ -41,6 +41,11 @@ class LetterGrid extends StatelessWidget {
             : math.min(cellFromWidth, cellFromHeight);
         final gridExtent = cellSize * n;
         final totalSize = gridExtent + gap * 2;
+        final letterStyle = embedded
+            ? AppTextStyles.gridLetter(context, n.toDouble()).copyWith(
+                fontSize: cellSize * 0.46,
+              )
+            : AppTextStyles.gridLetter(context, n.toDouble());
 
         final gridContent = ClipRRect(
           borderRadius: BorderRadius.circular(innerRadius),
@@ -63,8 +68,7 @@ class LetterGrid extends StatelessWidget {
                   state: state,
                   colors: colors,
                   cellSize: cellSize,
-                  letterStyle:
-                      AppTextStyles.gridLetter(context, n.toDouble()),
+                  letterStyle: letterStyle,
                 ),
                 size: Size.square(gridExtent),
               ),

@@ -19,6 +19,7 @@ import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
+import 'package:word_game/features/game/presentation/widgets/game_screen_metrics.dart';
 import 'package:word_game/features/game/presentation/widgets/level_complete_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/pause_menu_overlay.dart';
 import 'package:word_game/features/game/presentation/widgets/game_timeout_overlay.dart';
@@ -267,66 +268,73 @@ class _GameBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
     final colors = context.appColors;
-    return Column(
-      children: [
-        _TopBar(state: state),
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(6, 8, 6, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(6, 4, 6, 2),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: colors.shadow.withValues(alpha: 0.12),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          WordListPanel(state: state, embedded: true),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Divider(
-                              height: 1,
-                              thickness: 1,
-                              color: colors.cellBorder.withValues(alpha: 0.45),
+    final m = GameScreenMetrics.of(context);
+    return GameScreenScope(
+      metrics: m,
+      child: Column(
+        children: [
+          _TopBar(state: state),
+          Expanded(
+            child: CustomScrollView(
+              physics: const ClampingScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(m.s(6), m.s(8), m.s(6), m.s(10)),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(m.s(6), m.s(4), m.s(6), m.s(2)),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(m.s(18)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: colors.shadow.withValues(alpha: 0.12),
+                              blurRadius: m.s(8),
+                              offset: Offset(0, m.s(2)),
                             ),
-                          ),
-                          LetterGrid(
-                            state: state,
-                            colors: colors,
-                            embedded: true,
-                            onDragStart: (r, c) =>
-                                bloc.add(CellDragStarted(row: r, col: c)),
-                            onDragUpdate: (r, c) =>
-                                bloc.add(CellDragUpdated(row: r, col: c)),
-                            onDragEnd: () => bloc.add(const CellDragEnded()),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            WordListPanel(state: state, embedded: true),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: m.s(8)),
+                              child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                color: colors.cellBorder.withValues(alpha: 0.45),
+                              ),
+                            ),
+                            LetterGrid(
+                              state: state,
+                              colors: colors,
+                              embedded: true,
+                              onDragStart: (r, c) =>
+                                  bloc.add(CellDragStarted(row: r, col: c)),
+                              onDragUpdate: (r, c) =>
+                                  bloc.add(CellDragUpdated(row: r, col: c)),
+                              onDragEnd: () => bloc.add(const CellDragEnded()),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    _Toolbar(state: state),
-                  ],
+                  ),
                 ),
-              ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: _Toolbar(state: state),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -339,9 +347,10 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final bloc = context.read<GameBloc>();
+    final m = GameScreenScope.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+      padding: EdgeInsets.fromLTRB(m.s(10), m.s(50), m.s(10), m.s(40)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -356,11 +365,11 @@ class _TopBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.levelName(context).copyWith(
-                    fontSize: 28,
+                    fontSize: m.s(28),
                     letterSpacing: 0.6,
                     foreground: Paint()
                       ..style = PaintingStyle.stroke
-                      ..strokeWidth = 2
+                      ..strokeWidth = m.s(2)
                       ..color = Colors.black,
                   ),
                 ),
@@ -370,7 +379,7 @@ class _TopBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.levelName(context).copyWith(
-                    fontSize: 28,
+                    fontSize: m.s(28),
                     letterSpacing: 0.6,
                     shadows: JourneyThemeKit.textGlow(context),
                   ),
@@ -388,28 +397,28 @@ class _TopBar extends StatelessWidget {
                   bloc.add(const GamePaused());
                 }
               },
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(m.s(10)),
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
+                padding: EdgeInsets.symmetric(
+                  horizontal: m.s(10),
+                  vertical: m.s(6),
                 ),
                 decoration: BoxDecoration(
                   color: colors.scrim.withValues(
                     alpha: state.timerDanger ? 0.92 : 0.55,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(m.s(10)),
                   border: Border.all(
                     color: state.timerDanger
                         ? colors.timerDanger
                         : colors.glassBorder.withValues(alpha: 0.4),
-                    width: state.timerDanger ? 2 : 1,
+                    width: state.timerDanger ? m.s(2) : m.s(1),
                   ),
                   boxShadow: state.timerDanger
                       ? [
                           BoxShadow(
                             color: colors.timerDanger.withValues(alpha: 0.45),
-                            blurRadius: 8,
+                            blurRadius: m.s(8),
                           ),
                         ]
                       : null,
@@ -422,14 +431,14 @@ class _TopBar extends StatelessWidget {
                       style: AppTextStyles.timer(
                         context,
                         danger: state.timerDanger,
-                      ),
+                      ).copyWith(fontSize: m.s(state.timerDanger ? 16 : 14)),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: m.s(8)),
                     Icon(
                       state.isPaused
                           ? Icons.play_arrow_rounded
                           : Icons.pause_rounded,
-                      size: 18,
+                      size: m.s(18),
                       color: state.timerDanger ? Colors.white : colors.gold,
                     ),
                   ],
@@ -485,9 +494,10 @@ class _Toolbar extends StatelessWidget {
     final bloc = context.read<GameBloc>();
     final revealsLeft = state.revealsLeft;
     final revealLocked = revealsLeft <= 0;
+    final m = GameScreenScope.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(6, 0, 6, 4),
+      padding: EdgeInsets.fromLTRB(m.s(6), 0, m.s(6), m.s(4)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -540,42 +550,46 @@ class _ActionChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final m = GameScreenScope.of(context);
     return Opacity(
       opacity: disabled ? 0.5 : 1,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(m.s(10)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            padding: EdgeInsets.symmetric(
+              horizontal: m.s(4),
+              vertical: m.s(2),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: m.s(14),
+                    vertical: m.s(8),
                   ),
                   decoration: BoxDecoration(
                     color: colors.scrim.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(m.s(10)),
                     border: Border.all(
                       color: colors.glassBorder.withValues(alpha: 0.4),
-                      width: 1,
+                      width: m.s(1),
                     ),
                   ),
                   child: Icon(
                     icon,
                     color: colors.gold,
-                    size: 24,
+                    size: m.s(24),
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: m.s(4)),
                 Text(
                   label,
                   style: AppTextStyles.subtitle(context).copyWith(
-                    fontSize: 11,
+                    fontSize: m.s(11),
                     fontWeight: FontWeight.w600,
                     color: colors.onScenic,
                   ),
@@ -584,7 +598,7 @@ class _ActionChip extends StatelessWidget {
                   Text(
                     badge!,
                     style: AppTextStyles.bodyMuted(context).copyWith(
-                      fontSize: 9,
+                      fontSize: m.s(9),
                       color: colors.onScenicMuted,
                     ),
                   )
@@ -592,7 +606,7 @@ class _ActionChip extends StatelessWidget {
                   Text(
                     '$cost',
                     style: AppTextStyles.bodyMuted(context).copyWith(
-                      fontSize: 10,
+                      fontSize: m.s(10),
                       color: colors.onScenicMuted,
                     ),
                   ),

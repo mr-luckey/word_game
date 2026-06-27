@@ -3,6 +3,7 @@ import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
+import 'package:word_game/features/game/presentation/widgets/game_screen_metrics.dart';
 
 class CoinDisplay extends StatelessWidget {
   const CoinDisplay({
@@ -61,14 +62,16 @@ class CoinDisplay extends StatelessWidget {
     if (plain) return content;
 
     if (compact) {
+      final m = GameScreenScope.maybeOf(context);
+      final s = m?.s ?? (double v) => v;
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: s(10), vertical: s(6)),
         decoration: BoxDecoration(
           color: colors.scrim.withValues(alpha: 0.55),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(s(10)),
           border: Border.all(
             color: colors.glassBorder.withValues(alpha: 0.4),
-            width: 1,
+            width: s(1),
           ),
         ),
         child: Row(
@@ -77,14 +80,14 @@ class CoinDisplay extends StatelessWidget {
             Icon(
               Icons.monetization_on_rounded,
               color: colors.gold,
-              size: 18,
+              size: s(18),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: s(6)),
             Text(
               '$coins',
               style: AppTextStyles.coinsScore(context).copyWith(
                 color: colors.onScenic,
-                fontSize: 14,
+                fontSize: s(14),
                 fontWeight: FontWeight.w500,
               ),
             ),
