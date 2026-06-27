@@ -134,7 +134,7 @@ class GridPainter extends CustomPainter {
   final double cellSize;
   final TextStyle letterStyle;
 
-  static const _borderInset = 0.5;
+  static const _borderInset = 0.0;
 
   Color _contrastLetterColor(Color cellBackground) {
     final lightTile = cellBackground.computeLuminance() > 0.45;
@@ -196,7 +196,7 @@ class GridPainter extends CustomPainter {
         final idx = r * n + c;
         final rect = _cellRect(r, c);
 
-        Color bg = (r + c) % 2 == 0 ? colors.cellDefault : colors.cellAlt;
+        Color bg = colors.cellDefault;
         if (state.foundCellColors.containsKey(idx)) {
           bg = colors.foundColorForIndex(state.foundCellColors[idx]!);
         } else if (state.revealedCells.contains(idx)) {
@@ -211,13 +211,6 @@ class GridPainter extends CustomPainter {
         }
 
         canvas.drawRect(rect, Paint()..color = bg);
-        canvas.drawRect(
-          rect,
-          Paint()
-            ..color = colors.cellBorder.withValues(alpha: 0.55)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1,
-        );
 
         final isSelected =
             state.selectedCells.any((cell) => cell.row == r && cell.col == c);

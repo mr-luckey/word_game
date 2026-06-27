@@ -430,7 +430,6 @@ class _Toolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
-    final colors = context.appColors;
     final revealsLeft = state.revealsLeft;
     final revealLocked = revealsLeft <= 0;
 
@@ -441,38 +440,34 @@ class _Toolbar extends StatelessWidget {
         AppSizes.paddingMd,
         10,
       ),
-      child: JourneyPanel(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        radius: 16,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _ActionChip(
-              label: 'Hint',
-              cost: GameConfig.hintCost,
-              icon: Icons.lightbulb_outline_rounded,
-              onPressed: () => bloc.add(const HintRequested()),
-            ),
-            _ActionChip(
-              label: revealLocked ? 'Locked' : 'Reveal',
-              cost: GameConfig.revealCost,
-              icon: revealLocked ? Icons.lock_rounded : Icons.visibility_rounded,
-              badge: revealLocked
-                  ? '${state.maxReveals}/${state.maxReveals}'
-                  : 'Left: $revealsLeft',
-              disabled: revealLocked,
-              onPressed: revealLocked
-                  ? null
-                  : () => bloc.add(const RevealRequested()),
-            ),
-            _ActionChip(
-              label: 'Shuffle',
-              cost: GameConfig.shuffleCost,
-              icon: Icons.shuffle_rounded,
-              onPressed: () => bloc.add(const ShuffleRequested()),
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _ActionChip(
+            label: 'Hint',
+            cost: GameConfig.hintCost,
+            icon: Icons.lightbulb_outline_rounded,
+            onPressed: () => bloc.add(const HintRequested()),
+          ),
+          _ActionChip(
+            label: revealLocked ? 'Locked' : 'Reveal',
+            cost: GameConfig.revealCost,
+            icon: revealLocked ? Icons.lock_rounded : Icons.visibility_rounded,
+            badge: revealLocked
+                ? '${state.maxReveals}/${state.maxReveals}'
+                : 'Left: $revealsLeft',
+            disabled: revealLocked,
+            onPressed: revealLocked
+                ? null
+                : () => bloc.add(const RevealRequested()),
+          ),
+          _ActionChip(
+            label: 'Shuffle',
+            cost: GameConfig.shuffleCost,
+            icon: Icons.shuffle_rounded,
+            onPressed: () => bloc.add(const ShuffleRequested()),
+          ),
+        ],
       ),
     );
   }
