@@ -182,18 +182,7 @@ class _GameView extends StatelessWidget {
                             child: Stack(
                               children: [
                                 if (state is GameInProgress)
-                                  Stack(
-                                    children: [
-                                      _GameBody(state: state),
-                                      if (state.showTutorial)
-                                        LevelTutorialOverlay(
-                                          state: state,
-                                          onDismiss: () => context
-                                              .read<GameBloc>()
-                                              .add(const TutorialDismissed()),
-                                        ),
-                                    ],
-                                  )
+                                  _GameWithTutorial(state: state)
                                 else if (state is GameLoading ||
                                     state is GameInitial)
                                   const LoadingOverlay(
@@ -259,10 +248,40 @@ class _GameView extends StatelessWidget {
   }
 }
 
-class _GameBody extends StatelessWidget {
-  const _GameBody({required this.state});
+class _GameWithTutorial extends StatefulWidget {
+  const _GameWithTutorial({required this.state});
 
   final GameInProgress state;
+
+  @override
+  State<_GameWithTutorial> createState() => _GameWithTutorialState();
+}
+
+class _GameWithTutorialState extends State<_GameWithTutorial> {
+  final _gridKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        _GameBody(state: widget.state, gridKey: _gridKey),
+        if (widget.state.showTutorial)
+          LevelTutorialOverlay(
+            state: widget.state,
+            gridKey: _gridKey,
+            onDismiss: () =>
+                context.read<GameBloc>().add(const TutorialDismissed()),
+          ),
+      ],
+    );
+  }
+}
+
+class _GameBody extends StatelessWidget {
+  const _GameBody({required this.state, required this.gridKey});
+
+  final GameInProgress state;
+  final GlobalKey gridKey;
 
   @override
   Widget build(BuildContext context) {
@@ -312,6 +331,7 @@ class _GameBody extends StatelessWidget {
                               state: state,
                               colors: colors,
                               embedded: true,
+                              gridBoundsKey: gridKey,
                               onDragStart: (r, c) =>
                                   bloc.add(CellDragStarted(row: r, col: c)),
                               onDragUpdate: (r, c) =>

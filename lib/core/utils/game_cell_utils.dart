@@ -57,4 +57,39 @@ class GameCellUtils {
 
   static Set<int> remapRevealedCells(Set<int> revealedCells, int gridSize) =>
       rotateIndexSet(revealedCells, gridSize);
+
+  /// Order collinear cells from one end of the word to the other.
+  static List<({int row, int col})> sortCellsInLine(
+    List<({int row, int col})> cells,
+  ) {
+    if (cells.length <= 1) return cells;
+
+    var anchor = cells.first;
+    var farthest = cells.first;
+    var maxDistSq = 0.0;
+    for (final a in cells) {
+      for (final b in cells) {
+        final dx = (a.col - b.col).toDouble();
+        final dy = (a.row - b.row).toDouble();
+        final distSq = dx * dx + dy * dy;
+        if (distSq > maxDistSq) {
+          maxDistSq = distSq;
+          anchor = a;
+          farthest = b;
+        }
+      }
+    }
+
+    final dirRow = farthest.row - anchor.row;
+    final dirCol = farthest.col - anchor.col;
+    final sorted = List<({int row, int col})>.from(cells)
+      ..sort((a, b) {
+        final projA =
+            (a.row - anchor.row) * dirRow + (a.col - anchor.col) * dirCol;
+        final projB =
+            (b.row - anchor.row) * dirRow + (b.col - anchor.col) * dirCol;
+        return projA.compareTo(projB);
+      });
+    return sorted;
+  }
 }

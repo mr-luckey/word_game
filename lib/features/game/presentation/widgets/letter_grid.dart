@@ -15,6 +15,7 @@ class LetterGrid extends StatelessWidget {
     required this.onDragUpdate,
     required this.onDragEnd,
     this.embedded = false,
+    this.gridBoundsKey,
   });
 
   final GameInProgress state;
@@ -23,6 +24,7 @@ class LetterGrid extends StatelessWidget {
   final void Function(int row, int col) onDragUpdate;
   final VoidCallback onDragEnd;
   final bool embedded;
+  final GlobalKey? gridBoundsKey;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,10 @@ class LetterGrid extends StatelessWidget {
         );
 
         if (embedded) {
-          return gridContent;
+          final grid = gridBoundsKey == null
+              ? gridContent
+              : KeyedSubtree(key: gridBoundsKey, child: gridContent);
+          return grid;
         }
 
         return Center(

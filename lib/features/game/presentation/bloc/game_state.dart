@@ -67,6 +67,7 @@ class GameInProgress extends GameState {
     this.isTimedOut = false,
     this.showTutorial = false,
     this.tutorialHighlightIndices = const {},
+    this.tutorialPathCells = const [],
   });
 
   final List<List<GridCellModel>> grid;
@@ -99,6 +100,7 @@ class GameInProgress extends GameState {
   final bool isTimedOut;
   final bool showTutorial;
   final Set<int> tutorialHighlightIndices;
+  final List<({int row, int col})> tutorialPathCells;
 
   int get revealsLeft => (maxReveals - revealsUsed).clamp(0, maxReveals);
 
@@ -132,6 +134,8 @@ class GameInProgress extends GameState {
     bool? isCompleting,
     bool? isTimedOut,
     bool? showTutorial,
+    Set<int>? tutorialHighlightIndices,
+    List<({int row, int col})>? tutorialPathCells,
   }) =>
       GameInProgress(
         grid: grid ?? this.grid,
@@ -163,6 +167,9 @@ class GameInProgress extends GameState {
         isCompleting: isCompleting ?? this.isCompleting,
         isTimedOut: isTimedOut ?? this.isTimedOut,
         showTutorial: showTutorial ?? this.showTutorial,
+        tutorialHighlightIndices:
+            tutorialHighlightIndices ?? this.tutorialHighlightIndices,
+        tutorialPathCells: tutorialPathCells ?? this.tutorialPathCells,
       );
 
   @override
@@ -190,6 +197,7 @@ class GameInProgress extends GameState {
         isTimedOut,
         showTutorial,
         tutorialHighlightIndices,
+        tutorialPathCells,
       ];
 }
 

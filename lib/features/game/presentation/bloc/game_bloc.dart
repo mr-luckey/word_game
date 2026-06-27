@@ -144,10 +144,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final xpReward = _vip.applyLevelXpBonus(GameConfig.xpPerLevelComplete);
 
     Set<int> tutorialIndices = {};
+    List<({int row, int col})> tutorialPath = [];
     if (showTutorial && result.placements.isNotEmpty) {
       final n = level.gridSize;
       final first = result.placements.first;
-      tutorialIndices = first.cells
+      tutorialPath = GameCellUtils.sortCellsInLine(
+        first.cells.map((c) => (row: c.row, col: c.col)).toList(),
+      );
+      tutorialIndices = tutorialPath
           .map((c) => GameCellUtils.toIndex(c.row, c.col, n))
           .toSet();
     }
@@ -180,14 +184,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         maxReveals: GameConfig.maxRevealsPerLevel,
         showTutorial: showTutorial,
         tutorialHighlightIndices: tutorialIndices,
+        tutorialPathCells: tutorialPath,
       ),
     );
     _startTimer();
   }
 
-  void _onTutorialDismissed(TutorialDismissed event, Emitter<GameState> emit) {
+  Future<void> _onTutorialDismissed(
+    TutorialDismissed event,
+    Emitter<GameState> emit,
+  ) async {
     final s = state;
     if (s is! GameInProgress) return;
+    final prefs = getIt<SharedPreferences>();
+    await prefs.setBool('tutorial_level1_completed', true);
     emit(s.copyWith(showTutorial: false));
   }
 
