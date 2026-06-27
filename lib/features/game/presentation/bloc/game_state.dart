@@ -7,6 +7,19 @@ enum SelectionState { idle, selecting, correct, wrong }
 /// Marker emitted via [GameInProgress.feedback] to trigger coin dialog.
 const kInsufficientCoinsFeedback = '__insufficient_coins__';
 
+class FoundWordPath extends Equatable {
+  const FoundWordPath({
+    required this.colorIndex,
+    required this.cells,
+  });
+
+  final int colorIndex;
+  final List<({int row, int col})> cells;
+
+  @override
+  List<Object?> get props => [colorIndex, cells];
+}
+
 abstract class GameState extends Equatable {
   const GameState();
 
@@ -47,7 +60,8 @@ class GameInProgress extends GameState {
     required this.hintsUsed,
     required this.revealsUsed,
     required this.maxReveals,
-    this.foundCellColors = const {},
+    this.foundWordPaths = const [],
+    this.revealedWordPaths = const [],
     this.feedback,
     this.isCompleting = false,
     this.isTimedOut = false,
@@ -78,7 +92,8 @@ class GameInProgress extends GameState {
   final int hintsUsed;
   final int revealsUsed;
   final int maxReveals;
-  final Map<int, int> foundCellColors;
+  final List<FoundWordPath> foundWordPaths;
+  final List<FoundWordPath> revealedWordPaths;
   final String? feedback;
   final bool isCompleting;
   final bool isTimedOut;
@@ -103,7 +118,8 @@ class GameInProgress extends GameState {
     Set<int>? foundCells,
     Set<int>? hintCells,
     Set<int>? revealedCells,
-    Map<int, int>? foundCellColors,
+    List<FoundWordPath>? foundWordPaths,
+    List<FoundWordPath>? revealedWordPaths,
     int? coins,
     Duration? elapsed,
     bool? isPaused,
@@ -125,7 +141,8 @@ class GameInProgress extends GameState {
         foundCells: foundCells ?? this.foundCells,
         hintCells: hintCells ?? this.hintCells,
         revealedCells: revealedCells ?? this.revealedCells,
-        foundCellColors: foundCellColors ?? this.foundCellColors,
+        foundWordPaths: foundWordPaths ?? this.foundWordPaths,
+        revealedWordPaths: revealedWordPaths ?? this.revealedWordPaths,
         coins: coins ?? this.coins,
         timeLimit: timeLimit,
         levelId: levelId,
@@ -164,7 +181,8 @@ class GameInProgress extends GameState {
         hintsUsed,
         revealsUsed,
         displayNumber,
-        foundCellColors,
+        foundWordPaths,
+        revealedWordPaths,
         backgroundImage,
         themeId,
         feedback,

@@ -301,10 +301,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       await _audio.playWordFound();
       final n = s.grid.length;
       final colorIndex = s.foundWords.length;
-      final newFoundCellColors = Map<int, int>.from(s.foundCellColors);
-      for (final c in placement.cells) {
-        newFoundCellColors[c.row * n + c.col] = colorIndex;
-      }
       final newFoundCells = {
         ...s.foundCells,
         ...placement.cells.map((c) => c.row * n + c.col),
@@ -316,7 +312,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       var newState = s.copyWith(
         foundWords: newFoundWords,
         foundCells: newFoundCells,
-        foundCellColors: newFoundCellColors,
+        foundWordPaths: [
+          ...s.foundWordPaths,
+          FoundWordPath(
+            colorIndex: colorIndex,
+            cells: placement.cells
+                .map((c) => (row: c.row, col: c.col))
+                .toList(),
+          ),
+        ],
         selectedCells: [],
         selectionState: SelectionState.correct,
       );
@@ -468,6 +472,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       s.copyWith(
         coins: coins,
         revealedCells: {...s.revealedCells, ...indices},
+        revealedWordPaths: [
+          ...s.revealedWordPaths,
+          FoundWordPath(
+            colorIndex: 0,
+            cells: placement.cells
+                .map((c) => (row: c.row, col: c.col))
+                .toList(),
+          ),
+        ],
         revealsUsed: newRevealsUsed,
         selectedCells: [],
         clearFeedback: true,
@@ -493,7 +506,42 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         foundCells: GameCellUtils.rotateIndexSet(s.foundCells, n),
         hintCells: GameCellUtils.remapHintCells(s.hintCells, n),
         revealedCells: GameCellUtils.remapRevealedCells(s.revealedCells, n),
-        foundCellColors: GameCellUtils.rotateColorMap(s.foundCellColors, n),
+        foundWordPaths: s.foundWordPaths
+            .map(
+              (path) => FoundWordPath(
+                colorIndex: path.colorIndex,
+                cells: path.cells
+                    .map((cell) {
+                      final idx =
+                          GameCellUtils.toIndex(cell.row, cell.col, n);
+                      final rotated = GameCellUtils.rotateIndex(idx, n);
+                      return (
+                        row: GameCellUtils.rowOf(rotated, n),
+                        col: GameCellUtils.colOf(rotated, n),
+                      );
+                    })
+                    .toList(),
+              ),
+            )
+            .toList(),
+        revealedWordPaths: s.revealedWordPaths
+            .map(
+              (path) => FoundWordPath(
+                colorIndex: path.colorIndex,
+                cells: path.cells
+                    .map((cell) {
+                      final idx =
+                          GameCellUtils.toIndex(cell.row, cell.col, n);
+                      final rotated = GameCellUtils.rotateIndex(idx, n);
+                      return (
+                        row: GameCellUtils.rowOf(rotated, n),
+                        col: GameCellUtils.colOf(rotated, n),
+                      );
+                    })
+                    .toList(),
+              ),
+            )
+            .toList(),
         clearFeedback: true,
         feedback: 'Board rotated',
       ),
