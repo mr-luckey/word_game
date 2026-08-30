@@ -5,6 +5,7 @@ class AssetPaths {
 
   static const starBurstLottie = 'assets/animations/star_burst.json';
   static const treasureChestImage = 'assets/images/ui/treasure_chest.png';
+  /// Same artwork as the platform launcher icon (`ic_launcher`).
   static const appLogo = 'assets/images/ui/app_logo.png';
 
   static const wordFoundSfx = 'audio/word_found.wav';

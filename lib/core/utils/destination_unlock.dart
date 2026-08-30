@@ -1,3 +1,4 @@
+import 'package:word_game/core/constants/debug_flags.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
@@ -34,6 +35,7 @@ class DestinationUnlock {
     required List<ThemeCategoryEntity> sortedThemes,
     required Map<int, Map<int, int>> starsBySlot,
   }) {
+    if (DebugFlags.unlockAllContent) return true;
     final index = sortedThemes.indexWhere((t) => t.id == slotId);
     if (index <= 0) return true;
 

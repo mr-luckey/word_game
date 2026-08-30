@@ -146,15 +146,15 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     child: Column(
                       children: [
-                        SwitchListTile(
-                          title: const Text('Sound effects'),
+                        _SettingsSwitchTile(
+                          title: 'Sound effects',
                           value: state.soundEnabled,
                           onChanged: (_) =>
                               context.read<SettingsCubit>().toggleSound(),
                         ),
                         const Divider(height: 1),
-                        SwitchListTile(
-                          title: const Text('Background music'),
+                        _SettingsSwitchTile(
+                          title: 'Background music',
                           value: state.musicEnabled,
                           onChanged: (_) =>
                               context.read<SettingsCubit>().toggleMusic(),
@@ -169,6 +169,44 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
     ),
+    );
+  }
+}
+
+class _SettingsSwitchTile extends StatelessWidget {
+  const _SettingsSwitchTile({
+    required this.title,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String title;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: AppTextStyles.wordList(context).copyWith(
+                color: colors.onScenic,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: colors.gold,
+          ),
+        ],
+      ),
     );
   }
 }

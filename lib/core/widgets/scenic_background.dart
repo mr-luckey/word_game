@@ -18,6 +18,7 @@ class ScenicBackground extends StatelessWidget {
     this.colors,
     this.showBackgroundImage = true,
     this.useHdDefaults = true,
+    this.showCompass = true,
   });
 
   /// Full-screen scenic background with HD defaults (treasure screen quality).
@@ -46,6 +47,7 @@ class ScenicBackground extends StatelessWidget {
   final AppThemeColors? colors;
   final bool showBackgroundImage;
   final bool useHdDefaults;
+  final bool showCompass;
 
   @override
   Widget build(BuildContext context) {
@@ -98,19 +100,20 @@ class ScenicBackground extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          top: 54,
-          left: 0,
-          right: 0,
-          child: IgnorePointer(
-            child: Center(
-              child: Opacity(
-                opacity: 0.16,
-                child: CompassBadge(size: 78, dimmed: true),
+        if (showCompass)
+          Positioned(
+            top: 54,
+            left: 0,
+            right: 0,
+            child: IgnorePointer(
+              child: Center(
+                child: Opacity(
+                  opacity: 0.16,
+                  child: CompassBadge(size: 78, dimmed: true),
+                ),
               ),
             ),
           ),
-        ),
         if (child != null) child!,
       ],
     );

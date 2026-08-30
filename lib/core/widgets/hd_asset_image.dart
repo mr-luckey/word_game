@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 /// Full-bleed HD asset image — sharp on high-DPI phones (treasure screen quality).
@@ -18,13 +20,19 @@ class HdAssetImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dpr = MediaQuery.devicePixelRatioOf(context);
-    final width = MediaQuery.sizeOf(context).width;
-    final cacheWidth = (width * dpr).round().clamp(720, 4096);
+    final size = MediaQuery.sizeOf(context);
+    // Landscape photos covering a portrait screen need extra decode width
+    // so BoxFit.cover never upscales a short edge.
+    final longest = math.max(size.width, size.height);
+    final cacheWidth = (longest * dpr * 16 / 9).round().clamp(1440, 4096);
 
     Widget image = Image.asset(
       asset,
       fit: fit,
+      alignment: Alignment.center,
       filterQuality: FilterQuality.high,
+      isAntiAlias: true,
+      gaplessPlayback: true,
       cacheWidth: cacheWidth,
       errorBuilder: (_, __, ___) =>
           fallback ?? const ColoredBox(color: Color(0xFF1A2438)),

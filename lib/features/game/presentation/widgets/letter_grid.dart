@@ -15,6 +15,7 @@ class LetterGrid extends StatelessWidget {
     required this.onDragUpdate,
     required this.onDragEnd,
     this.embedded = false,
+    this.darkBoard = false,
     this.gridBoundsKey,
   });
 
@@ -24,6 +25,7 @@ class LetterGrid extends StatelessWidget {
   final void Function(int row, int col) onDragUpdate;
   final VoidCallback onDragEnd;
   final bool embedded;
+  final bool darkBoard;
   final GlobalKey? gridBoundsKey;
 
   @override
@@ -71,6 +73,7 @@ class LetterGrid extends StatelessWidget {
                   colors: colors,
                   cellSize: cellSize,
                   letterStyle: letterStyle,
+                  darkBoard: darkBoard,
                 ),
                 size: Size.square(gridExtent),
               ),
@@ -145,16 +148,21 @@ class GridPainter extends CustomPainter {
     required this.colors,
     required this.cellSize,
     required this.letterStyle,
+    this.darkBoard = false,
   });
 
   final GameInProgress state;
   final AppThemeColors colors;
   final double cellSize;
   final TextStyle letterStyle;
+  final bool darkBoard;
 
   static const _borderInset = 0.0;
 
   Color _contrastLetterColor(Color cellBackground) {
+    if (darkBoard && cellBackground.a < 0.1) {
+      return colors.onScenic;
+    }
     final lightTile = cellBackground.computeLuminance() > 0.45;
     if (lightTile) {
       for (final c in [colors.primary, colors.tertiary, colors.cream]) {
@@ -184,7 +192,8 @@ class GridPainter extends CustomPainter {
     );
   }
 
-  Color _cellBackground(int idx) => colors.cellDefault;
+  Color _cellBackground(int idx) =>
+      darkBoard ? Colors.transparent : colors.cellDefault;
 
   Color get _hintFillColor => colors.cellHint.withValues(alpha: 0.82);
 
@@ -392,5 +401,8 @@ class GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant GridPainter old) =>
-      old.state != state || old.cellSize != cellSize || old.colors != colors;
+      old.state != state ||
+      old.cellSize != cellSize ||
+      old.colors != colors ||
+      old.darkBoard != darkBoard;
 }

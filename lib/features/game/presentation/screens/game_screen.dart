@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
-import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
-import 'package:word_game/core/widgets/coin_display.dart';
+import 'package:word_game/core/theme/game_screen_styles.dart';
+import 'package:word_game/features/game/presentation/widgets/game_action_button.dart';
+import 'package:word_game/features/game/presentation/widgets/game_neon_panel.dart';
 import 'package:word_game/features/game/presentation/widgets/word_list_panel.dart';
 import 'package:word_game/core/widgets/glass_panel.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
@@ -164,10 +166,7 @@ class _GameView extends StatelessWidget {
         child: BlocBuilder<GameBloc, GameState>(
           builder: (context, state) {
             final preset = context.themePreset;
-            final bg =
-                state is GameInProgress && state.backgroundImage.isNotEmpty
-                    ? AssetPaths.themeImage(state.backgroundImage)
-                    : ScenicBackgroundStyle.hdAssetFor(preset);
+            final bg = AssetPaths.themeGrid(preset);
 
             return Scaffold(
               body: Column(
@@ -175,7 +174,12 @@ class _GameView extends StatelessWidget {
                   Expanded(
                     child: Stack(
                       children: [
-                        ScenicBackground(imageAsset: bg),
+                        ScenicBackground(
+                          imageAsset: bg,
+                          blurSigma: 0,
+                          darken: 0.16,
+                          showCompass: false,
+                        ),
                         SafeArea(
                           bottom: false,
                           child: JourneyContentWidth(
@@ -287,6 +291,7 @@ class _GameBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
     final colors = context.appColors;
+    final lightBoard = context.themePreset.gameSpec.lightAtmosphere;
     final m = GameScreenMetrics.of(context);
     return GameScreenScope(
       metrics: m,
@@ -301,36 +306,34 @@ class _GameBody extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(m.s(6), m.s(8), m.s(6), m.s(10)),
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(m.s(6), m.s(4), m.s(6), m.s(2)),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(m.s(18)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: colors.shadow.withValues(alpha: 0.12),
-                              blurRadius: m.s(8),
-                              offset: Offset(0, m.s(2)),
+                      padding: EdgeInsets.fromLTRB(m.s(8), m.s(4), m.s(8), 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GameNeonPanel(
+                            borderStyle: GamePanelBorderStyle.wordList,
+                            padding: EdgeInsets.fromLTRB(
+                              m.s(12),
+                              m.s(10),
+                              m.s(12),
+                              m.s(10),
                             ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            WordListPanel(state: state, embedded: true),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: m.s(8)),
-                              child: Divider(
-                                height: 1,
-                                thickness: 1,
-                                color: colors.cellBorder.withValues(alpha: 0.45),
-                              ),
+                            child: WordListPanel(state: state, embedded: true),
+                          ),
+                          SizedBox(height: m.s(10)),
+                          GameNeonPanel(
+                            borderStyle: GamePanelBorderStyle.grid,
+                            padding: EdgeInsets.fromLTRB(
+                              m.s(6),
+                              m.s(8),
+                              m.s(6),
+                              m.s(8),
                             ),
-                            LetterGrid(
+                            child: LetterGrid(
                               state: state,
                               colors: colors,
                               embedded: true,
+                              darkBoard: !lightBoard,
                               gridBoundsKey: gridKey,
                               onDragStart: (r, c) =>
                                   bloc.add(CellDragStarted(row: r, col: c)),
@@ -338,8 +341,8 @@ class _GameBody extends StatelessWidget {
                                   bloc.add(CellDragUpdated(row: r, col: c)),
                               onDragEnd: () => bloc.add(const CellDragEnded()),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -370,27 +373,19 @@ class _TopBar extends StatelessWidget {
     final m = GameScreenScope.of(context);
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(m.s(10), m.s(50), m.s(10), m.s(40)),
+      padding: EdgeInsets.fromLTRB(m.s(10), m.s(6), m.s(10), m.s(8)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CoinDisplay(coins: state.coins, compact: true),
+          _GoldCoinPill(coins: state.coins, scale: m.s),
           Expanded(
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Text(
-                  'Level ${state.displayNumber}',
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.levelName(context).copyWith(
-                    fontSize: m.s(28),
-                    letterSpacing: 0.6,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = m.s(2)
-                      ..color = Colors.black,
+                CustomPaint(
+                  size: Size(m.s(86), m.s(86)),
+                  painter: _RadarPainter(
+                    color: colors.gold.withValues(alpha: 0.55),
                   ),
                 ),
                 Text(
@@ -398,10 +393,27 @@ class _TopBar extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.levelName(context).copyWith(
-                    fontSize: m.s(28),
+                  style: GoogleFonts.cinzel(
+                    fontSize: m.s(24),
+                    fontWeight: FontWeight.w800,
                     letterSpacing: 0.6,
-                    shadows: JourneyThemeKit.textGlow(context),
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = m.s(3)
+                      ..color = Colors.black.withValues(alpha: 0.75),
+                  ),
+                ),
+                Text(
+                  'Level ${state.displayNumber}',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.cinzel(
+                    fontSize: m.s(24),
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                    color: colors.goldLight,
+                    shadows: JourneyThemeKit.textGlow(context, strength: 1.4),
                   ),
                 ),
               ],
@@ -417,22 +429,22 @@ class _TopBar extends StatelessWidget {
                   bloc.add(const GamePaused());
                 }
               },
-              borderRadius: BorderRadius.circular(m.s(10)),
+              borderRadius: BorderRadius.circular(m.s(12)),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: m.s(10),
-                  vertical: m.s(6),
+                  horizontal: m.s(12),
+                  vertical: m.s(7),
                 ),
                 decoration: BoxDecoration(
                   color: colors.scrim.withValues(
-                    alpha: state.timerDanger ? 0.92 : 0.55,
+                    alpha: state.timerDanger ? 0.92 : 0.65,
                   ),
-                  borderRadius: BorderRadius.circular(m.s(10)),
+                  borderRadius: BorderRadius.circular(m.s(12)),
                   border: Border.all(
                     color: state.timerDanger
                         ? colors.timerDanger
-                        : colors.glassBorder.withValues(alpha: 0.4),
-                    width: state.timerDanger ? m.s(2) : m.s(1),
+                        : colors.gold.withValues(alpha: 0.55),
+                    width: state.timerDanger ? m.s(2) : m.s(1.2),
                   ),
                   boxShadow: state.timerDanger
                       ? [
@@ -441,7 +453,12 @@ class _TopBar extends StatelessWidget {
                             blurRadius: m.s(8),
                           ),
                         ]
-                      : null,
+                      : [
+                          BoxShadow(
+                            color: colors.gold.withValues(alpha: 0.15),
+                            blurRadius: m.s(6),
+                          ),
+                        ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -512,36 +529,43 @@ class _Toolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
+    final gameSpec = context.themePreset.gameSpec;
     final revealsLeft = state.revealsLeft;
     final revealLocked = revealsLeft <= 0;
     final m = GameScreenScope.of(context);
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(m.s(6), 0, m.s(6), m.s(4)),
+      padding: EdgeInsets.fromLTRB(m.s(12), m.s(4), m.s(12), m.s(8)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _ActionChip(
+          GameActionButton(
             label: 'Hint',
-            cost: GameConfig.hintCost,
             icon: Icons.lightbulb_outline_rounded,
+            glowColor: gameSpec.hintButtonGlow,
+            subtitle: '${GameConfig.hintCost}',
+            showCoin: true,
             onPressed: () => bloc.add(const HintRequested()),
           ),
-          _ActionChip(
+          GameActionButton(
             label: revealLocked ? 'Locked' : 'Reveal',
-            cost: GameConfig.revealCost,
             icon: revealLocked ? Icons.lock_rounded : Icons.visibility_rounded,
-            badge: revealLocked
+            glowColor: gameSpec.revealButtonGlow,
+            subtitle: revealLocked
                 ? '${state.maxReveals}/${state.maxReveals}'
                 : 'Left: $revealsLeft',
             disabled: revealLocked,
+            large: true,
             onPressed:
                 revealLocked ? null : () => bloc.add(const RevealRequested()),
           ),
-          _ActionChip(
+          GameActionButton(
             label: 'Shuffle',
-            cost: GameConfig.shuffleCost,
             icon: Icons.shuffle_rounded,
+            glowColor: gameSpec.shuffleButtonGlow,
+            subtitle: '${GameConfig.shuffleCost}',
+            showCoin: true,
             onPressed: () => bloc.add(const ShuffleRequested()),
           ),
         ],
@@ -550,91 +574,88 @@ class _Toolbar extends StatelessWidget {
   }
 }
 
-class _ActionChip extends StatelessWidget {
-  const _ActionChip({
-    required this.label,
-    required this.cost,
-    required this.icon,
-    required this.onPressed,
-    this.badge,
-    this.disabled = false,
-  });
+class _GoldCoinPill extends StatelessWidget {
+  const _GoldCoinPill({required this.coins, required this.scale});
 
-  final String label;
-  final int cost;
-  final IconData icon;
-  final VoidCallback? onPressed;
-  final String? badge;
-  final bool disabled;
+  final int coins;
+  final double Function(double) scale;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final m = GameScreenScope.of(context);
-    return Opacity(
-      opacity: disabled ? 0.5 : 1,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(m.s(10)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: m.s(4),
-              vertical: m.s(2),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: m.s(14),
-                    vertical: m.s(8),
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.scrim.withValues(alpha: 0.55),
-                    borderRadius: BorderRadius.circular(m.s(10)),
-                    border: Border.all(
-                      color: colors.glassBorder.withValues(alpha: 0.4),
-                      width: m.s(1),
-                    ),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: colors.gold,
-                    size: m.s(24),
-                  ),
-                ),
-                SizedBox(height: m.s(4)),
-                Text(
-                  label,
-                  style: AppTextStyles.subtitle(context).copyWith(
-                    fontSize: m.s(11),
-                    fontWeight: FontWeight.w600,
-                    color: colors.onScenic,
-                  ),
-                ),
-                if (badge != null)
-                  Text(
-                    badge!,
-                    style: AppTextStyles.bodyMuted(context).copyWith(
-                      fontSize: m.s(9),
-                      color: colors.onScenicMuted,
-                    ),
-                  )
-                else
-                  Text(
-                    '$cost',
-                    style: AppTextStyles.bodyMuted(context).copyWith(
-                      fontSize: m.s(10),
-                      color: colors.onScenicMuted,
-                    ),
-                  ),
-              ],
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: scale(12),
+        vertical: scale(7),
+      ),
+      decoration: BoxDecoration(
+        color: colors.scrim.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(scale(14)),
+        border: Border.all(
+          color: colors.gold.withValues(alpha: 0.85),
+          width: scale(1.4),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colors.gold.withValues(alpha: 0.4),
+            blurRadius: scale(10),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.monetization_on_rounded,
+            color: colors.gold,
+            size: scale(20),
+          ),
+          SizedBox(width: scale(6)),
+          Text(
+            '$coins',
+            style: AppTextStyles.coinsScore(context).copyWith(
+              color: colors.onScenic,
+              fontSize: scale(14),
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
+class _RadarPainter extends CustomPainter {
+  _RadarPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.shortestSide / 2;
+    final stroke = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.1;
+    canvas.drawCircle(center, radius * 0.98, stroke);
+    canvas.drawCircle(center, radius * 0.62, stroke);
+    canvas.drawCircle(center, radius * 0.28, stroke);
+    canvas.drawLine(
+      Offset(center.dx - radius, center.dy),
+      Offset(center.dx + radius, center.dy),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(center.dx, center.dy - radius),
+      Offset(center.dx, center.dy + radius),
+      stroke,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _RadarPainter oldDelegate) =>
+      oldDelegate.color != color;
+}
+

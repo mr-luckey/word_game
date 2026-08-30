@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 
-/// App brand logo — full-bleed icon art (no white splash canvas padding).
+/// App launcher icon — same art as the store/home-screen icon.
 class AppLogo extends StatelessWidget {
   const AppLogo({
     super.key,

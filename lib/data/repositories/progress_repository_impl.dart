@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:word_game/core/constants/debug_flags.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/core/utils/level_progress_id.dart';
@@ -22,6 +23,7 @@ class ProgressRepositoryImpl implements ProgressRepository {
 
   @override
   Future<bool> isLevelUnlocked(int levelId, List<int> orderedLevelIds) async {
+    if (DebugFlags.unlockAllContent) return true;
     final index = orderedLevelIds.indexOf(levelId);
     if (index <= 0) return true;
     final prevId = orderedLevelIds[index - 1];
