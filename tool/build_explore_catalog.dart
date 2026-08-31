@@ -154,7 +154,7 @@ void main() {
 
     for (var i = 0; i < 10; i++) {
       final slot = i + 1;
-      final slug = images[i % images.length];
+      final slug = _imageForSlot(names[i], images, i);
       slots.add({
         'slotId': slot,
         'name': names[i],
@@ -177,4 +177,18 @@ void main() {
     }),
   );
   print('Updated explore_catalog.json');
+}
+
+/// Prefer a destination image whose slug matches the slot name (e.g. Paris → paris.webp).
+String _imageForSlot(String name, List<String> images, int fallbackIndex) {
+  final tokens = name
+      .toLowerCase()
+      .split(RegExp(r'[^a-z]+'))
+      .where((t) => t.length >= 3);
+  for (final token in tokens) {
+    for (final image in images) {
+      if (image.toLowerCase().contains(token)) return image;
+    }
+  }
+  return images[fallbackIndex % images.length];
 }

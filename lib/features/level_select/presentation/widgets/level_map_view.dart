@@ -199,12 +199,17 @@ class _LevelMapViewState extends State<LevelMapView> {
                         final entry = widget.levels[i];
                         final c = centers[i];
                         if (entry.isActive) {
-                          final markerW = nodeSize + 48;
-                          final markerH = nodeSize + 64;
+                          final outer = nodeSize + 28;
+                          const playBlockHeight = 22.0;
+                          const playGap = 8.0;
+                          final circleCenterFromTop =
+                              playBlockHeight + playGap + outer / 2;
+                          final markerW = outer + 20;
+                          final markerH = circleCenterFromTop + outer / 2;
                           return Positioned(
                             left: (c.dx - markerW / 2)
                                 .clamp(0.0, mapWidth - markerW),
-                            top: (c.dy - markerH / 2 - 8)
+                            top: (c.dy - circleCenterFromTop)
                                 .clamp(0.0, mapHeight - markerH),
                             child: LevelMapActiveMarker(
                               levelNumber: entry.levelNumber,

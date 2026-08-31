@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
@@ -12,8 +11,6 @@ import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/core/widgets/shell_nav_metrics.dart';
-import 'package:word_game/core/widgets/ads/banner_ad_slot.dart';
-import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/level_select/presentation/cubit/level_select_cubit.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_view.dart';
@@ -313,14 +310,6 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  ColoredBox(
-                    color: colors.navSurface,
-                    child: BannerAdSlot(
-                      ads: getIt<AdService>(),
-                      placement: AdPlacements.bannerLevelSelect,
-                      padding: const EdgeInsets.only(top: 8),
                     ),
                   ),
                 ],

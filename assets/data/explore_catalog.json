@@ -8,16 +8,16 @@
         "slotId": 1,
         "name": "Paris Adventure",
         "country": "World Tour",
-        "backgroundImage": "classic_travel/london.webp",
-        "imageSlug": "london.webp",
+        "backgroundImage": "classic_travel/paris.webp",
+        "imageSlug": "paris.webp",
         "unlockOrder": 1
       },
       {
         "slotId": 2,
         "name": "London Heritage",
         "country": "Adventure Zone",
-        "backgroundImage": "classic_travel/paris.webp",
-        "imageSlug": "paris.webp",
+        "backgroundImage": "classic_travel/london.webp",
+        "imageSlug": "london.webp",
         "unlockOrder": 2
       },
       {

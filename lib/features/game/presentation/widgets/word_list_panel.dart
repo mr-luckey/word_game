@@ -52,10 +52,10 @@ class WordListPanel extends StatelessWidget {
                   ],
           ),
         ),
-        SizedBox(height: embedded ? s(10) : 6),
+        SizedBox(height: embedded ? s(8) : 6),
         Wrap(
-          spacing: embedded ? s(8) : 10,
-          runSpacing: embedded ? s(8) : 8,
+          spacing: embedded ? s(6) : 10,
+          runSpacing: embedded ? s(6) : 8,
           alignment: WrapAlignment.center,
           children: state.wordsToFind.asMap().entries.map((e) {
             final found = state.foundWords.any((f) => f.text == e.value.text);
@@ -135,10 +135,10 @@ class _EmbeddedWordChip extends StatelessWidget {
     return Opacity(
       opacity: found ? 0.5 : 1,
       child: Container(
-        constraints: BoxConstraints(minHeight: scale(44)),
+        constraints: BoxConstraints(minHeight: scale(34)),
         padding: EdgeInsets.symmetric(
-          horizontal: scale(10),
-          vertical: scale(8),
+          horizontal: scale(8),
+          vertical: scale(5),
         ),
         decoration: BoxDecoration(
           color: plate,
@@ -157,12 +157,12 @@ class _EmbeddedWordChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: iconColor, size: scale(17)),
-            SizedBox(width: scale(6)),
+            Icon(icon, color: iconColor, size: scale(14)),
+            SizedBox(width: scale(5)),
             Text(
               word.toUpperCase(),
               style: AppTextStyles.wordList(context).copyWith(
-                fontSize: scale(13),
+                fontSize: scale(11),
                 fontWeight: FontWeight.w800,
                 color: labelColor,
                 height: 1.1,
