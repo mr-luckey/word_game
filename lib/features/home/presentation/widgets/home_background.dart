@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:word_game/core/constants/scenic_background_style.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/hd_asset_image.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
@@ -27,13 +28,14 @@ class HomeBackground extends StatelessWidget {
             decoration: BoxDecoration(gradient: colors.primaryGradient),
           ),
         ),
-        Opacity(
-          opacity: 0.22,
-          child: HdAssetImage(
-            asset: 'assets/images/themes/${preset.folder}/splash.webp',
-            fallback: const SizedBox.shrink(),
+        if (preset != AppThemePreset.classicTravel)
+          Opacity(
+            opacity: 0.22,
+            child: HdAssetImage(
+              asset: 'assets/images/themes/${preset.folder}/splash.webp',
+              fallback: const SizedBox.shrink(),
+            ),
           ),
-        ),
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(

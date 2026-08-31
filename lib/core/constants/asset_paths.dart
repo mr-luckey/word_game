@@ -21,8 +21,15 @@ class AssetPaths {
   static String themeSplash(AppThemePreset preset) =>
       'assets/images/themes/${preset.folder}/splash.webp';
 
+  static String themeGridFile(AppThemePreset preset) =>
+      preset == AppThemePreset.classicTravel ? 'grid_full.png' : 'grid_full.webp';
+
+  /// Relative to `assets/images/themes/` (e.g. `classic_travel/grid_full.png`).
+  static String themeGridRelative(AppThemePreset preset) =>
+      '${preset.folder}/${themeGridFile(preset)}';
+
   static String themeGrid(AppThemePreset preset) =>
-      'assets/images/themes/${preset.folder}/grid_full.webp';
+      'assets/images/themes/${themeGridRelative(preset)}';
 
   /// Full-screen HD scenic background (same asset as treasure / daily rewards).
   static String themeHdBackground(AppThemePreset preset) => themeGrid(preset);

@@ -1,3 +1,4 @@
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/data/models/achievement_badge_config.dart';
 import 'package:word_game/core/data/models/daily_challenge_config.dart';
 import 'package:word_game/core/data/models/daily_game_config.dart';
@@ -47,7 +48,7 @@ class GameContentRegistry {
         id: slotId,
         name: 'Adventure',
         theme: preset.folder,
-        backgroundImage: '${preset.folder}/grid_full.webp',
+        backgroundImage: AssetPaths.themeGridRelative(preset),
         levels: levels,
       );
     }
@@ -135,9 +136,7 @@ class GameContentRegistry {
     required int coinsReward,
     required DailyGameConfig game,
   }) {
-    final folder = preset.folder;
-    final bg = dailyChallenge.backgroundImageTemplate
-        .replaceAll('{themeFolder}', folder);
+    final bg = AssetPaths.themeGridRelative(preset);
     final words = game.words.length > dailyChallenge.wordsPerDay
         ? game.words.take(dailyChallenge.wordsPerDay).toList()
         : game.words;

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
+import 'package:word_game/core/theme/app_theme_preset.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
@@ -131,9 +132,11 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
         final preset = context.themePreset;
         final themeId = context.read<LevelSelectCubit>().themeId;
         final dest = DestinationCatalog.byId(themeId, context.themePreset);
-        final bgAsset = state.backgroundImage.isNotEmpty
-            ? AssetPaths.themeImage(state.backgroundImage)
-            : dest?.imageAsset ?? ScenicBackgroundStyle.hdAssetFor(preset);
+        final bgAsset = preset == AppThemePreset.classicTravel
+            ? AssetPaths.themeGrid(preset)
+            : state.backgroundImage.isNotEmpty
+                ? AssetPaths.themeImage(state.backgroundImage)
+                : dest?.imageAsset ?? ScenicBackgroundStyle.hdAssetFor(preset);
         final mapLevels = sortedMapLevels(state.levels);
         final statsLevels = state.filteredLevels;
         final mapSections = buildLevelMapSections(mapLevels);

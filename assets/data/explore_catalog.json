@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "description": "ONLY names + images per theme. Game levels: level_packs/slot_1.json … slot_10.json (same slot number = same game in every theme).",
+  "description": "ONLY names + images per theme. Game levels: level_packs/slot_1.json \u2026 slot_10.json (same slot number = same game in every theme).",
   "slotCount": 10,
   "themes": {
     "classic_travel": [
@@ -32,8 +32,8 @@
         "slotId": 4,
         "name": "Barcelona Escape",
         "country": "Explorer Route",
-        "backgroundImage": "classic_travel/grid_full.webp",
-        "imageSlug": "grid_full.webp",
+        "backgroundImage": "classic_travel/grid_full.png",
+        "imageSlug": "grid_full.png",
         "unlockOrder": 4
       },
       {
@@ -64,8 +64,8 @@
         "slotId": 8,
         "name": "Athens Odyssey",
         "country": "Voyage Bay",
-        "backgroundImage": "classic_travel/grid_full.webp",
-        "imageSlug": "grid_full.webp",
+        "backgroundImage": "classic_travel/grid_full.png",
+        "imageSlug": "grid_full.png",
         "unlockOrder": 8
       },
       {

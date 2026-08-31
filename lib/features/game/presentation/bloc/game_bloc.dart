@@ -153,6 +153,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final gridSize = GameConfig.playableGridSize(
       requested: level.gridSize,
       words: level.words,
+      difficultyIndex: level.difficultyIndex,
     );
     final result = GridGenerator(gridSize: gridSize).generate(level.words);
     _placements = result.placements;

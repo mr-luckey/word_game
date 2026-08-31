@@ -5,7 +5,7 @@ class DebugFlags {
   DebugFlags._();
 
   /// Unlock every destination and sequential level.
-  static const bool unlockAllLevels = true;
+  static const bool unlockAllLevels = false;
 
   /// Schedule five local test notifications (10s apart) on debug launch.
   static const bool scheduleTestNotifications = false;

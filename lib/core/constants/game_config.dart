@@ -12,9 +12,12 @@ class GameConfig {
   static const int rotateCost = 0;
 
   static const int gridEasy = 8;
-  static const int gridMedium = 10;
-  static const int gridHard = 10;
-  static const int gridPro = 10;
+  static const int gridMedium = 8;
+  static const int gridHard = 8;
+  static const int gridPro = 8;
+
+  /// Medium, hard, and pro boards cap at [maxPlayableGridSize] minus this value.
+  static const int gridReductionMediumPlus = 2;
 
   /// Late levels used 12–13 cells; keep playable boards at this cap unless a
   /// word is longer and needs more room.
@@ -23,13 +26,16 @@ class GameConfig {
   static int playableGridSize({
     required int requested,
     required Iterable<String> words,
+    int difficultyIndex = 0,
   }) {
     var longest = 1;
     for (final word in words) {
       if (word.length > longest) longest = word.length;
     }
-    final capped =
-        requested > maxPlayableGridSize ? maxPlayableGridSize : requested;
+    final maxCap = difficultyIndex >= 1
+        ? maxPlayableGridSize - gridReductionMediumPlus
+        : maxPlayableGridSize;
+    final capped = requested > maxCap ? maxCap : requested;
     return longest > capped ? longest : capped;
   }
 

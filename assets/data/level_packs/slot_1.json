@@ -305,7 +305,7 @@
     {
       "id": 21,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 240,
       "hintsAllowed": 4,
       "coinsReward": 60,
@@ -320,7 +320,7 @@
     {
       "id": 22,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 245,
       "hintsAllowed": 4,
       "coinsReward": 65,
@@ -335,7 +335,7 @@
     {
       "id": 23,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 250,
       "hintsAllowed": 4,
       "coinsReward": 70,
@@ -350,7 +350,7 @@
     {
       "id": 24,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 255,
       "hintsAllowed": 4,
       "coinsReward": 75,
@@ -365,7 +365,7 @@
     {
       "id": 25,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 260,
       "hintsAllowed": 4,
       "coinsReward": 80,
@@ -380,7 +380,7 @@
     {
       "id": 26,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 265,
       "hintsAllowed": 4,
       "coinsReward": 85,
@@ -395,7 +395,7 @@
     {
       "id": 27,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 270,
       "hintsAllowed": 4,
       "coinsReward": 90,
@@ -410,7 +410,7 @@
     {
       "id": 28,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 275,
       "hintsAllowed": 4,
       "coinsReward": 95,
@@ -425,7 +425,7 @@
     {
       "id": 29,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 280,
       "hintsAllowed": 4,
       "coinsReward": 100,
@@ -440,7 +440,7 @@
     {
       "id": 30,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 285,
       "hintsAllowed": 4,
       "coinsReward": 105,
@@ -455,7 +455,7 @@
     {
       "id": 31,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 290,
       "hintsAllowed": 4,
       "coinsReward": 110,
@@ -470,7 +470,7 @@
     {
       "id": 32,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 295,
       "hintsAllowed": 4,
       "coinsReward": 115,
@@ -485,7 +485,7 @@
     {
       "id": 33,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 300,
       "hintsAllowed": 4,
       "coinsReward": 120,
@@ -500,7 +500,7 @@
     {
       "id": 34,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 305,
       "hintsAllowed": 4,
       "coinsReward": 125,
@@ -515,7 +515,7 @@
     {
       "id": 35,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 310,
       "hintsAllowed": 4,
       "coinsReward": 130,
@@ -530,7 +530,7 @@
     {
       "id": 36,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 315,
       "hintsAllowed": 4,
       "coinsReward": 135,
@@ -545,7 +545,7 @@
     {
       "id": 37,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 320,
       "hintsAllowed": 4,
       "coinsReward": 140,
@@ -560,7 +560,7 @@
     {
       "id": 38,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 325,
       "hintsAllowed": 4,
       "coinsReward": 145,
@@ -575,7 +575,7 @@
     {
       "id": 39,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 330,
       "hintsAllowed": 4,
       "coinsReward": 150,
@@ -590,7 +590,7 @@
     {
       "id": 40,
       "difficultyIndex": 1,
-      "gridSize": 11,
+      "gridSize": 9,
       "timeLimit": 335,
       "hintsAllowed": 4,
       "coinsReward": 155,
@@ -605,7 +605,7 @@
     {
       "id": 41,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 300,
       "hintsAllowed": 3,
       "coinsReward": 100,
@@ -620,7 +620,7 @@
     {
       "id": 42,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 305,
       "hintsAllowed": 3,
       "coinsReward": 105,
@@ -635,7 +635,7 @@
     {
       "id": 43,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 310,
       "hintsAllowed": 3,
       "coinsReward": 110,
@@ -650,7 +650,7 @@
     {
       "id": 44,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 315,
       "hintsAllowed": 3,
       "coinsReward": 115,
@@ -665,7 +665,7 @@
     {
       "id": 45,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 320,
       "hintsAllowed": 3,
       "coinsReward": 120,
@@ -680,7 +680,7 @@
     {
       "id": 46,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 325,
       "hintsAllowed": 3,
       "coinsReward": 125,
@@ -695,7 +695,7 @@
     {
       "id": 47,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 330,
       "hintsAllowed": 3,
       "coinsReward": 130,
@@ -710,7 +710,7 @@
     {
       "id": 48,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 335,
       "hintsAllowed": 3,
       "coinsReward": 135,
@@ -725,7 +725,7 @@
     {
       "id": 49,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 340,
       "hintsAllowed": 3,
       "coinsReward": 140,
@@ -740,7 +740,7 @@
     {
       "id": 50,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 345,
       "hintsAllowed": 3,
       "coinsReward": 145,
@@ -755,7 +755,7 @@
     {
       "id": 51,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 350,
       "hintsAllowed": 3,
       "coinsReward": 150,
@@ -770,7 +770,7 @@
     {
       "id": 52,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 355,
       "hintsAllowed": 3,
       "coinsReward": 155,
@@ -785,7 +785,7 @@
     {
       "id": 53,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 360,
       "hintsAllowed": 3,
       "coinsReward": 160,
@@ -800,7 +800,7 @@
     {
       "id": 54,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 365,
       "hintsAllowed": 3,
       "coinsReward": 165,
@@ -815,7 +815,7 @@
     {
       "id": 55,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 370,
       "hintsAllowed": 3,
       "coinsReward": 170,
@@ -830,7 +830,7 @@
     {
       "id": 56,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 375,
       "hintsAllowed": 3,
       "coinsReward": 175,
@@ -845,7 +845,7 @@
     {
       "id": 57,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 380,
       "hintsAllowed": 3,
       "coinsReward": 180,
@@ -860,7 +860,7 @@
     {
       "id": 58,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 385,
       "hintsAllowed": 3,
       "coinsReward": 185,
@@ -875,7 +875,7 @@
     {
       "id": 59,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 390,
       "hintsAllowed": 3,
       "coinsReward": 190,
@@ -890,7 +890,7 @@
     {
       "id": 60,
       "difficultyIndex": 2,
-      "gridSize": 12,
+      "gridSize": 10,
       "timeLimit": 395,
       "hintsAllowed": 3,
       "coinsReward": 195,
@@ -905,7 +905,7 @@
     {
       "id": 61,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 360,
       "hintsAllowed": 2,
       "coinsReward": 150,
@@ -920,7 +920,7 @@
     {
       "id": 62,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 365,
       "hintsAllowed": 2,
       "coinsReward": 155,
@@ -935,7 +935,7 @@
     {
       "id": 63,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 370,
       "hintsAllowed": 2,
       "coinsReward": 160,
@@ -950,7 +950,7 @@
     {
       "id": 64,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 375,
       "hintsAllowed": 2,
       "coinsReward": 165,
@@ -965,7 +965,7 @@
     {
       "id": 65,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 380,
       "hintsAllowed": 2,
       "coinsReward": 170,
@@ -980,7 +980,7 @@
     {
       "id": 66,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 385,
       "hintsAllowed": 2,
       "coinsReward": 175,
@@ -995,7 +995,7 @@
     {
       "id": 67,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 390,
       "hintsAllowed": 2,
       "coinsReward": 180,
@@ -1010,7 +1010,7 @@
     {
       "id": 68,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 395,
       "hintsAllowed": 2,
       "coinsReward": 185,
@@ -1025,7 +1025,7 @@
     {
       "id": 69,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 400,
       "hintsAllowed": 2,
       "coinsReward": 190,
@@ -1040,7 +1040,7 @@
     {
       "id": 70,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 405,
       "hintsAllowed": 2,
       "coinsReward": 195,
@@ -1055,7 +1055,7 @@
     {
       "id": 71,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 410,
       "hintsAllowed": 2,
       "coinsReward": 200,
@@ -1070,7 +1070,7 @@
     {
       "id": 72,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 415,
       "hintsAllowed": 2,
       "coinsReward": 205,
@@ -1085,7 +1085,7 @@
     {
       "id": 73,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 420,
       "hintsAllowed": 2,
       "coinsReward": 210,
@@ -1100,7 +1100,7 @@
     {
       "id": 74,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 425,
       "hintsAllowed": 2,
       "coinsReward": 215,
@@ -1115,7 +1115,7 @@
     {
       "id": 75,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 430,
       "hintsAllowed": 2,
       "coinsReward": 220,
@@ -1130,7 +1130,7 @@
     {
       "id": 76,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 435,
       "hintsAllowed": 2,
       "coinsReward": 225,
@@ -1145,7 +1145,7 @@
     {
       "id": 77,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 440,
       "hintsAllowed": 2,
       "coinsReward": 230,
@@ -1160,7 +1160,7 @@
     {
       "id": 78,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 445,
       "hintsAllowed": 2,
       "coinsReward": 235,
@@ -1175,7 +1175,7 @@
     {
       "id": 79,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 450,
       "hintsAllowed": 2,
       "coinsReward": 240,
@@ -1190,7 +1190,7 @@
     {
       "id": 80,
       "difficultyIndex": 3,
-      "gridSize": 13,
+      "gridSize": 11,
       "timeLimit": 455,
       "hintsAllowed": 2,
       "coinsReward": 245,

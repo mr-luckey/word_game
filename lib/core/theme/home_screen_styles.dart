@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
 
 enum HomeFeaturedLayout { fullBleed, splitGlass }
@@ -96,8 +97,7 @@ const _oceanBadges = [
 ];
 
 extension HomeScreenSpecX on AppThemePreset {
-  String get homeBackgroundAsset =>
-      'assets/images/themes/$folder/grid_full.webp';
+  String get homeBackgroundAsset => AssetPaths.themeGrid(this);
 
   HomeScreenSpec get homeSpec => switch (this) {
         AppThemePreset.classicTravel => const HomeScreenSpec(

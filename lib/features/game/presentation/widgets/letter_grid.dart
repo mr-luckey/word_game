@@ -157,23 +157,55 @@ class GridPainter extends CustomPainter {
   final TextStyle letterStyle;
   final bool darkBoard;
 
-  static const _borderInset = 0.0;
+  Color get _hintFillColor => colors.cellHint.withValues(alpha: 0.78);
 
-  Color _contrastLetterColor(Color cellBackground) {
-    if (darkBoard && cellBackground.a < 0.1) {
-      return colors.onScenic;
+  Color get _revealFillColor => colors.cellRevealed.withValues(alpha: 0.78);
+
+  bool _isSelected(int row, int col) =>
+      state.selectedCells.any((cell) => cell.row == row && cell.col == col);
+
+  Color get _selectionFillColor => state.selectionState == SelectionState.wrong
+      ? colors.cellWrong.withValues(alpha: 0.92)
+      : colors.selectionLine.withValues(alpha: 0.9);
+
+  double get _selectionStrokeWidth => cellSize * 0.62;
+
+  static const _fallbackLetterPalette = [
+    Color(0xFFFFE082),
+    Color(0xFF80DEEA),
+    Color(0xFFFF8A80),
+    Color(0xFF69F0AE),
+    Color(0xFFFFB74D),
+    Color(0xFFCE93D8),
+    Color(0xFF4FC3F7),
+    Color(0xFFFFF59D),
+  ];
+
+  List<Color> get _letterPalette {
+    if (colors.foundWordPalette.isNotEmpty) {
+      return colors.foundWordPalette;
     }
-    final lightTile = cellBackground.computeLuminance() > 0.45;
-    if (lightTile) {
-      for (final c in [colors.primary, colors.tertiary, colors.cream]) {
-        if (c.computeLuminance() < 0.42) return c;
-      }
-      return const Color(0xFF1A2744);
-    }
-    for (final c in [colors.onSurface, colors.onScenic]) {
-      if (c.computeLuminance() > 0.58) return c;
-    }
-    return const Color(0xFFFFFFFF);
+    return _fallbackLetterPalette;
+  }
+
+  /// Bright per-cell color — saturated enough to read on dark and light boards.
+  Color _idleLetterColor(int idx) {
+    final base = _letterPalette[idx % _letterPalette.length];
+    final hsl = HSLColor.fromColor(base);
+    final lightness = darkBoard
+        ? hsl.lightness.clamp(0.68, 0.92)
+        : hsl.lightness.clamp(0.38, 0.52);
+    return hsl
+        .withLightness(lightness)
+        .withSaturation((hsl.saturation * 1.08).clamp(0.55, 1.0))
+        .toColor();
+  }
+
+  Color _foundLetterColor() => const Color(0xFFFFFFFF);
+
+  FontWeight _letterWeight({required bool isSelected, required bool isFound}) {
+    if (isSelected || isFound) return FontWeight.w800;
+    return FontWeight.w700;
   }
 
   Offset _cellCenter(int row, int col) {
@@ -185,28 +217,29 @@ class GridPainter extends CustomPainter {
 
   Rect _cellRect(int row, int col) {
     return Rect.fromLTWH(
-      col * cellSize + _borderInset,
-      row * cellSize + _borderInset,
-      cellSize - _borderInset * 2,
-      cellSize - _borderInset * 2,
+      col * cellSize,
+      row * cellSize,
+      cellSize,
+      cellSize,
     );
   }
 
-  Color _cellBackground(int idx) =>
-      darkBoard ? Colors.transparent : colors.cellDefault;
+  int? _foundColorIndexAt(int row, int col) {
+    var latest = -1;
+    for (final path in state.foundWordPaths) {
+      if (path.cells.any((cell) => cell.row == row && cell.col == col)) {
+        latest = path.colorIndex;
+      }
+    }
+    return latest >= 0 ? latest : null;
+  }
 
-  Color get _hintFillColor => colors.cellHint.withValues(alpha: 0.82);
+  bool _isRevealed(int row, int col) =>
+      state.revealedWordPaths.any(
+        (path) => path.cells.any((cell) => cell.row == row && cell.col == col),
+      );
 
-  Color get _revealFillColor => colors.cellRevealed.withValues(alpha: 0.82);
-
-  bool _isSelected(int row, int col) =>
-      state.selectedCells.any((cell) => cell.row == row && cell.col == col);
-
-  Color get _selectionFillColor => state.selectionState == SelectionState.wrong
-      ? colors.cellWrong.withValues(alpha: 0.88)
-      : colors.selectionLine.withValues(alpha: 0.82);
-
-  double get _selectionStrokeWidth => cellSize * 0.58;
+  bool _isHint(int idx) => state.hintCells.contains(idx);
 
   void _sortCellsInLine(List<({int row, int col})> cells) {
     if (cells.length <= 1) return;
@@ -241,17 +274,21 @@ class GridPainter extends CustomPainter {
   void _drawRoundedPath(
     Canvas canvas,
     List<({int row, int col})> cells,
-    Color color,
-  ) {
+    Color color, {
+    double? strokeWidth,
+    double opacity = 1,
+  }) {
     if (cells.isEmpty) return;
+    final paintColor = color.withValues(alpha: color.a * opacity);
+    final width = strokeWidth ?? _selectionStrokeWidth;
 
     if (cells.length == 1) {
       final cell = cells.first;
       canvas.drawCircle(
         _cellCenter(cell.row, cell.col),
-        _selectionStrokeWidth / 2,
+        width / 2,
         Paint()
-          ..color = color
+          ..color = paintColor
           ..style = PaintingStyle.fill,
       );
       return;
@@ -273,23 +310,35 @@ class GridPainter extends CustomPainter {
     canvas.drawPath(
       path,
       Paint()
-        ..color = color
-        ..strokeWidth = _selectionStrokeWidth
+        ..color = paintColor
+        ..strokeWidth = width
         ..style = PaintingStyle.stroke
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round,
     );
   }
 
+  void _drawRoundedPathWithGlow(
+    Canvas canvas,
+    List<({int row, int col})> cells,
+    Color color,
+  ) {
+    _drawRoundedPath(
+      canvas,
+      cells,
+      color,
+      strokeWidth: _selectionStrokeWidth * 1.45,
+      opacity: 0.32,
+    );
+    _drawRoundedPath(canvas, cells, color);
+  }
+
   void _drawFoundWords(Canvas canvas) {
     for (final path in state.foundWordPaths) {
       final cells = List<({int row, int col})>.from(path.cells);
       _sortCellsInLine(cells);
-      _drawRoundedPath(
-        canvas,
-        cells,
-        colors.foundColorForIndex(path.colorIndex).withValues(alpha: 0.82),
-      );
+      final color = colors.foundColorForIndex(path.colorIndex);
+      _drawRoundedPathWithGlow(canvas, cells, color.withValues(alpha: 0.88));
     }
   }
 
@@ -297,7 +346,7 @@ class GridPainter extends CustomPainter {
     for (final path in state.revealedWordPaths) {
       final cells = List<({int row, int col})>.from(path.cells);
       _sortCellsInLine(cells);
-      _drawRoundedPath(canvas, cells, _revealFillColor);
+      _drawRoundedPathWithGlow(canvas, cells, _revealFillColor);
     }
   }
 
@@ -305,7 +354,7 @@ class GridPainter extends CustomPainter {
     for (final idx in state.hintCells) {
       final row = idx ~/ n;
       final col = idx % n;
-      _drawRoundedPath(
+      _drawRoundedPathWithGlow(
         canvas,
         [(row: row, col: col)],
         _hintFillColor,
@@ -319,47 +368,29 @@ class GridPainter extends CustomPainter {
     final cells = state.selectedCells
         .map((cell) => (row: cell.row, col: cell.col))
         .toList();
-    _drawRoundedPath(canvas, cells, _selectionFillColor);
+    _drawRoundedPathWithGlow(canvas, cells, _selectionFillColor);
   }
 
-  Color _letterBackground(int idx, int row, int col, bool isSelected) {
-    if (isSelected) return _selectionFillColor;
-
-    var latestColorIndex = -1;
-    for (final path in state.foundWordPaths) {
-      if (path.cells.any((cell) => cell.row == row && cell.col == col)) {
-        latestColorIndex = path.colorIndex;
-      }
+  Color _letterColor({
+    required int idx,
+    required bool isSelected,
+    required bool isFound,
+    required bool isRevealed,
+    required bool isHint,
+    required bool isWrong,
+  }) {
+    if (isWrong || isSelected || isFound || isRevealed) {
+      return _foundLetterColor();
     }
-    if (latestColorIndex >= 0) {
-      return colors
-          .foundColorForIndex(latestColorIndex)
-          .withValues(alpha: 0.82);
+    if (isHint) {
+      return _idleLetterColor(idx);
     }
-
-    for (final path in state.revealedWordPaths) {
-      if (path.cells.any((cell) => cell.row == row && cell.col == col)) {
-        return _revealFillColor;
-      }
-    }
-
-    if (state.hintCells.contains(idx)) {
-      return _hintFillColor;
-    }
-
-    return _cellBackground(idx);
+    return _idleLetterColor(idx);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     final n = state.grid.length;
-
-    for (var r = 0; r < n; r++) {
-      for (var c = 0; c < n; c++) {
-        final idx = r * n + c;
-        canvas.drawRect(_cellRect(r, c), Paint()..color = _cellBackground(idx));
-      }
-    }
 
     _drawFoundWords(canvas);
     _drawRevealedWords(canvas);
@@ -369,13 +400,26 @@ class GridPainter extends CustomPainter {
       _drawRoundedSelection(canvas);
     }
 
+    final isWrong = state.selectionState == SelectionState.wrong;
+
     for (var r = 0; r < n; r++) {
       for (var c = 0; c < n; c++) {
         final rect = _cellRect(r, c);
         final idx = r * n + c;
         final isSelected = _isSelected(r, c);
-        final letterBg = _letterBackground(idx, r, c, isSelected);
-        final letterColor = _contrastLetterColor(letterBg);
+        final foundColorIndex = _foundColorIndexAt(r, c);
+        final isFound = foundColorIndex != null;
+        final isRevealed = _isRevealed(r, c);
+        final isHint = _isHint(idx);
+
+        final letterColor = _letterColor(
+          idx: idx,
+          isSelected: isSelected,
+          isFound: isFound,
+          isRevealed: isRevealed,
+          isHint: isHint,
+          isWrong: isWrong && isSelected,
+        );
 
         final letter = state.grid[r][c].letter;
         final tp = TextPainter(
@@ -383,7 +427,10 @@ class GridPainter extends CustomPainter {
             text: letter,
             style: letterStyle.copyWith(
               color: letterColor,
-              fontWeight: FontWeight.w800,
+              fontWeight: _letterWeight(
+                isSelected: isSelected,
+                isFound: isFound || isRevealed,
+              ),
             ),
           ),
           textDirection: TextDirection.ltr,
