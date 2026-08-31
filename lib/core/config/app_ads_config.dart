@@ -36,7 +36,8 @@ AdsConfig createAppAdsConfig() {
       'after_level_group': 0,
       'after_session': 1,
     },
-    minimumInterstitialInterval: const Duration(seconds: 90),
+    minimumInterstitialInterval:
+        Duration(seconds: GameConfig.scheduledInterstitialIntervalSeconds),
     rewardedPlacements: const {
       'extra_coins': 0,
       'double_coins': 1,

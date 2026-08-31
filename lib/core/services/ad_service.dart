@@ -14,6 +14,8 @@ enum RewardedAdOutcome { earned, skipped, unavailable }
 
 enum FullScreenAdKind { interstitial, rewarded }
 
+enum InterstitialSource { scheduled, userAction }
+
 typedef FullScreenAdDismissed = void Function(FullScreenAdKind kind);
 
 /// Central AdMob manager. Placement-based IDs. No waterfall. Offline = idle.
@@ -40,7 +42,9 @@ class AdService {
   bool _initializing = false;
   bool _fullScreenShowing = false;
   bool _gameplayActive = false;
+  bool _interstitialShowInProgress = false;
   DateTime? _lastFullScreenAt;
+  DateTime? _userInterstitialPriorityUntil;
 
   InterstitialAd? _interstitial;
   String? _interstitialPlacement;
@@ -49,9 +53,9 @@ class AdService {
 
   int _interstitialAttempts = 0;
   int _rewardedAttempts = 0;
-  int _levelCount = 0;
   Timer? _interstitialRetry;
   Timer? _rewardedRetry;
+  Timer? _periodicInterstitialTimer;
 
   final List<VoidCallback> _readyListeners = [];
   final List<FullScreenAdDismissed> _dismissListeners = [];
@@ -78,6 +82,11 @@ class AdService {
 
   Future<void> setAdsRemoved(bool value) async {
     await _prefs.setBool(_removeAdsKey, value);
+    if (value) {
+      _stopPeriodicInterstitials();
+    } else if (_network.isOnline) {
+      _startPeriodicInterstitials();
+    }
   }
 
   void addOnAdsReady(VoidCallback listener) => _readyListeners.add(listener);
@@ -95,17 +104,16 @@ class AdService {
       await _ensureSdk();
       if (_sdkInitialized) {
         unawaited(
-          preloadInterstitial(placement: AdPlacements.interstitialAfterLevelGroup),
-        );
-        unawaited(
           preloadInterstitial(placement: AdPlacements.interstitialAfterSession),
         );
         unawaited(preloadRewarded(placement: AdPlacements.rewardedExtraCoins));
+        _startPeriodicInterstitials();
       }
     }
   }
 
   Future<void> dispose() async {
+    _stopPeriodicInterstitials();
     _interstitialRetry?.cancel();
     _rewardedRetry?.cancel();
     _interstitial?.dispose();
@@ -157,9 +165,10 @@ class AdService {
   }
 
   Future<void> preloadInterstitial({
-    String placement = AdPlacements.interstitialAfterLevelGroup,
+    String placement = AdPlacements.interstitialAfterSession,
   }) async {
     if (adsRemoved || kIsWeb) return;
+    if (_fullScreenShowing || _interstitialShowInProgress) return;
     if (_interstitial != null && _interstitialPlacement == placement) return;
     final unitId = _config.interstitialUnitId(placement);
     if (unitId == null) return;
@@ -170,6 +179,7 @@ class AdService {
       _interstitialRetry?.cancel();
       _interstitial?.dispose();
       _interstitial = null;
+      _interstitialPlacement = null;
       final completer = Completer<InterstitialAd?>();
       await InterstitialAd.load(
         adUnitId: unitId,
@@ -200,6 +210,7 @@ class AdService {
           _lastFullScreenAt = DateTime.now();
           ad.dispose();
           _interstitial = null;
+          _interstitialPlacement = null;
           _notifyFullScreenDismissed(FullScreenAdKind.interstitial);
           unawaited(preloadInterstitial(placement: placement));
         },
@@ -208,6 +219,7 @@ class AdService {
           _fullScreenShowing = false;
           ad.dispose();
           _interstitial = null;
+          _interstitialPlacement = null;
         },
       );
       _interstitial = ad;
@@ -218,10 +230,11 @@ class AdService {
 
   void onLevelComplete() {
     if (adsRemoved || kIsWeb) return;
-    _levelCount++;
-    if (_levelCount % AdPlacements.interstitialEveryNLevels != 0) return;
     unawaited(
-      showInterstitial(placement: AdPlacements.interstitialAfterLevelGroup),
+      showInterstitial(
+        placement: AdPlacements.interstitialAfterLevelGroup,
+        source: InterstitialSource.userAction,
+      ),
     );
   }
 
@@ -230,30 +243,57 @@ class AdService {
     if (adsRemoved || kIsWeb) return;
     setGameplayActive(false);
     unawaited(
-      showInterstitial(placement: AdPlacements.interstitialAfterSession),
+      showInterstitial(
+        placement: AdPlacements.interstitialAfterSession,
+        source: InterstitialSource.userAction,
+      ),
     );
+  }
+
+  /// Button / navigation triggered interstitial — beats scheduled ads.
+  Future<bool> showInterstitialForUserAction({
+    String placement = AdPlacements.interstitialAfterLevelGroup,
+  }) {
+    return showInterstitial(placement: placement, source: InterstitialSource.userAction);
   }
 
   Future<bool> showInterstitial({
     String placement = AdPlacements.interstitialAfterLevelGroup,
+    InterstitialSource source = InterstitialSource.userAction,
   }) async {
     if (adsRemoved || kIsWeb) return false;
     if (_gameplayActive) return false;
-    if (_fullScreenShowing) return false;
-    if (!_frequencyAllowsInterstitial()) return false;
-    if (_interstitial == null || _interstitialPlacement != placement) {
-      await preloadInterstitial(placement: placement);
+    if (_fullScreenShowing || _interstitialShowInProgress) return false;
+    if (source == InterstitialSource.scheduled &&
+        _userInterstitialPriorityUntil != null &&
+        DateTime.now().isBefore(_userInterstitialPriorityUntil!)) {
+      return false;
     }
-    final ad = _interstitial;
-    if (ad == null) return false;
+    if (!_frequencyAllowsInterstitial()) return false;
+
+    if (source == InterstitialSource.userAction) {
+      _userInterstitialPriorityUntil = DateTime.now().add(
+        _config.minimumInterstitialInterval,
+      );
+    }
+
+    _interstitialShowInProgress = true;
     try {
+      if (_interstitial == null || _interstitialPlacement != placement) {
+        await preloadInterstitial(placement: placement);
+      }
+      final ad = _interstitial;
+      if (ad == null) return false;
       await ad.show();
       return true;
     } catch (error, stack) {
       debugPrint('showInterstitial failed: $error\n$stack');
-      ad.dispose();
+      _interstitial?.dispose();
       _interstitial = null;
+      _interstitialPlacement = null;
       return false;
+    } finally {
+      _interstitialShowInProgress = false;
     }
   }
 
@@ -412,6 +452,10 @@ class AdService {
     unawaited(() async {
       final ok = await _ensureSdk();
       if (!ok) return;
+      unawaited(
+        preloadInterstitial(placement: AdPlacements.interstitialAfterSession),
+      );
+      _startPeriodicInterstitials();
       for (final listener in List<VoidCallback>.from(_readyListeners)) {
         listener();
       }
@@ -448,6 +492,30 @@ class AdService {
     if (last == null) return true;
     return DateTime.now().difference(last) >=
         _config.minimumInterstitialInterval;
+  }
+
+  void _startPeriodicInterstitials() {
+    _stopPeriodicInterstitials();
+    if (adsRemoved || kIsWeb) return;
+    _periodicInterstitialTimer = Timer.periodic(
+      Duration(seconds: GameConfig.scheduledInterstitialIntervalSeconds),
+      (_) => unawaited(_tickScheduledInterstitial()),
+    );
+  }
+
+  void _stopPeriodicInterstitials() {
+    _periodicInterstitialTimer?.cancel();
+    _periodicInterstitialTimer = null;
+  }
+
+  Future<void> _tickScheduledInterstitial() async {
+    if (adsRemoved || kIsWeb) return;
+    if (_gameplayActive) return;
+    if (_fullScreenShowing || _interstitialShowInProgress) return;
+    await showInterstitial(
+      placement: AdPlacements.interstitialAfterSession,
+      source: InterstitialSource.scheduled,
+    );
   }
 
   void _scheduleInterstitialRetry(String placement) {
