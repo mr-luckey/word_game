@@ -7,6 +7,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:word_game/core/constants/product_ids.dart';
 import 'package:word_game/core/constants/shop_products.dart';
 import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/progress_sync_service.dart';
 import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/features/game/domain/repositories/level_repository.dart';
@@ -57,7 +58,7 @@ class ShopPurchaseError extends ShopState {
 }
 
 class ShopCubit extends Cubit<ShopState> {
-  ShopCubit(this._wallet, this._adService, this._vip, this._sync)
+  ShopCubit(this._wallet, this._adService, this._vip, this._sync, this._analytics)
       : super(const ShopInitial()) {
     _init();
   }
@@ -66,6 +67,7 @@ class ShopCubit extends Cubit<ShopState> {
   final AdService _adService;
   final VipService _vip;
   final ProgressSyncService _sync;
+  final AnalyticsService _analytics;
   final InAppPurchase _iap = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _sub;
   List<ProductDetails> _products = [];
@@ -158,6 +160,7 @@ class ShopCubit extends Cubit<ShopState> {
       }
     }
     await _sync.recordPurchaseAndSync(productId);
+    unawaited(_analytics.logPurchase(productId));
   }
 
   @override

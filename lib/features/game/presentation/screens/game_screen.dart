@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/constants/game_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/theme/game_screen_styles.dart';
+import 'package:word_game/core/widgets/ads/banner_ad_slot.dart';
 import 'package:word_game/features/game/presentation/widgets/game_action_button.dart';
 import 'package:word_game/features/game/presentation/widgets/game_neon_panel.dart';
 import 'package:word_game/features/game/presentation/widgets/word_list_panel.dart';
@@ -28,7 +29,6 @@ import 'package:word_game/features/game/presentation/widgets/game_timeout_overla
 import 'package:word_game/features/game/presentation/widgets/letter_grid.dart';
 import 'package:word_game/core/widgets/insufficient_coins_dialog.dart';
 import 'package:word_game/features/game/presentation/widgets/level_tutorial_overlay.dart';
-import 'package:word_game/features/level_select/presentation/cubit/banner_ad_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/xp_cubit.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
@@ -42,10 +42,7 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => BannerAdCubit(getIt()),
-      child: _GameView(levelId: levelId),
-    );
+    return _GameView(levelId: levelId);
   }
 }
 
@@ -501,23 +498,13 @@ class _GameBannerAd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    return BlocBuilder<BannerAdCubit, BannerAd?>(
-      builder: (context, banner) {
-        if (banner == null) return const SizedBox.shrink();
-        return ColoredBox(
-          color: colors.navSurface,
-          child: SafeArea(
-            top: false,
-            child: Center(
-              child: SizedBox(
-                width: banner.size.width.toDouble(),
-                height: banner.size.height.toDouble(),
-                child: AdWidget(ad: banner),
-              ),
-            ),
-          ),
-        );
-      },
+    return ColoredBox(
+      color: colors.navSurface,
+      child: BannerAdSlot(
+        ads: getIt<AdService>(),
+        placement: AdPlacements.bannerGame,
+        padding: const EdgeInsets.only(top: 8),
+      ),
     );
   }
 }
@@ -535,7 +522,7 @@ class _Toolbar extends StatelessWidget {
     final m = GameScreenScope.of(context);
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(m.s(12), m.s(4), m.s(12), m.s(8)),
+      padding: EdgeInsets.fromLTRB(m.s(12), m.s(2), m.s(12), m.s(4)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,

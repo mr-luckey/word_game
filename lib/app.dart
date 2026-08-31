@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/navigation/app_navigator.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/widgets/app_lifecycle_audio_scope.dart';
 import 'package:word_game/core/widgets/main_shell.dart';
@@ -38,7 +39,7 @@ class WordSearchApp extends StatelessWidget {
           title: 'Word Search Journey',
           debugShowCheckedModeBanner: false,
           theme: themeState.themeData,
-          routerConfig: _router,
+          routerConfig: appRouter,
           builder: (context, child) => AppLifecycleAudioScope(
             child: child ?? const SizedBox.shrink(),
           ),
@@ -94,7 +95,8 @@ CustomTransitionPage<void> _slideFromBottomPage(
       ),
     );
 
-final _router = GoRouter(
+final appRouter = GoRouter(
+  navigatorKey: rootNavigatorKey,
   initialLocation: '/',
   routes: [
     GoRoute(

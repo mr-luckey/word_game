@@ -152,6 +152,26 @@ void main() {
       ),
     ).thenAnswer((_) async {});
     when(() => analytics.logLevelStart(any())).thenAnswer((_) async {});
+    when(() => analytics.logLevelComplete(
+          levelId: any(named: 'levelId'),
+          stars: any(named: 'stars'),
+        )).thenAnswer((_) async {});
+    when(() => analytics.logHintUsed(
+          levelNumber: any(named: 'levelNumber'),
+          source: any(named: 'source'),
+        )).thenAnswer((_) async {});
+    when(() => analytics.logLevelFailed(
+          levelNumber: any(named: 'levelNumber'),
+          difficulty: any(named: 'difficulty'),
+          moves: any(named: 'moves'),
+          timeSeconds: any(named: 'timeSeconds'),
+          attemptNumber: any(named: 'attemptNumber'),
+          source: any(named: 'source'),
+        )).thenAnswer((_) async {});
+    when(() => analytics.logDailyRewardClaimed(
+          day: any(named: 'day'),
+          source: any(named: 'source'),
+        )).thenAnswer((_) async {});
     when(() => audio.playWordFound()).thenAnswer((_) async {});
   });
 

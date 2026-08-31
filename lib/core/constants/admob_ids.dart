@@ -1,54 +1,41 @@
-import 'dart:io';
-
-/// AdMob unit IDs — replace test IDs with your production IDs.
-/// Add multiple IDs per format; the app tries them in order and stops after the first load.
+/// Production Android AdMob unit IDs from the AdMob console.
+/// iOS production IDs are not in this repo — lists stay empty (do not invent).
+/// Multiple IDs per format are named placements, not a no-fill waterfall.
 class AdMobIds {
   AdMobIds._();
 
-  static const String testAppId = 'ca-app-pub-3940256099942544~3347511713';
+  static const String androidAppId = 'ca-app-pub-6619866004331477~2679151109';
 
   static const List<String> interstitialAndroid = [
-    'ca-app-pub-5561438827097019/6060325087',
-    'ca-app-pub-5561438827097019/7812390450',
-    'ca-app-pub-5561438827097019/7425377646',
-    'ca-app-pub-5561438827097019/8149296799',
-    'ca-app-pub-5561438827097019/7429247074',
+    'ca-app-pub-6619866004331477/6913979397',
+    'ca-app-pub-6619866004331477/6996855392',
+    'ca-app-pub-6619866004331477/2567540277',
+    'ca-app-pub-6619866004331477/5683773725',
+    'ca-app-pub-6619866004331477/9348571041',
   ];
 
-  static const List<String> interstitialIos = [
-    'ca-app-pub-3940256099942544/4411468910',
-  ];
+  /// Production iOS interstitial units — missing.
+  static const List<String> interstitialIos = <String>[];
 
   static const List<String> rewardedAndroid = [
-    'ca-app-pub-5561438827097019/3415844860',
-    'ca-app-pub-5561438827097019/7564102737',
-    'ca-app-pub-5561438827097019/9789681524',
-    'ca-app-pub-5561438827097019/4018480093',
-    'ca-app-pub-5561438827097019/8476599854',
+    'ca-app-pub-6619866004331477/4370692051',
+    'ca-app-pub-6619866004331477/6722407706',
+    'ca-app-pub-6619866004331477/8118365372',
+    'ca-app-pub-6619866004331477/5492202031',
+    'ca-app-pub-6619866004331477/2866038698',
   ];
 
-  static const List<String> rewardedIos = [
-    'ca-app-pub-3940256099942544/1712485313',
-  ];
+  /// Production iOS rewarded units — missing.
+  static const List<String> rewardedIos = <String>[];
 
   static const List<String> bannerAndroid = [
-    'ca-app-pub-5561438827097019/9639601737',
-    'ca-app-pub-5561438827097019/7780600865',
-    'ca-app-pub-5561438827097019/3443765025',
-    'ca-app-pub-5561438827097019/5960252736',
-    'ca-app-pub-5561438827097019/6821866706',
+    'ca-app-pub-6619866004331477/718827087',
+    'ca-app-pub-6619866004331477/4562263749',
+    'ca-app-pub-6619866004331477/5193703615',
+    'ca-app-pub-6619866004331477/3166306075',
+    'ca-app-pub-6619866004331477/9540142736',
   ];
 
-  static const List<String> bannerIos = [
-    'ca-app-pub-3940256099942544/2934735716',
-  ];
-
-  static List<String> get interstitial =>
-      Platform.isAndroid ? interstitialAndroid : interstitialIos;
-
-  static List<String> get rewarded =>
-      Platform.isAndroid ? rewardedAndroid : rewardedIos;
-
-  static List<String> get banner =>
-      Platform.isAndroid ? bannerAndroid : bannerIos;
+  /// Production iOS banner units — missing.
+  static const List<String> bannerIos = <String>[];
 }

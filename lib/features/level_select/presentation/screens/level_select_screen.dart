@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/constants/asset_paths.dart';
 import 'package:word_game/core/constants/scenic_background_style.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
@@ -12,7 +12,8 @@ import 'package:word_game/core/theme/destination_catalog.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
 import 'package:word_game/core/widgets/shell_nav_metrics.dart';
-import 'package:word_game/features/level_select/presentation/cubit/banner_ad_cubit.dart';
+import 'package:word_game/core/widgets/ads/banner_ad_slot.dart';
+import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
 import 'package:word_game/features/level_select/presentation/cubit/level_select_cubit.dart';
 import 'package:word_game/features/level_select/presentation/widgets/level_map_view.dart';
@@ -35,7 +36,6 @@ class LevelSelectScreen extends StatelessWidget {
         BlocProvider(
           create: (_) => LevelSelectCubit(getIt(), getIt(), themeId)..load(),
         ),
-        BlocProvider(create: (_) => BannerAdCubit(getIt())),
       ],
       child: const _LevelSelectView(),
     );
@@ -315,18 +315,13 @@ class _LevelSelectViewState extends State<_LevelSelectView> {
                       ),
                     ),
                   ),
-                  BlocBuilder<BannerAdCubit, BannerAd?>(
-                    builder: (context, banner) {
-                      if (banner == null) return const SizedBox.shrink();
-                      return ColoredBox(
-                        color: colors.navSurface,
-                        child: SizedBox(
-                          width: banner.size.width.toDouble(),
-                          height: banner.size.height.toDouble(),
-                          child: AdWidget(ad: banner),
-                        ),
-                      );
-                    },
+                  ColoredBox(
+                    color: colors.navSurface,
+                    child: BannerAdSlot(
+                      ads: getIt<AdService>(),
+                      placement: AdPlacements.bannerLevelSelect,
+                      padding: const EdgeInsets.only(top: 8),
+                    ),
                   ),
                 ],
                 ),

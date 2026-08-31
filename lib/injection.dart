@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:word_game/core/navigation/app_navigator.dart';
 import 'package:word_game/core/data/game_content_loader.dart';
 import 'package:word_game/core/data/game_content_registry.dart';
 import 'package:word_game/core/services/achievement_service.dart';
@@ -19,6 +23,7 @@ import 'package:word_game/core/services/app_update_service.dart';
 import 'package:word_game/core/services/vip_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
+import 'package:word_game/core/services/local_notification_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/data/local/database.dart';
 import 'package:word_game/data/repositories/level_repository_impl.dart';
@@ -85,7 +90,26 @@ Future<void> configureDependencies() async {
 
   getIt.registerLazySingleton(() => AudioService(prefs));
   getIt.registerLazySingleton(() => AnalyticsService());
-  getIt.registerLazySingleton(() => AdService(prefs, getIt()));
+  getIt.registerLazySingleton(
+    () => AdService(prefs, getIt(), analytics: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => LocalNotificationService(
+      prefs: prefs,
+      onTap: (payload) {
+        unawaited(
+          getIt<AnalyticsService>().logNotificationOpened(
+            notificationId: payload,
+            source: 'local',
+          ),
+        );
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) {
+          ctx.go('/home');
+        }
+      },
+    ),
+  );
   getIt.registerLazySingleton(() => AppRatingService(prefs));
   getIt.registerLazySingleton(() => AppUpdateService());
   getIt.registerLazySingleton(
@@ -115,7 +139,7 @@ Future<void> configureDependencies() async {
       vip: getIt(),
     ),
   );
-  getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt(), getIt()));
+  getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt(), getIt(), getIt()));
 
   final wallet = getIt<WalletRepository>();
   if (!await wallet.hasWelcomeBonusGranted()) {

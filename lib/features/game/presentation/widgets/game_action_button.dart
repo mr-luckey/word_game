@@ -32,9 +32,9 @@ class GameActionButton extends StatelessWidget {
     final colors = context.appColors;
     final light = context.themePreset.gameSpec.lightAtmosphere;
     final m = GameScreenScope.of(context);
-    final buttonSize = m.s(large ? 72 : 58);
-    final ringWidth = m.s(3);
-    final iconSize = m.s(large ? 32 : 26);
+    final buttonSize = m.s(large ? 44 : 38);
+    final ringWidth = m.s(2);
+    final iconSize = m.s(large ? 20 : 18);
 
     return Opacity(
       opacity: disabled ? 0.5 : 1,
@@ -51,13 +51,13 @@ class GameActionButton extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: glowColor.withValues(alpha: 0.7),
-                      blurRadius: m.s(18),
-                      spreadRadius: m.s(1),
+                      color: glowColor.withValues(alpha: 0.55),
+                      blurRadius: m.s(10),
+                      spreadRadius: m.s(0.4),
                     ),
                     BoxShadow(
-                      color: glowColor.withValues(alpha: 0.3),
-                      blurRadius: m.s(32),
+                      color: glowColor.withValues(alpha: 0.22),
+                      blurRadius: m.s(16),
                     ),
                   ],
                 ),
@@ -77,17 +77,17 @@ class GameActionButton extends StatelessWidget {
                   child: Icon(icon, color: glowColor, size: iconSize),
                 ),
               ),
-              SizedBox(height: m.s(8)),
+              SizedBox(height: m.s(4)),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: m.s(12),
-                  vertical: m.s(6),
+                  horizontal: m.s(8),
+                  vertical: m.s(3),
                 ),
                 decoration: BoxDecoration(
                   color: light
                       ? Colors.white.withValues(alpha: 0.92)
                       : glowColor.withValues(alpha: 0.22),
-                  borderRadius: BorderRadius.circular(m.s(14)),
+                  borderRadius: BorderRadius.circular(m.s(10)),
                   border: Border.all(
                     color: glowColor.withValues(alpha: 0.75),
                     width: m.s(1.2),
@@ -105,7 +105,7 @@ class GameActionButton extends StatelessWidget {
                     Text(
                       label,
                       style: AppTextStyles.subtitle(context).copyWith(
-                        fontSize: m.s(12),
+                        fontSize: m.s(10),
                         fontWeight: FontWeight.w800,
                         color: light
                             ? const Color(0xFF0D2137)
@@ -121,14 +121,14 @@ class GameActionButton extends StatelessWidget {
                             Icon(
                               Icons.monetization_on_rounded,
                               color: colors.gold,
-                              size: m.s(11),
+                              size: m.s(9),
                             ),
                             SizedBox(width: m.s(3)),
                           ],
                           Text(
                             subtitle!,
                             style: AppTextStyles.bodyMuted(context).copyWith(
-                              fontSize: m.s(10),
+                              fontSize: m.s(8),
                               fontWeight: FontWeight.w600,
                               color: light
                                   ? const Color(0xFF1E3A5F)

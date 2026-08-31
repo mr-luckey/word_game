@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:word_game/app.dart';
 import 'package:word_game/core/services/ad_service.dart';
+import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/app_rating_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
+import 'package:word_game/core/services/local_notification_service.dart';
 import 'package:word_game/injection.dart';
 
 Future<void> main() async {
@@ -12,7 +16,9 @@ Future<void> main() async {
 
   await Firebase.initializeApp();
   await configureDependencies();
-  await getIt<AdService>().initialize();
+  unawaited(getIt<AnalyticsService>().init());
+  unawaited(getIt<AdService>().initialize());
+  unawaited(_scheduleLocalNotifications());
   await getIt<AppRatingService>().recordAppLaunch();
   await getIt<AudioService>().startBackgroundMusic();
   await SystemChrome.setPreferredOrientations([
@@ -25,4 +31,12 @@ Future<void> main() async {
     ),
   );
   runApp(const WordSearchApp());
+}
+
+Future<void> _scheduleLocalNotifications() async {
+  final count = await getIt<LocalNotificationService>().scheduleNotifications();
+  await getIt<AnalyticsService>().logNotificationScheduled(
+    count: count,
+    source: 'app_start',
+  );
 }

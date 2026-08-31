@@ -6,6 +6,7 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/animated_word_chip.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
+import 'package:word_game/features/game/presentation/widgets/game_neon_panel.dart';
 import 'package:word_game/features/game/presentation/widgets/game_screen_metrics.dart';
 
 class WordListPanel extends StatelessWidget {
@@ -51,25 +52,25 @@ class WordListPanel extends StatelessWidget {
                   ],
           ),
         ),
-        SizedBox(height: embedded ? s(12) : 6),
+        SizedBox(height: embedded ? s(10) : 6),
         Wrap(
-          spacing: embedded ? s(10) : 10,
-          runSpacing: embedded ? s(10) : 8,
+          spacing: embedded ? s(8) : 10,
+          runSpacing: embedded ? s(8) : 8,
           alignment: WrapAlignment.center,
           children: state.wordsToFind.asMap().entries.map((e) {
             final found = state.foundWords.any((f) => f.text == e.value.text);
             if (embedded) {
               final iconColor = gameSpec
                   .wordIconColors[e.key % gameSpec.wordIconColors.length];
-              final icon = gameWordIcons[e.key % gameWordIcons.length];
               return _EmbeddedWordChip(
                 word: e.value.text,
                 found: found,
-                icon: icon,
+                icon: gameWordIcons[e.key % gameWordIcons.length],
                 iconColor: iconColor,
                 textColor: gameSpec.wordChipText,
                 lightAtmosphere: gameSpec.lightAtmosphere,
                 scale: s,
+                cornerRadius: kGameWordListPanelRadius,
               );
             }
             return AnimatedWordChip(
@@ -106,6 +107,7 @@ class _EmbeddedWordChip extends StatelessWidget {
     required this.textColor,
     required this.lightAtmosphere,
     required this.scale,
+    required this.cornerRadius,
   });
 
   final String word;
@@ -115,31 +117,39 @@ class _EmbeddedWordChip extends StatelessWidget {
   final Color textColor;
   final bool lightAtmosphere;
   final double Function(double) scale;
+  final double cornerRadius;
 
   @override
   Widget build(BuildContext context) {
-    final fill = lightAtmosphere
-        ? Colors.white.withValues(alpha: 0.92)
-        : const Color(0xE6121828);
+    final plate = lightAtmosphere
+        ? Color.alphaBlend(
+            Colors.white.withValues(alpha: 0.42),
+            iconColor.withValues(alpha: 0.55),
+          )
+        : Color.alphaBlend(
+            Colors.black.withValues(alpha: 0.72),
+            iconColor.withValues(alpha: 0.85),
+          );
     final labelColor = textColor;
 
     return Opacity(
       opacity: found ? 0.5 : 1,
       child: Container(
+        constraints: BoxConstraints(minHeight: scale(44)),
         padding: EdgeInsets.symmetric(
           horizontal: scale(10),
-          vertical: scale(6),
+          vertical: scale(8),
         ),
         decoration: BoxDecoration(
-          color: fill,
-          borderRadius: BorderRadius.circular(scale(10)),
+          color: plate,
+          borderRadius: BorderRadius.circular(cornerRadius),
           border: Border.all(
-            color: iconColor.withValues(alpha: 0.95),
-            width: scale(1.4),
+            color: iconColor,
+            width: scale(1.6),
           ),
           boxShadow: [
             BoxShadow(
-              color: iconColor.withValues(alpha: lightAtmosphere ? 0.22 : 0.4),
+              color: iconColor.withValues(alpha: lightAtmosphere ? 0.2 : 0.4),
               blurRadius: scale(8),
             ),
           ],
@@ -164,7 +174,7 @@ class _EmbeddedWordChip extends StatelessWidget {
                     ? null
                     : [
                         Shadow(
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: Colors.black.withValues(alpha: 0.75),
                           blurRadius: 4,
                         ),
                       ],

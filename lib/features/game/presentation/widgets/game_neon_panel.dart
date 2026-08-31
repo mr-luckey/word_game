@@ -7,6 +7,9 @@ import 'package:word_game/core/widgets/moving_light_border.dart';
 
 enum GamePanelBorderStyle { wordList, grid }
 
+const double kGameWordListPanelRadius = 18;
+const double kGameGridPanelRadius = 22;
+
 /// Dark glass panel with animated moving-light border for the game screen.
 ///
 /// No BackdropFilter — that would blur the HD scenic photo behind the board.
@@ -27,8 +30,10 @@ class GameNeonPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spec = context.themePreset.gameSpec;
-    final radius =
-        borderRadius ?? (borderStyle == GamePanelBorderStyle.grid ? 22.0 : 18.0);
+    final radius = borderRadius ??
+        (borderStyle == GamePanelBorderStyle.grid
+            ? kGameGridPanelRadius
+            : kGameWordListPanelRadius);
     final isGrid = borderStyle == GamePanelBorderStyle.grid;
     final lightColors =
         isGrid ? spec.gridBorderLights : spec.wordListBorderLights;

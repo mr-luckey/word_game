@@ -131,11 +131,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(const GameError('Level not found'));
       return;
     }
-    final result =
-        GridGenerator(gridSize: level.gridSize).generate(level.words);
+    final gridSize = GameConfig.playableGridSize(
+      requested: level.gridSize,
+      words: level.words,
+    );
+    final result = GridGenerator(gridSize: gridSize).generate(level.words);
     _placements = result.placements;
     final coins = await _wallet.getCoins();
-    await _analytics.logLevelStart(level.id);
+    unawaited(
+      _analytics.logLevelStart(level.id),
+    );
     final grid = _buildGridModels(result.grid);
     final displayNumber = _displayNumberForLevel(level.id, level.themeId);
     final showTutorial = await _isFirstLevelTutorial(level.id, level.themeId);
@@ -146,7 +151,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Set<int> tutorialIndices = {};
     List<({int row, int col})> tutorialPath = [];
     if (showTutorial && result.placements.isNotEmpty) {
-      final n = level.gridSize;
+      final n = gridSize;
       final first = result.placements.first;
       tutorialPath = GameCellUtils.sortCellsInLine(
         first.cells.map((c) => (row: c.row, col: c.col)).toList(),
@@ -247,6 +252,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           selectedCells: [],
           selectionState: SelectionState.idle,
           clearFeedback: true,
+        ),
+      );
+      unawaited(
+        _analytics.logLevelFailed(
+          levelNumber: s.levelId,
+          timeSeconds: s.timeLimit,
+          source: 'timeout',
         ),
       );
       return;
@@ -428,6 +440,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         clearFeedback: true,
         feedback: 'Hint: first letter of "${targetPlacement.word}"',
       ),
+    );
+    unawaited(
+      _analytics.logHintUsed(levelNumber: s.levelId, source: 'hint_button'),
     );
   }
 
@@ -689,6 +704,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     unawaited(_analytics.logLevelComplete(levelId: s.levelId, stars: stars));
+    if (s.levelId == _content.dailyChallenge.levelId) {
+      unawaited(
+        _analytics.logDailyRewardClaimed(source: 'daily_challenge'),
+      );
+    }
     unawaited(_audio.playLevelComplete());
 
     if (emit.isDone) return;
