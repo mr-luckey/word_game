@@ -9,6 +9,7 @@ import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/daily_challenge_service.dart';
 import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/app_theme_preset.dart';
+import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
 import 'package:word_game/features/game/domain/entities/level_entity.dart';
@@ -44,6 +45,8 @@ class MockThemeBloc extends Mock implements AppThemeBloc {}
 
 class MockVip extends Mock implements VipService {}
 
+class MockAdService extends Mock implements AdService {}
+
 void main() {
   const sampleLevel = LevelEntity(
     id: 101,
@@ -68,6 +71,7 @@ void main() {
   late MockDailyChallenge dailyChallenge;
   late MockThemeBloc themeBloc;
   late MockVip vip;
+  late MockAdService ads;
   late GameContentRegistry testContent;
 
   GameBloc buildBloc() => GameBloc(
@@ -83,6 +87,7 @@ void main() {
         themeBloc: themeBloc,
         content: testContent,
         vip: vip,
+        ads: ads,
       );
 
   setUp(() {
@@ -96,6 +101,7 @@ void main() {
     dailyChallenge = MockDailyChallenge();
     themeBloc = MockThemeBloc();
     vip = MockVip();
+    ads = MockAdService();
     testContent = GameContentRegistry(
       levelPacksBySlot: const {1: []},
       slotsConfig: const SlotsConfig(slotCount: 10),
@@ -121,6 +127,8 @@ void main() {
     when(() => vip.applyLevelCoinBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
     when(() => vip.applyLevelXpBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
     when(() => vip.applyDailyCoinBonus(any())).thenAnswer((i) => i.positionalArguments[0] as int);
+    when(() => ads.adsRemoved).thenReturn(true);
+    when(() => ads.isOnline).thenReturn(false);
     when(() => dailyChallenge.todayRewardCoins).thenReturn(50);
     when(() => themeBloc.state).thenReturn(
       AppThemeState(

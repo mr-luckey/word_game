@@ -17,7 +17,6 @@ import 'package:word_game/features/home/presentation/widgets/home_top_bar.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 import 'package:word_game/injection.dart';
 import 'package:word_game/core/widgets/engagement_prompt_scope.dart';
-import 'package:word_game/core/widgets/exit_app_dialog.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -124,16 +123,10 @@ class _HomeViewState extends State<_HomeView> {
     final preset = context.themePreset;
     final metrics = HomeLayoutMetrics.of(context);
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
-        await exitAppIfConfirmed(context);
-      },
-      child: EngagementPromptScope(
-        key: ValueKey('engagement-$_engagementTick'),
-        afterGameplay: _afterGameplay,
-        child: Scaffold(
+    return EngagementPromptScope(
+      key: ValueKey('engagement-$_engagementTick'),
+      afterGameplay: _afterGameplay,
+      child: Scaffold(
           extendBodyBehindAppBar: true,
           body: HomeBackground(
             child: SafeArea(
@@ -236,7 +229,6 @@ class _HomeViewState extends State<_HomeView> {
             ),
           ),
         ),
-      ),
     );
   }
 }

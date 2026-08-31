@@ -42,6 +42,8 @@ AdsConfig createAppAdsConfig() {
       'extra_coins': 0,
       'double_coins': 1,
       'double_xp': 2,
+      'reveal_word': 3,
+      'shuffle_board': 4,
     },
     maxRetries: 2,
     retryBackoff: const Duration(seconds: 30),
@@ -62,6 +64,8 @@ abstract final class AdPlacements {
   static const rewardedExtraCoins = 'extra_coins';
   static const rewardedDoubleCoins = 'double_coins';
   static const rewardedDoubleXp = 'double_xp';
+  static const rewardedRevealWord = 'reveal_word';
+  static const rewardedShuffleBoard = 'shuffle_board';
 
   static const interstitialEveryNLevels = GameConfig.interstitialEveryNLevels;
 }

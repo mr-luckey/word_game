@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:word_game/core/navigation/system_back_guard.dart';
 import 'package:word_game/core/services/app_rating_service.dart';
 import 'package:word_game/core/widgets/journey_prompt_dialog.dart';
 import 'package:word_game/injection.dart';
@@ -20,13 +21,15 @@ class EngagementPromptScope extends StatefulWidget {
   State<EngagementPromptScope> createState() => _EngagementPromptScopeState();
 }
 
-class _EngagementPromptScopeState extends State<EngagementPromptScope> {
+class _EngagementPromptScopeState extends State<EngagementPromptScope>
+    with WidgetsBindingObserver {
   Timer? _idleTimer;
   bool _ratingShownThisSession = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scheduleIdleRatingPrompt();
     if (widget.afterGameplay) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -45,16 +48,33 @@ class _EngagementPromptScopeState extends State<EngagementPromptScope> {
     }
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _scheduleIdleRatingPrompt();
+      return;
+    }
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.detached) {
+      _idleTimer?.cancel();
+    }
+  }
+
   void _scheduleIdleRatingPrompt() {
     _idleTimer?.cancel();
+    if (!shouldHandleSystemBack()) return;
     _idleTimer = Timer(const Duration(seconds: 75), () {
-      if (!mounted) return;
+      if (!mounted || !shouldHandleSystemBack()) return;
       _maybeShowRating(afterGameplay: false);
     });
   }
 
   Future<void> _maybeShowRating({required bool afterGameplay}) async {
-    if (!mounted || _ratingShownThisSession) return;
+    if (!mounted || _ratingShownThisSession || !shouldHandleSystemBack()) {
+      return;
+    }
 
     final rating = getIt<AppRatingService>();
     if (!rating.shouldOfferRandomPrompt(afterGameplay: afterGameplay)) {
@@ -78,6 +98,7 @@ class _EngagementPromptScopeState extends State<EngagementPromptScope> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _idleTimer?.cancel();
     super.dispose();
   }

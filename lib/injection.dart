@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -103,10 +104,11 @@ Future<void> configureDependencies() async {
             source: 'local',
           ),
         );
-        final ctx = rootNavigatorKey.currentContext;
-        if (ctx != null && ctx.mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final ctx = rootNavigatorKey.currentContext;
+          if (ctx == null || !ctx.mounted) return;
           ctx.go('/home');
-        }
+        });
       },
     ),
   );
@@ -137,6 +139,7 @@ Future<void> configureDependencies() async {
       themeBloc: getIt(),
       content: getIt(),
       vip: getIt(),
+      ads: getIt(),
     ),
   );
   getIt.registerFactory(() => ShopCubit(getIt(), getIt(), getIt(), getIt(), getIt()));

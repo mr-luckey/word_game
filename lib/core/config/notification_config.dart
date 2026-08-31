@@ -27,7 +27,7 @@ class NotificationConfig {
     this.scheduleTimes = const ['17:00', '21:00'],
     this.rotationMode = NotificationRotationMode.alternate,
     this.daysToSchedule = 14,
-    this.androidChannelId = 'daily_local',
+    this.androidChannelId = 'daily_local_v2',
     this.androidChannelName = 'Daily reminders',
     this.pluginVersion = '1',
   });

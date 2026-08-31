@@ -570,6 +570,8 @@ class _Toolbar extends StatelessWidget {
     final revealsLeft = state.revealsLeft;
     final revealLocked = revealsLeft <= 0;
     final m = GameScreenScope.of(context);
+    final ads = getIt<AdService>();
+    final showAdIcons = ads.isOnline && !ads.adsRemoved;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(m.s(12), m.s(2), m.s(12), m.s(4)),
@@ -583,6 +585,7 @@ class _Toolbar extends StatelessWidget {
             glowColor: gameSpec.hintButtonGlow,
             subtitle: '${GameConfig.hintCost}',
             showCoin: true,
+            showShakingAdIcon: showAdIcons,
             onPressed: () => bloc.add(const HintRequested()),
           ),
           GameActionButton(
@@ -594,6 +597,7 @@ class _Toolbar extends StatelessWidget {
                 : 'Left: $revealsLeft',
             disabled: revealLocked,
             large: true,
+            showShakingAdIcon: showAdIcons && !revealLocked,
             onPressed:
                 revealLocked ? null : () => bloc.add(const RevealRequested()),
           ),
@@ -603,6 +607,7 @@ class _Toolbar extends StatelessWidget {
             glowColor: gameSpec.shuffleButtonGlow,
             subtitle: '${GameConfig.shuffleCost}',
             showCoin: true,
+            showShakingAdIcon: showAdIcons,
             onPressed: () => bloc.add(const ShuffleRequested()),
           ),
         ],

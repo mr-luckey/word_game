@@ -7,5 +7,11 @@ class DebugFlags {
   /// Unlock every destination and sequential level.
   static const bool unlockAllLevels = true;
 
+  /// Schedule five local test notifications (10s apart) on debug launch.
+  static const bool scheduleTestNotifications = false;
+
   static bool get unlockAllContent => kDebugMode && unlockAllLevels;
+
+  static bool get sendTestNotifications =>
+      kDebugMode && scheduleTestNotifications;
 }

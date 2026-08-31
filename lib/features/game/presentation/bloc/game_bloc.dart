@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word_game/core/constants/game_config.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
+import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/achievement_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/audio_service.dart';
@@ -42,6 +44,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required AppThemeBloc themeBloc,
     required GameContentRegistry content,
     required VipService vip,
+    required AdService ads,
   })  : _loadLevel = loadLevel,
         _getNextLevel = getNextLevel,
         _saveProgress = saveProgress,
@@ -54,6 +57,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _themeBloc = themeBloc,
         _content = content,
         _vip = vip,
+        _ads = ads,
         super(const GameInitial()) {
     on<LoadLevel>(_onLoadLevel);
     on<LoadNextLevel>(_onLoadNextLevel);
@@ -83,8 +87,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final AppThemeBloc _themeBloc;
   final GameContentRegistry _content;
   final VipService _vip;
+  final AdService _ads;
 
   Timer? _timer;
+
+  /// Online + ads available → try ad first; otherwise pay with coins.
+  Future<bool> _payWithAdOrCoins({
+    required int coinCost,
+    required Future<bool> Function() tryAd,
+  }) async {
+    if (!_ads.adsRemoved && _ads.isOnline) {
+      final paidWithAd = await tryAd();
+      if (paidWithAd) return true;
+    }
+    final currentCoins = await _wallet.getCoins();
+    if (currentCoins < coinCost) return false;
+    return _spendCoins(coinCost);
+  }
 
   Future<String?> _achievementFeedback(
     Future<List<AchievementUnlock>> future,
@@ -395,14 +414,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return;
     }
 
-    final currentCoins = await _wallet.getCoins();
-    if (currentCoins < GameConfig.hintCost) {
-      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
-      return;
-    }
-
-    final ok = await _spendCoins(GameConfig.hintCost);
-    if (!ok) {
+    final paid = await _payWithAdOrCoins(
+      coinCost: GameConfig.hintCost,
+      tryAd: () => _ads.showInterstitialForUserAction(
+        allowDuringGameplay: true,
+      ),
+    );
+    if (!paid) {
       emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
       return;
     }
@@ -465,14 +483,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       return;
     }
 
-    final currentCoins = await _wallet.getCoins();
-    if (currentCoins < GameConfig.revealCost) {
-      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
-      return;
-    }
-
-    final ok = await _spendCoins(GameConfig.revealCost);
-    if (!ok) {
+    final paid = await _payWithAdOrCoins(
+      coinCost: GameConfig.revealCost,
+      tryAd: () async {
+        final outcome = await _ads.showRewarded(
+          placement: AdPlacements.rewardedRevealWord,
+        );
+        return outcome == RewardedAdOutcome.earned;
+      },
+    );
+    if (!paid) {
       emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
       return;
     }
@@ -586,14 +606,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final s = state;
     if (s is! GameInProgress || s.isPaused) return;
 
-    final currentCoins = await _wallet.getCoins();
-    if (currentCoins < GameConfig.shuffleCost) {
-      emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
-      return;
-    }
-
-    final ok = await _spendCoins(GameConfig.shuffleCost);
-    if (!ok) {
+    final paid = await _payWithAdOrCoins(
+      coinCost: GameConfig.shuffleCost,
+      tryAd: () async {
+        final outcome = await _ads.showRewarded(
+          placement: AdPlacements.rewardedShuffleBoard,
+        );
+        return outcome == RewardedAdOutcome.earned;
+      },
+    );
+    if (!paid) {
       emit(s.copyWith(feedback: kInsufficientCoinsFeedback));
       return;
     }

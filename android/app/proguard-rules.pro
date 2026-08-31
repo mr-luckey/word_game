@@ -15,5 +15,8 @@
 # Google Mobile Ads
 -keep class com.google.android.gms.ads.** { *; }
 
+# Local notifications (scheduled alarms survive release minify)
+-keep class com.dexterous.flutterlocalnotifications.** { *; }
+
 # In-app billing
 -keep class com.android.vending.billing.** { *; }

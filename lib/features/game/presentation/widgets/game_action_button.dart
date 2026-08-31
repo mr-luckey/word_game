@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/game_screen_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
@@ -14,6 +15,7 @@ class GameActionButton extends StatelessWidget {
     required this.onPressed,
     this.subtitle,
     this.showCoin = false,
+    this.showShakingAdIcon = false,
     this.disabled = false,
     this.large = false,
   });
@@ -24,6 +26,7 @@ class GameActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? subtitle;
   final bool showCoin;
+  final bool showShakingAdIcon;
   final bool disabled;
   final bool large;
 
@@ -46,36 +49,47 @@ class GameActionButton extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: glowColor.withValues(alpha: 0.55),
-                      blurRadius: m.s(10),
-                      spreadRadius: m.s(0.4),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: glowColor.withValues(alpha: 0.55),
+                          blurRadius: m.s(10),
+                          spreadRadius: m.s(0.4),
+                        ),
+                        BoxShadow(
+                          color: glowColor.withValues(alpha: 0.22),
+                          blurRadius: m.s(16),
+                        ),
+                      ],
                     ),
-                    BoxShadow(
-                      color: glowColor.withValues(alpha: 0.22),
-                      blurRadius: m.s(16),
-                    ),
-                  ],
-                ),
-                child: Container(
-                  width: buttonSize,
-                  height: buttonSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: light
-                        ? const Color(0xF2F4FAFF)
-                        : const Color(0xE6101018),
-                    border: Border.all(
-                      color: glowColor,
-                      width: ringWidth,
+                    child: Container(
+                      width: buttonSize,
+                      height: buttonSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: light
+                            ? const Color(0xF2F4FAFF)
+                            : const Color(0xE6101018),
+                        border: Border.all(
+                          color: glowColor,
+                          width: ringWidth,
+                        ),
+                      ),
+                      child: Icon(icon, color: glowColor, size: iconSize),
                     ),
                   ),
-                  child: Icon(icon, color: glowColor, size: iconSize),
-                ),
+                  if (showShakingAdIcon)
+                    Positioned(
+                      top: -m.s(2),
+                      right: -m.s(2),
+                      child: _ShakingAdBadge(size: m.s(14)),
+                    ),
+                ],
               ),
               SizedBox(height: m.s(4)),
               Container(
@@ -146,5 +160,38 @@ class GameActionButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _ShakingAdBadge extends StatelessWidget {
+  const _ShakingAdBadge({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.appColors;
+
+    return Container(
+      width: size + 4,
+      height: size + 4,
+      decoration: BoxDecoration(
+        color: colors.scrim.withValues(alpha: 0.92),
+        shape: BoxShape.circle,
+        border: Border.all(color: colors.gold, width: 1.2),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        'AD',
+        style: TextStyle(
+          fontSize: size * 0.46,
+          fontWeight: FontWeight.w900,
+          color: colors.gold,
+          height: 1,
+        ),
+      ),
+    )
+        .animate(onPlay: (controller) => controller.repeat(reverse: true))
+        .shake(hz: 2.5, rotation: 0.04);
   }
 }

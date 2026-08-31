@@ -253,16 +253,22 @@ class AdService {
   /// Button / navigation triggered interstitial — beats scheduled ads.
   Future<bool> showInterstitialForUserAction({
     String placement = AdPlacements.interstitialAfterLevelGroup,
+    bool allowDuringGameplay = false,
   }) {
-    return showInterstitial(placement: placement, source: InterstitialSource.userAction);
+    return showInterstitial(
+      placement: placement,
+      source: InterstitialSource.userAction,
+      allowDuringGameplay: allowDuringGameplay,
+    );
   }
 
   Future<bool> showInterstitial({
     String placement = AdPlacements.interstitialAfterLevelGroup,
     InterstitialSource source = InterstitialSource.userAction,
+    bool allowDuringGameplay = false,
   }) async {
     if (adsRemoved || kIsWeb) return false;
-    if (_gameplayActive) return false;
+    if (_gameplayActive && !allowDuringGameplay) return false;
     if (_fullScreenShowing || _interstitialShowInProgress) return false;
     if (source == InterstitialSource.scheduled &&
         _userInterstitialPriorityUntil != null &&

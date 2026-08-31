@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:word_game/app.dart';
+import 'package:word_game/core/constants/debug_flags.dart';
 import 'package:word_game/core/services/ad_pitch_handler.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
@@ -33,12 +34,20 @@ Future<void> main() async {
     ),
   );
   runApp(const WordSearchApp());
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    unawaited(getIt<LocalNotificationService>().handleLaunchNotification());
+  });
 }
 
 Future<void> _scheduleLocalNotifications() async {
-  final count = await getIt<LocalNotificationService>().scheduleNotifications();
+  final service = getIt<LocalNotificationService>();
+  final count = await service.scheduleNotifications();
   await getIt<AnalyticsService>().logNotificationScheduled(
     count: count,
     source: 'app_start',
   );
+  if (DebugFlags.sendTestNotifications) {
+    final testCount = await service.scheduleTestNotifications(count: 5);
+    debugPrint('Test notifications scheduled: $testCount');
+  }
 }

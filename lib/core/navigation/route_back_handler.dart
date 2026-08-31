@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
+import 'package:word_game/core/navigation/system_back_guard.dart';
 
 /// Standard system-back for full-screen routes pushed on the root navigator.
 class RouteBackHandler extends StatelessWidget {
@@ -19,7 +20,7 @@ class RouteBackHandler extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
+        if (didPop || !shouldHandleSystemBack()) return;
         if (onPop != null) {
           onPop!();
         } else {
