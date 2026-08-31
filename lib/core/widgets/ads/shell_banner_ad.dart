@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/services/ad_service.dart';
-import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/ads/banner_ad_slot.dart';
 import 'package:word_game/core/widgets/journey_bottom_nav.dart';
 import 'package:word_game/injection.dart';
@@ -32,6 +31,7 @@ class ShellBannerAd extends StatelessWidget {
         ads: ads,
         placement: placement,
         padding: EdgeInsets.zero,
+        useSafeArea: false,
       ),
     );
   }
@@ -52,18 +52,13 @@ class ShellBottomDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
     final ads = getIt<AdService>();
     final showBanner = !ads.adsRemoved;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (showBanner)
-          ColoredBox(
-            color: colors.navSurface,
-            child: ShellBannerAd(placement: bannerPlacement),
-          ),
+        if (showBanner) ShellBannerAd(placement: bannerPlacement),
         JourneyBottomNav(
           selectedIndex: selectedIndex,
           onSelected: onSelected,
@@ -87,18 +82,14 @@ class ScreenFooterBanner extends StatelessWidget {
     final ads = getIt<AdService>();
     if (ads.adsRemoved) return const SizedBox.shrink();
 
-    final colors = context.appColors;
-
-    return ColoredBox(
-      color: colors.navSurface,
-      child: SafeArea(
-        top: false,
-        child: Center(
-          child: BannerAdSlot(
-            ads: ads,
-            placement: placement,
-            padding: EdgeInsets.zero,
-          ),
+    return SafeArea(
+      top: false,
+      child: Center(
+        child: BannerAdSlot(
+          ads: ads,
+          placement: placement,
+          padding: EdgeInsets.zero,
+          useSafeArea: false,
         ),
       ),
     );

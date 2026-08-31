@@ -167,79 +167,86 @@ class _GameView extends StatelessWidget {
             final bg = AssetPaths.themeGrid(preset);
 
             return Scaffold(
-              body: Column(
+              backgroundColor: Colors.transparent,
+              body: Stack(
+                fit: StackFit.expand,
                 children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        ScenicBackground(
-                          imageAsset: bg,
-                          blurSigma: 0,
-                          darken: 0.16,
-                          showCompass: false,
-                        ),
-                        SafeArea(
-                          bottom: false,
-                          child: JourneyContentWidth(
-                            child: Stack(
-                              children: [
-                                if (state is GameInProgress)
-                                  _GameWithTutorial(state: state)
-                                else if (state is GameLoading ||
-                                    state is GameInitial)
-                                  const LoadingOverlay(
-                                      message: 'Loading level...')
-                                else if (state is GameCompleted)
-                                  const LoadingOverlay(
-                                      message: 'Level complete!')
-                                else if (state is GameError)
-                                  Center(
-                                    child: GlassPanel(
-                                      child: Text(
-                                        state.message,
-                                        style: AppTextStyles.levelName(context),
-                                      ),
-                                    ),
-                                  )
-                                else
-                                  const SizedBox.shrink(),
-                              ],
-                            ),
-                          ),
-                        ),
-                        if (state is GameInProgress && state.isCompleting)
-                          const LoadingOverlay(message: 'Level complete...'),
-                        if (state is GameInProgress && state.isTimedOut)
-                          GameTimeoutOverlay(
-                            state: state,
-                            onRetry: () => context
-                                .read<GameBloc>()
-                                .add(LoadLevel(state.levelId)),
-                            onQuit: () => journeyPopFromGame(
-                              context,
-                              themeId: state.themeId,
-                            ),
-                          )
-                        else if (state is GameInProgress && state.isPaused)
-                          PauseMenuOverlay(
-                            state: state,
-                            onResume: () => context
-                                .read<GameBloc>()
-                                .add(const GameResumed()),
-                            onRestart: () {
-                              final bloc = context.read<GameBloc>();
-                              bloc.add(LoadLevel(state.levelId));
-                            },
-                            onSettings: () => context.push('/settings'),
-                            onQuit: () => journeyPopFromGame(
-                              context,
-                              themeId: state.themeId,
-                            ),
-                          ),
-                      ],
-                    ),
+                  ScenicBackground(
+                    imageAsset: bg,
+                    blurSigma: 0,
+                    darken: 0.16,
+                    showCompass: false,
                   ),
-                  if (state is GameInProgress) const _GameBannerAd(),
+                  Column(
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            SafeArea(
+                              bottom: false,
+                              child: JourneyContentWidth(
+                                child: Stack(
+                                  children: [
+                                    if (state is GameInProgress)
+                                      _GameWithTutorial(state: state)
+                                    else if (state is GameLoading ||
+                                        state is GameInitial)
+                                      const LoadingOverlay(
+                                          message: 'Loading level...')
+                                    else if (state is GameCompleted)
+                                      const LoadingOverlay(
+                                          message: 'Level complete!')
+                                    else if (state is GameError)
+                                      Center(
+                                        child: GlassPanel(
+                                          child: Text(
+                                            state.message,
+                                            style:
+                                                AppTextStyles.levelName(context),
+                                          ),
+                                        ),
+                                      )
+                                    else
+                                      const SizedBox.shrink(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (state is GameInProgress && state.isCompleting)
+                              const LoadingOverlay(message: 'Level complete...'),
+                            if (state is GameInProgress && state.isTimedOut)
+                              GameTimeoutOverlay(
+                                state: state,
+                                onRetry: () => context
+                                    .read<GameBloc>()
+                                    .add(LoadLevel(state.levelId)),
+                                onQuit: () => journeyPopFromGame(
+                                  context,
+                                  themeId: state.themeId,
+                                ),
+                              )
+                            else if (state is GameInProgress && state.isPaused)
+                              PauseMenuOverlay(
+                                state: state,
+                                onResume: () => context
+                                    .read<GameBloc>()
+                                    .add(const GameResumed()),
+                                onRestart: () {
+                                  final bloc = context.read<GameBloc>();
+                                  bloc.add(LoadLevel(state.levelId));
+                                },
+                                onSettings: () => context.push('/settings'),
+                                onQuit: () => journeyPopFromGame(
+                                  context,
+                                  themeId: state.themeId,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      if (state is GameInProgress) const _GameBannerAd(),
+                    ],
+                  ),
                 ],
               ),
             );
@@ -543,14 +550,11 @@ class _GameBannerAd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
-    return ColoredBox(
-      color: colors.navSurface,
-      child: BannerAdSlot(
-        ads: getIt<AdService>(),
-        placement: AdPlacements.bannerGame,
-        padding: const EdgeInsets.only(top: 8),
-      ),
+    return BannerAdSlot(
+      ads: getIt<AdService>(),
+      placement: AdPlacements.bannerGame,
+      padding: EdgeInsets.zero,
+      useSafeArea: false,
     );
   }
 }

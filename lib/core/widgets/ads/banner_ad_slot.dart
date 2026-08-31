@@ -9,13 +9,15 @@ class BannerAdSlot extends StatefulWidget {
     required this.ads,
     required this.placement,
     this.size,
-    this.padding = const EdgeInsets.only(top: 8),
+    this.padding = EdgeInsets.zero,
+    this.useSafeArea = true,
   });
 
   final AdService ads;
   final String placement;
   final AdSize? size;
   final EdgeInsets padding;
+  final bool useSafeArea;
 
   @override
   State<BannerAdSlot> createState() => _BannerAdSlotState();
@@ -70,16 +72,20 @@ class _BannerAdSlotState extends State<BannerAdSlot> {
     if (!_loaded || ad == null) {
       return const SizedBox.shrink();
     }
+    final content = Padding(
+      padding: widget.padding,
+      child: SizedBox(
+        width: ad.size.width.toDouble(),
+        height: ad.size.height.toDouble(),
+        child: AdWidget(ad: ad),
+      ),
+    );
+    if (!widget.useSafeArea) {
+      return Center(child: content);
+    }
     return SafeArea(
       top: false,
-      child: Padding(
-        padding: widget.padding,
-        child: SizedBox(
-          width: ad.size.width.toDouble(),
-          height: ad.size.height.toDouble(),
-          child: AdWidget(ad: ad),
-        ),
-      ),
+      child: content,
     );
   }
 }
