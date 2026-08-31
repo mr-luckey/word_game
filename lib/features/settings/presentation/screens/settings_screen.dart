@@ -7,6 +7,7 @@ import 'package:word_game/core/theme/app_theme_bloc.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/widgets/scenic_page.dart';
 import 'package:word_game/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:word_game/injection.dart';
@@ -21,6 +22,7 @@ class SettingsScreen extends StatelessWidget {
       create: (_) => SettingsCubit(getIt()),
       child: ScenicPage(
         title: 'Settings',
+        footerBannerPlacement: AdPlacements.bannerHome,
         child: JourneyContentWidth(
           child: ListView(
             padding: const EdgeInsets.all(AppSizes.paddingMd),

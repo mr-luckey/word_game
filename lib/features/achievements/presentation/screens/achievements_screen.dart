@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/theme/app_sizes.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/ads/shell_banner_ad.dart';
 import 'package:word_game/features/achievements/presentation/widgets/achievement_widgets.dart';
 import 'package:word_game/features/profile/domain/entities/achievement.dart';
 import 'package:word_game/features/profile/presentation/cubit/profile_cubit.dart';
@@ -120,6 +122,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                           );
                         },
                       ),
+                    ),
+                    const ScreenFooterBanner(
+                      placement: AdPlacements.bannerAchievements,
                     ),
                   ],
                 ),

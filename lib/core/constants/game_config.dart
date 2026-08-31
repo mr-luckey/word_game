@@ -34,7 +34,7 @@ class GameConfig {
   }
 
   static const int splashDelayMs = 2500;
-  static const int interstitialEveryNLevels = 3;
+  static const int interstitialEveryNLevels = 2;
   static const int rewardedBonusCoins = 2;
 
   /// VIP Pass: multiply level & daily coin rewards by this factor.

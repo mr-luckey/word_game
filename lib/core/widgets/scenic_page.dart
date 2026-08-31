@@ -7,6 +7,7 @@ import 'package:word_game/core/theme/app_text_styles.dart';
 import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/ads/shell_banner_ad.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
 
 /// Shared scenic layout for secondary screens (settings, level select, etc.).
@@ -20,6 +21,7 @@ class ScenicPage extends StatelessWidget {
     this.showCoins = true,
     this.blurSigma = ScenicBackgroundStyle.hdBlur,
     this.darken = ScenicBackgroundStyle.hdDarken,
+    this.footerBannerPlacement,
   });
 
   final String title;
@@ -29,6 +31,7 @@ class ScenicPage extends StatelessWidget {
   final bool showCoins;
   final double blurSigma;
   final double darken;
+  final String? footerBannerPlacement;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,8 @@ class ScenicPage extends StatelessWidget {
                 ),
               ),
               Expanded(child: child),
+              if (footerBannerPlacement != null)
+                ScreenFooterBanner(placement: footerBannerPlacement!),
             ],
           ),
         ),

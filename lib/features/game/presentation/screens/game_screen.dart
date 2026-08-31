@@ -63,7 +63,8 @@ class _GameView extends StatelessWidget {
         };
         journeyPopFromGame(context, themeId: themeId);
       },
-      child: MultiBlocListener(
+      child: _GameplayAdScope(
+        child: MultiBlocListener(
         listeners: [
           BlocListener<GameBloc, GameState>(
             listenWhen: (p, c) =>
@@ -244,6 +245,51 @@ class _GameView extends StatelessWidget {
             );
           },
         ),
+      ),
+      ),
+    );
+  }
+}
+
+class _GameplayAdScope extends StatefulWidget {
+  const _GameplayAdScope({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_GameplayAdScope> createState() => _GameplayAdScopeState();
+}
+
+class _GameplayAdScopeState extends State<_GameplayAdScope> {
+  @override
+  void dispose() {
+    getIt<AdService>().setGameplayActive(false);
+    super.dispose();
+  }
+
+  bool _isActivePlay(GameState state) =>
+      state is GameInProgress &&
+      !state.isPaused &&
+      !state.isTimedOut &&
+      !state.isCompleting;
+
+  void _sync(GameState state) {
+    getIt<AdService>().setGameplayActive(_isActivePlay(state));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<GameBloc, GameState>(
+      listenWhen: (p, c) => _isActivePlay(p) != _isActivePlay(c),
+      listener: (context, state) => _sync(state),
+      child: BlocBuilder<GameBloc, GameState>(
+        buildWhen: (p, c) => _isActivePlay(p) != _isActivePlay(c),
+        builder: (context, state) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _sync(state);
+          });
+          return widget.child;
+        },
       ),
     );
   }

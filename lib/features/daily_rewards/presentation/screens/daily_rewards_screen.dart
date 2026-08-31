@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/config/app_ads_config.dart';
 import 'package:word_game/core/navigation/journey_nav.dart';
 import 'package:word_game/core/navigation/route_back_handler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import 'package:word_game/core/theme/theme_context.dart';
 import 'package:word_game/core/widgets/coin_display.dart';
 import 'package:word_game/core/widgets/journey_theme_kit.dart';
 import 'package:word_game/core/widgets/scenic_background.dart';
+import 'package:word_game/core/widgets/ads/shell_banner_ad.dart';
 import 'package:word_game/core/widgets/treasure_chest_image.dart';
 import 'package:word_game/features/daily_rewards/presentation/cubit/daily_rewards_cubit.dart';
 import 'package:word_game/features/wallet/presentation/cubit/coin_cubit.dart';
@@ -150,6 +152,9 @@ class _DailyRewardsView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                    const ScreenFooterBanner(
+                      placement: AdPlacements.bannerHome,
                     ),
                   ],
                 );

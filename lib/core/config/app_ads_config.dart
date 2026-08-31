@@ -26,6 +26,9 @@ AdsConfig createAppAdsConfig() {
       'level_select': 0,
       'game': 1,
       'home': 2,
+      'destinations': 2,
+      'profile': 2,
+      'achievements': 2,
       'result': 3,
       'shop': 4,
     },
@@ -33,12 +36,12 @@ AdsConfig createAppAdsConfig() {
       'after_level_group': 0,
       'after_session': 1,
     },
+    minimumInterstitialInterval: const Duration(seconds: 90),
     rewardedPlacements: const {
       'extra_coins': 0,
       'double_coins': 1,
       'double_xp': 2,
     },
-    minimumInterstitialInterval: const Duration(minutes: 2),
     maxRetries: 2,
     retryBackoff: const Duration(seconds: 30),
     requestTimeout: const Duration(seconds: 10),
@@ -48,7 +51,13 @@ AdsConfig createAppAdsConfig() {
 abstract final class AdPlacements {
   static const bannerLevelSelect = 'level_select';
   static const bannerGame = 'game';
+  static const bannerHome = 'home';
+  static const bannerDestinations = 'destinations';
+  static const bannerProfile = 'profile';
+  static const bannerShop = 'shop';
+  static const bannerAchievements = 'achievements';
   static const interstitialAfterLevelGroup = 'after_level_group';
+  static const interstitialAfterSession = 'after_session';
   static const rewardedExtraCoins = 'extra_coins';
   static const rewardedDoubleCoins = 'double_coins';
   static const rewardedDoubleXp = 'double_xp';

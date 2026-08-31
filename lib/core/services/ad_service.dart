@@ -12,6 +12,10 @@ import 'package:word_game/core/services/vip_service.dart';
 
 enum RewardedAdOutcome { earned, skipped, unavailable }
 
+enum FullScreenAdKind { interstitial, rewarded }
+
+typedef FullScreenAdDismissed = void Function(FullScreenAdKind kind);
+
 /// Central AdMob manager. Placement-based IDs. No waterfall. Offline = idle.
 class AdService {
   AdService(
@@ -35,6 +39,7 @@ class AdService {
   bool _sdkInitialized = false;
   bool _initializing = false;
   bool _fullScreenShowing = false;
+  bool _gameplayActive = false;
   DateTime? _lastFullScreenAt;
 
   InterstitialAd? _interstitial;
@@ -49,6 +54,7 @@ class AdService {
   Timer? _rewardedRetry;
 
   final List<VoidCallback> _readyListeners = [];
+  final List<FullScreenAdDismissed> _dismissListeners = [];
 
   bool get adsRemoved =>
       (_prefs.getBool(_removeAdsKey) ?? false) || _vip.suppressesAds;
@@ -56,7 +62,19 @@ class AdService {
   bool get isReady => _sdkInitialized;
   bool get isOnline => _network.isOnline;
   bool get isFullScreenShowing => _fullScreenShowing;
+  bool get isGameplayActive => _gameplayActive;
   bool get hasRewardedAd => _rewarded != null;
+
+  /// True while the player is actively finding words — blocks interstitials.
+  void setGameplayActive(bool active) {
+    _gameplayActive = active;
+  }
+
+  void addOnFullScreenAdDismissed(FullScreenAdDismissed listener) =>
+      _dismissListeners.add(listener);
+
+  void removeOnFullScreenAdDismissed(FullScreenAdDismissed listener) =>
+      _dismissListeners.remove(listener);
 
   Future<void> setAdsRemoved(bool value) async {
     await _prefs.setBool(_removeAdsKey, value);
@@ -78,6 +96,9 @@ class AdService {
       if (_sdkInitialized) {
         unawaited(
           preloadInterstitial(placement: AdPlacements.interstitialAfterLevelGroup),
+        );
+        unawaited(
+          preloadInterstitial(placement: AdPlacements.interstitialAfterSession),
         );
         unawaited(preloadRewarded(placement: AdPlacements.rewardedExtraCoins));
       }
@@ -179,6 +200,7 @@ class AdService {
           _lastFullScreenAt = DateTime.now();
           ad.dispose();
           _interstitial = null;
+          _notifyFullScreenDismissed(FullScreenAdKind.interstitial);
           unawaited(preloadInterstitial(placement: placement));
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
@@ -203,10 +225,20 @@ class AdService {
     );
   }
 
+  /// Natural break when leaving a game session (back to map/home).
+  void onGameSessionEnded() {
+    if (adsRemoved || kIsWeb) return;
+    setGameplayActive(false);
+    unawaited(
+      showInterstitial(placement: AdPlacements.interstitialAfterSession),
+    );
+  }
+
   Future<bool> showInterstitial({
     String placement = AdPlacements.interstitialAfterLevelGroup,
   }) async {
     if (adsRemoved || kIsWeb) return false;
+    if (_gameplayActive) return false;
     if (_fullScreenShowing) return false;
     if (!_frequencyAllowsInterstitial()) return false;
     if (_interstitial == null || _interstitialPlacement != placement) {
@@ -294,6 +326,7 @@ class AdService {
             earned ? RewardedAdOutcome.earned : RewardedAdOutcome.skipped,
           );
         }
+        _notifyFullScreenDismissed(FullScreenAdKind.rewarded);
         unawaited(preloadRewarded(placement: placement));
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
@@ -435,5 +468,11 @@ class AdService {
     _rewardedRetry = Timer(delay, () {
       unawaited(preloadRewarded(placement: placement));
     });
+  }
+
+  void _notifyFullScreenDismissed(FullScreenAdKind kind) {
+    for (final listener in List<FullScreenAdDismissed>.from(_dismissListeners)) {
+      listener(kind);
+    }
   }
 }

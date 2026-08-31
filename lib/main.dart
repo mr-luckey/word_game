@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:word_game/app.dart';
+import 'package:word_game/core/services/ad_pitch_handler.dart';
 import 'package:word_game/core/services/ad_service.dart';
 import 'package:word_game/core/services/analytics_service.dart';
 import 'package:word_game/core/services/app_rating_service.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   await configureDependencies();
   unawaited(getIt<AnalyticsService>().init());
   unawaited(getIt<AdService>().initialize());
+  installAdPitchHandler();
   unawaited(_scheduleLocalNotifications());
   await getIt<AppRatingService>().recordAppLaunch();
   await getIt<AudioService>().startBackgroundMusic();
