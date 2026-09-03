@@ -1,7 +1,7 @@
 name: word_game
 description: Word Search Journey Flutter Clone
 publish_to: 'none'
-version: 8.0.0+8
+version: 10.0.0+10
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -24,7 +24,7 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   timezone: ^0.10.0
   flutter_timezone: ^4.1.0
-  in_app_purchase: ^3.2.0
+  in_app_purchase: ^3.3.0
   lottie: ^3.1.2
   confetti: ^0.7.0
   flutter_animate: ^4.5.0
